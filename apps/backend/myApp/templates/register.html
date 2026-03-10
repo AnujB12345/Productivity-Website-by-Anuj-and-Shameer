@@ -5,6 +5,14 @@
 	{% csrf_token %}
 	<h2>Sign Up</h2>
 		
+
+	{% if messages %}
+		{% for message in messages %}
+			<div class="message {{ message.tags }}">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
 	{% for field in form %}
 	<p>
 		{% if field.errors %}

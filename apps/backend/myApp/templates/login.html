@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+{% if messages %}
+	{% for message in messages %}
+		<div class="message {{ message.tags }}">
+			{{ message }}
+		</div>
+	{% endfor %}
+{% endif %}
+
 <form method="POST" novalidate>
 	{% csrf_token %}
 	<h2>Login</h2>
