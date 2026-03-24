@@ -1,4 +1,18 @@
 {% extends "base.html" %} {% block title %} Home Page {% endblock %}
+
 {% block content %}
-<p> This is the Home Page. </p>
+<p>This is the Home Page.</p>
+
+<a href="{% url 'users:login' %}">
+    <button>Go to Login</button>
+</a>
+
+<a href="{% url 'users:register' %}">
+    <button>Go to Register</button>
+</a>
+
+<a href="{% url 'home' %}">
+    <button>Refresh Home</button>
+</a>
+
 {% endblock %}

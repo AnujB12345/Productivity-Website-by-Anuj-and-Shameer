@@ -21,7 +21,8 @@ from myApp.views import ReactView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('myapp/', include("myApp.urls")),
+    path('', include("myApp.urls")),
     path("user/", include("users.urls")),
+    path("todo/", include("todo.urls")),
     path('wel/', ReactView.as_view(), name="react-view"),
 ]

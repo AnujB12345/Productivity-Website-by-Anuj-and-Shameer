@@ -7,7 +7,7 @@ from .serializer import ReactSerializer
 # Create your views here.
 
 def home(request):
-    return render(request, "first-react-app/dist/index.html")
+    return render(request, "home.html")
 
 def about(request):
     return HttpResponse("About Page")

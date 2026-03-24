@@ -4,6 +4,6 @@ from . import views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path("", views.home),
-    path('about/', views.about),
+    path("", views.home, name="home"),
+    path('about', views.about, name="about"),
 ]

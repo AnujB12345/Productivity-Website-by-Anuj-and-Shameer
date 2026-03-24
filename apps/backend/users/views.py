@@ -25,6 +25,7 @@ def sign_up(request):
                 messages.error(request, "Username or email already exists")
                 conn.close()
                 return render(request, "register.html", {"form": form})
+                
             cursor.execute(
                 "INSERT INTO users (username, password_hash, email) VALUES (?, ?, ?)",
                 (username, password, email)
@@ -33,13 +34,15 @@ def sign_up(request):
             conn.commit()
             cursor.close()
             messages.success(request, "Account created successfully")
-            return redirect("users:sign_in")
-            #user should be stored in the database
+            list(messages.get_messages(request))
+            return redirect("users:login")
+        
         else:
             return render(request, 'register.html', {'form': form})
+            
 
 def sign_in(request):
-
+    list(messages.get_messages(request))
     if request.method == 'GET':
         form = LoginForm()
         return render(request,'login.html', {'form': form})
@@ -60,13 +63,13 @@ def sign_in(request):
                 conn.close()
                 return render(request, "login.html", {"form": form})
             if check_password(password, stored_hash[0]):
-                messages.success(request, "Logged in successfully")
-                return redirect("/myapp/")
+                return redirect("/")
 
             #should be checked if user is in databasse
         
         messages.error(request,"Invalid password")
         return render(request,'login.html',{'form': form})
+        
     
 def sign_out(request):
     logout(request)
