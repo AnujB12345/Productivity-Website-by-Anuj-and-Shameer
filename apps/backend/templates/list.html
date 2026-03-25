@@ -69,6 +69,16 @@
                     🗑
                 </button>
             </form>
+            <div style="width: 20px;"></div>
+            <form method="POST" style="margin: 0;">
+                {% csrf_token %}
+                <input type="hidden" name="task_id" value="{{ todo.id }}">
+                <input type="hidden" name="check_task" value="off">
+                <input type="checkbox" name="check_task" value="on"
+                    onchange="this.form.submit()"
+                    {% if todo.checkbox %} checked {% endif %}>
+            </form>
+
         </div>
 
     </div>
