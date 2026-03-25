@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Todo
 
 def todo_list(request):
-    todos = Todo.objects.all()
+    todos = Todo.objects.filter(username=request.session["username"])
 
     if request.method == "POST":
 
         if "add_task" in request.POST:
             title = request.POST.get("title")
             if title:
-                Todo.objects.create(title=title)
+                Todo.objects.create(title=title, username=request.session["username"])
             return redirect("todo:todo_list")
         
         if "edit_task" in request.POST:

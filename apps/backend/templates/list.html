@@ -1,4 +1,7 @@
+{% extends "base.html" %}
 {% load static %}
+
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -88,6 +91,7 @@
     </div>
 </div>
 
+
 <script>
 function enableEdit(id) {
     document.getElementById("text-" + id).style.display = "none";
@@ -97,3 +101,5 @@ function enableEdit(id) {
 
 </body>
 </html>
+
+{% endblock %}

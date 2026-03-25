@@ -63,6 +63,7 @@ def sign_in(request):
                 conn.close()
                 return render(request, "login.html", {"form": form})
             if check_password(password, stored_hash[0]):
+                request.session["username"] = username
                 return redirect("/")
 
             #should be checked if user is in databasse
