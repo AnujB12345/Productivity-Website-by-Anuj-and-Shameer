@@ -59,7 +59,7 @@ def sign_in(request):
             cursor.execute("SELECT password_hash FROM users WHERE username=?", (username,))
             stored_hash=cursor.fetchone()
             if not stored_hash:
-                messages.error(request, "Username does not exist")
+                messages.error(request, "Username does not exist, please try again!")
                 conn.close()
                 return render(request, "login.html", {"form": form})
             if check_password(password, stored_hash[0]):
