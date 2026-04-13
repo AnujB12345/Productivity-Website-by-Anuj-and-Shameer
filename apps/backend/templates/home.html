@@ -1,4 +1,4 @@
-{% extends "base.html" %} {% block title %} Home Page {% endblock %}
+{% extends "base.html" %} {% block title %} Home Page {% endblock %} <!-- This page extends base.html-->
 
 {% block content %}
 <p>Welcome to the Productivity App. This is the Home Page.</p>
@@ -11,7 +11,7 @@
     <button>Go to Register Page</button>
 </a>
 
-<a href="{% url 'todo:todo_list' %}">
+<a href="{% url 'todo:todo_list' %}"> 
     <button>To-Do</button>
 </a>
 
