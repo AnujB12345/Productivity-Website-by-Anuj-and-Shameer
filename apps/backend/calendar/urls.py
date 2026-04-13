@@ -3,6 +3,7 @@ from django.contrib import admin
 from . import views
 from django.views.generic import TemplateView
 
+app_name="calendar"
 urlpatterns = [
-    path("", views.home)
+    path("", views.add_event, name="calendar")
 ]

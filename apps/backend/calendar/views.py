@@ -1,16 +1,17 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Todo
+from django.shortcuts import render
 
-def todo_list(request):
+# Create your views here.
 
-    if not request.session.get("username"):
-        return redirect("users:login")
+def calendar_view(request):
+    return render(request, "home.html")
 
-    todos = Todo.objects.filter(username=request.session["username"])
+
+def add_event(request):
+    events = CalendarEvent.objects.filter(username=request.session["username"])
 
     if request.method == "POST":
 
-        if "add_task" in request.POST:
+        if "add_event" in request.POST:
             title = request.POST.get("title")
             if title:
                 Todo.objects.create(title=title, username=request.session["username"])

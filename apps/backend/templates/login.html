@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
+{% block body_class %}login{% endblock %}
 {% block extra_css %}  
-<link rel = "stylesheet" href = "{% static 'css/login.css' %}">
-
+<link rel = "stylesheet" href = "{% static 'my_app/login.css' %}">
 {% endblock%}
+
 
 {% block content %}
 

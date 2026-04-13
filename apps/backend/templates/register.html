@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block content %}
+{% block body_class %}register-page{% endblock %}
+{% block extra_css %}  
+<link rel = "stylesheet" href = "{% static 'my_app/register.css' %}">
+{% endblock%}
+
+{%block content%}
+
 <form method="POST" novalidate>
 	{% csrf_token %}
 	<h2>Sign Up</h2>
