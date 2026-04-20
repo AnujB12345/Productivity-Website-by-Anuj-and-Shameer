@@ -5,5 +5,5 @@ from django.views.generic import TemplateView
 
 app_name="calendar"
 urlpatterns = [
-    path("", views.add_event, name="calendar")
+    path("", views.calendar_event, name="calendar")
 ]

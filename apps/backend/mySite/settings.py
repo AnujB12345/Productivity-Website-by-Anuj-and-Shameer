@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'todo',
     "rest_framework",
     "corsheaders",
-    "calendar",
+    "calendar_app",
 
 ]
 

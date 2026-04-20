@@ -24,6 +24,6 @@ urlpatterns = [
     path('', include("myApp.urls")),
     path("user/", include("users.urls")),
     path("todo/", include("todo.urls")),
-    path("calendar/", include("calendar.urls")),
+    path("calendar/", include("calendar_app.urls")),
     path('wel/', ReactView.as_view(), name="react-view"),
 ]
