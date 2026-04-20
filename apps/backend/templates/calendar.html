@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% block title %} Home Page {% endblock %} <!-- This page extends base.html-->
+
+{% load static %}
+
+{% block body_class %}home-page{% endblock %}
+{% block extra_css %}  
+<link rel = "stylesheet" href = "{% static 'my_app/home.css' %}">
+{% endblock%}
+
+{% block content %}
+
+<h1>{{ month|date:"F" }} {{ year }}</h1>
+
+<a href="?month={{ prev_month }}&year={{ prev_year }}{% if selected_date %}&date={{ selected_date }}{% endif %}">&larr; Previous</a>
+&nbsp;
+<a href="?month={{ next_month }}&year={{ next_year }}{% if selected_date %}&date={{ selected_date }}{% endif %}">Next &rarr;</a>
+
+<br><br>
+
+<!-- Calendar Table -->
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Mon</th>
+      <th>Tue</th>
+      <th>Wed</th>
+      <th>Thu</th>
+      <th>Fri</th>
+      <th>Sat</th>
+      <th>Sun</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for week in calendar %}
+      <tr>
+        {% for day in week %}
+          {% if day == 0 %}
+            <td>&nbsp;</td>
+          {% else %}
+            <td>
+              <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}">
+                {% if day == today.day and month == today.month and year == today.year %}
+                  <strong>{{ day }} (Today)</strong>
+                {% else %}
+                  {{ day }}
+                {% endif %}
+              </a>
+              <br>
+              {% for event in events %}
+                {% if event.date.day == day and event.date.month == month and event.date.year == year %}
+                  <small>&#8226; {{ event.title }}</small><br>
+                {% endif %}
+              {% endfor %}
+            </td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<br>
+
+<!-- Events list -->
+<h2>
+  Events
+  {% if selected_date %} &mdash; {{ selected_date }}{% endif %}
+</h2>
+
+{% if events %}
+  <ul>
+    {% for event in events %}
+      <li>
+        <strong>{{ event.title }}</strong> &mdash; {{ event.date }} at {{ event.time|time:"H:i" }}
+        {% if event.description %}<br><em>{{ event.description }}</em>{% endif %}
+        &nbsp;
+
+        <!-- Edit button -->
+        <button onclick="document.getElementById('edit-form-{{ event.id }}').style.display='block'">Edit</button>
+
+        <!-- Delete form -->
+        <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this event?');">
+          {% csrf_token %}
+          <input type="hidden" name="event_id" value="{{ event.id }}">
+          <button type="submit" name="delete_event">Delete</button>
+        </form>
+
+        <!-- Inline edit form (hidden by default) -->
+        <div id="edit-form-{{ event.id }}" style="display:none; margin-top: 8px;">
+          <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="event_id" value="{{ event.id }}">
+            <label>Title: <input type="text" name="title" value="{{ event.title }}" required></label><br>
+            <label>Date: <input type="date" name="date" value="{{ event.date }}" required></label><br>
+            <label>Time: <input type="time" name="time" value="{{ event.time|time:'H:i' }}" required></label><br>
+            <label>Description: <input type="text" name="description" value="{{ event.description }}"></label><br>
+            <button type="submit" name="edit_event">Save</button>
+            <button type="button" onclick="document.getElementById('edit-form-{{ event.id }}').style.display='none'">Cancel</button>
+          </form>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No events{% if selected_date %} on this day{% endif %}.</p>
+{% endif %}
+
+<br>
+
+<!-- Add event form -->
+<h3>Add Event</h3>
+<form method="POST">
+  {% csrf_token %}
+  <label>Title: <input type="text" name="title" required></label><br><br>
+  <label>Date: <input type="date" name="date" value="{{ selected_date }}" required></label><br><br>
+  <label>Time: <input type="time" name="time" required></label><br><br>
+  <label>Description: <input type="text" name="description"></label><br><br>
+  <button type="submit" name="add_event">Add Event</button>
+</form>
+
+{% endblock %}
