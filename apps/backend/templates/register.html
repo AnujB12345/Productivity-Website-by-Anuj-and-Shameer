@@ -3,35 +3,48 @@
 
 {% block body_class %}register-page{% endblock %}
 {% block extra_css %}  
-<link rel = "stylesheet" href = "{% static 'my_app/register.css' %}">
-{% endblock%}
+<link rel = "stylesheet" href = "{% static 'my_app/register_page.css' %}">
+{% endblock %}
 
-{%block content%}
+{% block content %}
 
-<form method="POST" novalidate>
+<form class= "register-page" method="POST" novalidate>
 	{% csrf_token %}
-	<h2>Sign Up</h2>
+	<h2 class="title">Sign Up</h2>
 		
+	<div class="frame">
 
 	{% if messages %}
 		{% for message in messages %}
-			<div class="message {{ message.tags }}">
+			<div class="message">
 				{{ message }}
 			</div>
 		{% endfor %}
 	{% endif %}
 	{% for field in form %}
-	<p>
+	<div class="field">
 		{% if field.errors %}
-		<ul class="errorlist">
+		<div class="errorlist">
 			{% for error in field.errors %}
-			<li>{{ error }}</li>
+			<small class="error">{{ error }}</small>
 			{% endfor %}
-		</ul>
+		</div>
 		{% endif %}
-	 	{{ field.label_tag }} {{ field }}
-	</p>
+	 	{{ field.label_tag }} 
+
+		{{ field }}
+	</div>
 	{% endfor %}
-	<input type="submit" value="Register" />
+
+	<div class="button-container">
+		<input class= "register-button" type="submit" value="Register" onclick="openPopup()"/>
+	</div>
+	
+	<div class="login-link">
+		<p>Already have an account? <a href="{% url 'users:login' %}">Login here</a></p>
+
+
+	</div>
+
 </form>
-{% endblock content%}
+{% endblock content %}

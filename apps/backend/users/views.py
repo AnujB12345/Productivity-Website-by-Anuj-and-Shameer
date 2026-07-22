@@ -1,3 +1,5 @@
+import time
+
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, logout
@@ -18,7 +20,10 @@ def sign_up(request):
             password = make_password(form.cleaned_data['password1'])
             conn = sqlite3.connect("users.db")
             cursor = conn.cursor()
-
+            if email == "":
+                messages.error(request, "Email is required")
+                conn.close()
+                return render(request, "register.html", {"form": form})
             cursor.execute("SELECT id FROM users WHERE username=? OR email=?", (username, email))
             existing_user=cursor.fetchone()
             if existing_user:
@@ -35,7 +40,8 @@ def sign_up(request):
             cursor.close()
             messages.success(request, "Account created successfully")
             list(messages.get_messages(request))
-            return redirect("users:login")
+            request.session["username"] = username
+            return redirect("/")
         
         else:
             return render(request, 'register.html', {'form': form})
