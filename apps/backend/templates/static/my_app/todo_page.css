@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=SquadaOne&display=swap');
+
+body {
+    background-color: rgb(255, 121, 121);
+    padding-bottom: 60px;
+}
+
+.todo-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 20px 15px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+    font-family: 'SquadaOne', sans-serif;   
+    font-weight: bold;
+    font-size: 40px;
+    color: white;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    padding-top: 30px;
+    padding-bottom: 15px;
+    text-align: center;
+}
+
+.input-group {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    padding-top: 30px;
+    outline: none;
+}
+
+.task-input {
+    text-align: center;
+    width: 50%;
+    border-radius: 7px;
+    border-color: rgb(255, 121, 121);
+    border-style: solid;
+    border-width: 2px;
+    padding-right: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    outline: none;
+}
+
+.spacer {
+    width: 4px; 
+}
+
+.add-btn {
+    background-color: white;
+    color: rgb(255, 121, 121);
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+
+}
+
+.add-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.add-btn:hover {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.add-btn .btn-text {
+    font-size: 40px;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    top: -16px;
+    left: -4px;
+    outline: none;
+}
+
+
+.no-tasks {
+    text-align: center;
+    font-family: Arial;       
+    font-weight: bold;
+    font-size: 16px;
+    color: rgb(255, 121, 121);
+    padding-top: 20px;
+}
+
+
+.task {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-right: 30px;
+    border-bottom: 2px solid rgb(255, 121, 121);
+}
+
+.task-text {
+    font-size: 20px;
+}
+
+
+.save-btn {
+    background-color: white;
+    color: rgb(255, 121, 121);
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+
+}
+
+.save-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.save-btn:hover {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.save-btn .btn-text {
+    font-size: 23px;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    top: -5px;
+    left: -5px;
+    outline: none;
+}
+
+.edit-input {
+    text-align: center;
+    width: 50%;
+    border-radius: 7px;
+    border-color: rgb(255, 121, 121);
+    border-style: solid;
+    border-width: 2px;
+    padding-right: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    outline: none;
+}
+
+.checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 20px;
+    height: 20px;
+
+    border: 2px solid rgb(255, 121, 121);
+    border-radius: 5px;
+    background: white;
+
+    cursor: pointer;
+    position: relative;
+    top: 9px;
+}
+
+.checkbox:checked {
+    background: rgb(255, 121, 121);
+}
+
+.checkbox:checked::before {
+    content: "✓"; 
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.footer span {
+    display: block;
+    text-align: center;
+    font-family: Arial;       
+    font-weight: bold;
+    font-size: 14px;
+    color: rgb(255, 121, 121);
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+
+.clear-btn {
+    display: block;
+    margin: 0 auto;
+    background-color: white;
+    color: rgb(255, 121, 121);
+    width: 100px;
+    height: 46px;
+    border: none;
+    border-radius: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+
+}
+
+.clear-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.clear-btn:hover {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.clear-btn .btn-text {
+    font-size: 23px;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    top: -5px;
+    left: -5px;
+    outline: none;
+}

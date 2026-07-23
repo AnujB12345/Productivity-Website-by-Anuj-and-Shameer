@@ -1,26 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block body_class %}todo{% endblock %}
+{% block extra_css %}  
+<link rel = "stylesheet" href = "{% static 'my_app/todo_page.css' %}">
+{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Todo App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
+    <h2 class="title">Todo App</h2>
 
-<div class="todo-container">
-    <h2>Todo App</h2>
-
+    
+    <div class="todo-container">
     <!-- ADD TASK -->
     <form method="POST">
         {% csrf_token %}
         <div class="input-group">
-            <input type="text" name="title" placeholder="Add your new todo" required>
-            <button type="submit" name="add_task" class="add-btn">+</button>
+            <input class="task-input" type="text" name="title" placeholder="Add your new todo" required>
+            <div class="spacer"></div>
+            <button class="add-btn" type="submit" name="add_task">
+                <span class="btn-text">+</span>
+            </button>
         </div>
     </form>
 
@@ -45,10 +45,11 @@
                    value="{{ todo.title }}"
                    class="edit-input"
                    required>
+            <div class="spacer"></div>
             <button type="submit"
                     name="edit_task"
-                    class="btn btn-save">
-                ✔
+                    class="btn save-btn">
+                <span class="btn-text">✔</span>
             </button>
         </form>
 
@@ -74,7 +75,7 @@
                 {% csrf_token %}
                 <input type="hidden" name="task_id" value="{{ todo.id }}">
                 <input type="hidden" name="check_task" value="off">
-                <input type="checkbox" name="check_task" value="on"
+                <input class="checkbox" type="checkbox" name="check_task" value="on"
                     onchange="this.form.submit()"
                     {% if todo.checkbox %} checked {% endif %}>
             </form>
@@ -83,7 +84,7 @@
 
     </div>
     {% empty %}
-        <p>No tasks yet</p>
+        <p class="no-tasks">No tasks yet</p>
     {% endfor %}
 
     <!-- FOOTER -->
@@ -109,7 +110,5 @@ function enableEdit(id) {
 }
 </script>
 
-</body>
-</html>
 
 {% endblock %}
