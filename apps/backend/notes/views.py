@@ -26,6 +26,10 @@ def notes(request):
             note = get_object_or_404(Note, id=note_id, username=request.session["username"])
             note.title = new_title
             note.description = new_description
+            if new_description is None:
+                note.description = ""
+            if not new_title:
+                new_title = note.title
             note.save()
             return redirect("notes:notes")
         

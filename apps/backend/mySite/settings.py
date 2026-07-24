@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "calendar_app",
-
+    "notes",
 ]
 
 MIDDLEWARE = [

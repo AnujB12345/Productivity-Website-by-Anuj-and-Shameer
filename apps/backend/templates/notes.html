@@ -1,103 +1,110 @@
 {% extends "base.html" %}
 {% load static %}
 
+{% block body_class %}todo{% endblock %}
+{% block extra_css %}  
+<link rel = "stylesheet" href = "{% static 'my_app/notes.css' %}">
+{% endblock %}
+
 {% block content %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Todo App</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
+    <h2 class="title">Notes App</h2>
 
-<div class="todo-container">
-    <h2>Todo App</h2>
-
+    
+    <div class="todo-container">
     <!-- ADD TASK -->
     <form method="POST">
         {% csrf_token %}
         <div class="input-group">
-            <input type="text" name="title" placeholder="Add your new todo" required>
-            <button type="submit" name="add_task" class="add-btn">+</button>
+            <input class="note-input" type="text" name="title" placeholder="Add your new note title" required>
+            <div class="spacer"></div>
+            <button class="add-btn" type="submit" name="add_note">
+                <span class="btn-text">+</span>
+            </button>
+            
+            <textarea class="note-description-input" type="text" name="description" placeholder="Add your new note description"></textarea>
         </div>
     </form>
 
     <!-- TASK LIST -->
-    {% for todo in not %}
-    <div class="task">
+
+    
+    {% for note in notes %}
+    <div class="note">
 
         <!-- NORMAL TEXT -->
-        <div id="text-{{ todo.id }}" class="task-text">
-            {{ todo.title }}
+        <div id="text-{{ note.id }}" class="note-text">
+            {{ note.title }}
         </div>
 
         <!-- EDIT MODE -->
         <form method="POST"
-              id="edit-{{ todo.id }}"
+              id="edit-{{ note.id }}"
               class="edit-form"
               style="display:none;">
             {% csrf_token %}
-            <input type="hidden" name="task_id" value="{{ todo.id }}">
-            <input type="text"
-                   name="new_title"
-                   value="{{ todo.title }}"
-                   class="edit-input"
-                   required>
-            <button type="submit"
-                    name="edit_task"
-                    class="btn btn-save">
-                ✔
-            </button>
-        </form>
+           <form id="edit-{{ note.id }}" class="edit-form" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="note_id" value="{{ note.id }}">
+
+    <div class="edit-top">
+        <input
+            type="text"
+            name="new_title"
+            value="{{ note.title }}"
+            class="edit-input"
+            required>
+
+        <button
+            type="submit"
+            name="edit_note"
+            class="btn save-btn">
+            ✔
+        </button>
+    </div>
+
+    <textarea
+        class="note-description-input-editing"
+        name="new_description"
+        >{{ note.description }}</textarea>
+</form>
 
         <!-- BUTTONS -->
         <div class="btn-group">
             <button type="button"
-                    onclick="enableEdit({{ todo.id }})"
+                    onclick="enableEdit({{ note.id }})"
                     class="btn btn-edit">
                 ✏
             </button>
 
             <form method="POST">
                 {% csrf_token %}
-                <input type="hidden" name="task_id" value="{{ todo.id }}">
+                <input type="hidden" name="note_id" value="{{ note.id }}">
                 <button type="submit"
-                        name="delete_task"
+                        name="delete_note"
                         class="btn btn-delete">
                     🗑
                 </button>
             </form>
             <div style="width: 20px;"></div>
-            <form method="POST" style="margin: 0;">
-                {% csrf_token %}
-                <input type="hidden" name="task_id" value="{{ todo.id }}">
-                <input type="hidden" name="check_task" value="off">
-                <input type="checkbox" name="check_task" value="on"
-                    onchange="this.form.submit()"
-                    {% if todo.checkbox %} checked {% endif %}>
-            </form>
+            
 
         </div>
 
     </div>
+
+    <div class="note-description"
+         id="description-{{ note.id }}">
+            {{ note.description }}
+        </div>
     {% empty %}
-        <p>No tasks yet</p>
+        <p class="no-notes">No notes yet</p>
     {% endfor %}
 
     <!-- FOOTER -->
     <div class="footer">
-        <span>You have {{ task_count }} tasks</span>
+        <span>You have {{ note_count }} notes</span>
 
-        <form method="POST">
-            {% csrf_token %}
-            <button type="submit"
-                    name="clear_all"
-                    class="clear-btn">
-                Clear All
-            </button>
-        </form>
     </div>
 </div>
 
@@ -105,11 +112,10 @@
 <script>
 function enableEdit(id) {
     document.getElementById("text-" + id).style.display = "none";
+    document.getElementById("description-" + id).style.display = "none";
     document.getElementById("edit-" + id).style.display = "flex";
 }
 </script>
 
-</body>
-</html>
 
 {% endblock %}
