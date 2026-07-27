@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=SquadaOne&display=swap');
 
-body.register-page {
-    background-color: rgb(255, 121, 121);
-    padding-bottom: 60px;
-}
+
 
 .title {
     font-family: 'SquadaOne', sans-serif;   
@@ -22,6 +19,7 @@ body.register-page {
     padding-bottom: 30px;
 }
 
+
 .field input{
     text-align: center;
     width: 50%;
@@ -32,13 +30,12 @@ body.register-page {
     padding-left: 6px;
     padding-top: 2px;
     padding-bottom: 2px;
-
 }
 
 
 .field label{
     display: block;
-    font-family: Arial;       
+    font-family: arial;       
     font-weight: bold;
     font-size: 14px;
     color: rgb(255, 121, 121);
@@ -66,6 +63,7 @@ body.register-page {
     justify-content: center;
     margin-top: 20px;
 }
+
 .register-button {
     background-color: rgb(255, 121, 121);
     justify-content: center;

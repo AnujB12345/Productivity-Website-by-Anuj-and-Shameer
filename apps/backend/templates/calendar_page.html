@@ -1,10 +1,10 @@
-{% extends "base.html" %} {% block title %} Home Page {% endblock %} <!-- This page extends base.html-->
+{% extends "base_page.html" %} {% block title %} Home Page {% endblock %} <!-- This page extends base_page.html-->
 
 {% load static %}
 
 {% block body_class %}calendar{% endblock %}
 {% block extra_css %}  
-<link rel = "stylesheet" href = "{% static 'my_app/calendar.css' %}">
+<link rel = "stylesheet" href = "{% static 'my_app/calendar_page.css' %}">
 {% endblock%}
 
 {% block content %}

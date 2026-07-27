@@ -40,7 +40,7 @@ def todo_list(request):
             Todo.objects.all().delete()
             return redirect("todo:todo_list")
         
-    return render(request, "list.html", {
+    return render(request, "to_do_list_page.html", {
         "todos": todos,
         "task_count": todos.count()
     })

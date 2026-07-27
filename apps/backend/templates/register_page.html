@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base_page.html" %} {% block title %} Register Page {% endblock %} <!-- This page extends base_page.html-->
 {% load static %}
 
 {% block body_class %}register-page{% endblock %}
@@ -10,7 +10,7 @@
 
 <form class= "register-page" method="POST" novalidate>
 	{% csrf_token %}
-	<h2 class="title">Sign Up</h2>
+	<h2 class="title">Register</h2>
 		
 	<div class="frame">
 

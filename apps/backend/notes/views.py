@@ -43,7 +43,7 @@ def notes(request):
             Note.objects.all().delete()
             return redirect("notes:notes")
         
-    return render(request, "notes.html", {
+    return render(request, "revision_notes_page.html", {
         "notes": notes,
         "note_count": notes.count()
     })

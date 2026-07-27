@@ -1,14 +1,14 @@
-{% extends "base.html" %}
+{% extends "base_page.html" %} {% block title %} To-do List {% endblock %} <!-- This page extends base_page.html-->
 {% load static %}
 
 {% block body_class %}todo{% endblock %}
 {% block extra_css %}  
-<link rel = "stylesheet" href = "{% static 'my_app/todo_page.css' %}">
+<link rel = "stylesheet" href = "{% static 'my_app/to_do_list_page.css' %}">
 {% endblock %}
 
 {% block content %}
 
-    <h2 class="title">Todo App</h2>
+    <h2 class="title">To-do List</h2>
 
     
     <div class="todo-container">
@@ -83,6 +83,7 @@
         </div>
 
     </div>
+    
     {% empty %}
         <p class="no-tasks">No tasks yet</p>
     {% endfor %}

@@ -1,0 +1,50 @@
+{% extends "base_page.html" %} {% block title %} Home Page {% endblock %} <!-- This page extends base_page.html-->
+
+{% load static %}
+
+{% block body_class %}home-page{% endblock %}
+{% block extra_css %}  
+<link rel = "stylesheet" href = "{% static 'my_app/home_page.css' %}">
+{% endblock%}
+
+{% block content %}
+<h1 class = "title">Welcome to the Productivity App</h1>
+
+
+<a href="{% url 'todo:todo_list' %}" class = "text-box">
+    <div>
+        <span class = "feature-name">To-Do List</span>
+        <p class = "feature-summary">Create your own to-do list to help with organisation</p>
+    </div>
+</a>
+
+<a href="{% url 'notes:notes' %}" class = "text-box"> 
+    <div>
+        <span class = "feature-name">Revision Notes</span>
+        <p class = "feature-summary">Use our notes feature to help create revision notes for exams</p>
+    </div>
+</a>
+
+<a href="{% url 'calendar:calendar' %}" class = "text-box"> 
+    <div> 
+        <span class = "feature-name">Calendar</span>
+        <p class = "feature-summary">Use our calendar feature to plan out your day thoroughly</p> 
+    </div>
+</a>
+
+<h1 class = "login-register-prompt"> Want to access these features?</h1>
+
+<div class = "login-register-links">
+    <a href="{% url 'users:login' %}">
+        <button>Login</button>
+    </a>
+
+    <a href="{% url 'users:register' %}" >
+        <button>Register</button>
+    </a>
+</div>
+
+
+
+
+{% endblock %}

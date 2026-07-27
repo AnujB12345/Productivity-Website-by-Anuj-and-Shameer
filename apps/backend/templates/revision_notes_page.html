@@ -1,9 +1,9 @@
-{% extends "base.html" %}
+{% extends "base_page.html" %} {% block title %} Revision Notes {% endblock %} <!-- This page extends base_page.html-->
 {% load static %}
 
 {% block body_class %}todo{% endblock %}
 {% block extra_css %}  
-<link rel = "stylesheet" href = "{% static 'my_app/notes.css' %}">
+<link rel = "stylesheet" href = "{% static 'my_app/revision_notes_page.css' %}">
 {% endblock %}
 
 {% block content %}

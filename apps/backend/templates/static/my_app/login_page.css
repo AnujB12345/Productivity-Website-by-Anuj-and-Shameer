@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=SquadaOne&display=swap');
 
-body {
-    background-color: rgb(255, 121, 121);
-    padding-bottom: 60px;
-}
 
 .title {
     font-family: 'SquadaOne', sans-serif;   
@@ -49,15 +45,15 @@ body {
 
 .errorlist {
     color: red;
-    font-size: 12px;
-    margin-top: 5px;
+    font-size: 14px;
+    margin-top: 0px;
     text-align: center;
-    padding-top: 20px;
+    padding-top: 5px;
 }
 
 .error {
     color: red;
-    font-size: 12px;
+    font-size: 14px;
     margin-top: 5px;
     text-align: center;
 }
@@ -69,6 +65,9 @@ body {
     justify-content: center;
     margin-top: 20px;
 }
+/* The box surrounding the login button*/
+
+
 .login-button {
     background-color: rgb(255, 121, 121);
     justify-content: center;
@@ -82,11 +81,14 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
 }
+/*Design of the actual login button*/
+
 
 .login-button:hover {
     background-color: rgb(235, 110, 110);
     color: rgb(224, 224, 224);
 }
+/*Colour of login button changes slightly when you hover over it*/
 
 .frame {
     background-color: white;
@@ -94,6 +96,7 @@ body {
     border-radius: 15px;
     box-shadow: 0 20px 15px rgba(0, 0, 0, 0.1);
 }
+/* The entire white frame which encloses everything within the login page*/
 
 .register-link {
     text-align: center;

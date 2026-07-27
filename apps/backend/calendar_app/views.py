@@ -85,7 +85,7 @@ def calendar_event(request):
             return redirect(request.path)
 
 
-    return render(request, "calendar.html", {
+    return render(request, "calendar_page.html", {
         "calendar": cal,
         "year": year,
         "month": month,

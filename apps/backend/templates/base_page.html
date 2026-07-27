@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %} Productivity App {% endblock %}
+    </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"  rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    
+    <link rel = "stylesheet" href="{% static 'my_app/base_page.css' %}">
+    <!--Link the CSS file for base_page.html-->
+
+    {% block extra_css %}{% endblock %} <!--Additional CSS files for other pages-->
+  </head>
+
+  <body class = "{%block body_class %} {% endblock %}">
+
+    <nav class="navbar navbar-light" id = "main-navigation-bar">
+      <a class="navbar-name" href="{% url 'home' %}">Productivity App</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class = "collapse navbar-collapse" id = "navbar">
+        <ul class ="nav-links">
+          <li><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+          <li><a class="nav-link" href="{% url 'users:login' %}">Login</a></li>
+          <li><a class="nav-link" href="{% url 'users:register' %}">Register</a></li>
+          <li><a class="nav-link" href="{% url 'todo:todo_list' %}">To-do</a></li>
+          <li><a class="nav-link" href="{% url 'calendar:calendar' %}">Calendar</a></li>
+        </ul>
+      </div>
+    </nav>
+    
+    <div class="container">
+      {% block content %} {% endblock %} 
+      <!--Contains all of the extra content in the webpages-->
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" ></script>
+  </body>
+</html>
+ 

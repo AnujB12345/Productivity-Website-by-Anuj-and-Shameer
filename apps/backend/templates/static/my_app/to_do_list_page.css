@@ -1,9 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=SquadaOne&display=swap');
 
-body {
-    background-color: rgb(255, 121, 121);
-    padding-bottom: 60px;
-}
 
 .todo-container {
     background-color: white;
@@ -31,37 +27,18 @@ body {
     outline: none;
 }
 
-.note-input {
+.task-input {
     text-align: center;
     width: 50%;
     border-radius: 7px;
-    border-color: rgb(255, 121, 121);
+    /* border-color: rgb(255, 121, 121); */
+    border-color: lightseagreen;
     border-style: solid;
     border-width: 2px;
     padding-right: 6px;
     padding-top: 2px;
     padding-bottom: 2px;
     outline: none;
-    font-size: 20px;
-}
-
-.note-description-input {
-    text-align: left;
-    padding:7px;
-    width: 55.5%;
-    height: 150px;
-    border-radius: 7px;
-    border-color: rgb(255, 121, 121);
-    border-style: solid;
-    border-width: 2px;
-    padding-right: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    outline: none;
-    position: relative;
-    top: 3px;
-    font-size: 12px;
-    
 }
 
 .spacer {
@@ -69,8 +46,8 @@ body {
 }
 
 .add-btn {
-    background-color: white;
-    color: rgb(255, 121, 121);
+    /* background-color: white;
+    color: rgb(255, 121, 121); */
     width: 40px;
     height: 40px;
     border: none;
@@ -81,6 +58,12 @@ body {
     padding-bottom: 2px;
     transition: background-color 0.3s ease, color 0.3s ease;
     outline: none;
+
+    /* background-color: rgb(255, 121, 121); */
+    background-color: lightseagreen;
+    color: white;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+    font-weight: bold; 
 
 }
 
@@ -105,17 +88,18 @@ body {
 }
 
 
-.no-notes {
+.no-tasks {
     text-align: center;
     font-family: Arial;       
     font-weight: bold;
     font-size: 16px;
-    color: rgb(255, 121, 121);
+    /* color: rgb(255, 121, 121); */
+    color: lightseagreen;
     padding-top: 20px;
 }
 
 
-.note {
+.task {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -123,27 +107,19 @@ body {
     padding-top: 30px;
     padding-left: 20px;
     padding-right: 30px;
-    border-bottom: 2px solid rgb(255, 121, 121);
+    /* border-bottom: 2px solid rgb(255, 121, 121); */
+    border-bottom: 2px lightseagreen;
+
 }
 
-.note-text {
+.task-text {
     font-size: 20px;
-}
-
-.note-description {
-    font-size: 12px;
-    color: rgb(100, 100, 100);
-    padding-top: 5px;
-    padding-left: 20px;
-    padding-right: 30px;
-    padding-bottom: 40px;
-    
 }
 
 
 .save-btn {
     background-color: white;
-    color: rgb(255, 121, 121);
+    color: lightseagreen;
     width: 40px;
     height: 40px;
     border: none;
@@ -181,13 +157,44 @@ body {
     text-align: center;
     width: 50%;
     border-radius: 7px;
-    border-color: rgb(255, 121, 121);
+    border-color: lightseagreen;
     border-style: solid;
     border-width: 2px;
     padding-right: 6px;
     padding-top: 2px;
     padding-bottom: 2px;
     outline: none;
+}
+
+.checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 20px;
+    height: 20px;
+
+    border: 2px solid lightseagreen;
+    border-radius: 5px;
+    background: white;
+
+    cursor: pointer;
+    position: relative;
+    top: 9px;
+}
+
+.checkbox:checked {
+    background: lightseagreen;
+}
+
+.checkbox:checked::before {
+    content: "✓"; 
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .footer span {
@@ -196,36 +203,50 @@ body {
     font-family: Arial;       
     font-weight: bold;
     font-size: 14px;
-    color: rgb(255, 121, 121);
+    color: lightseagreen;
     padding-top: 30px;
     padding-bottom: 20px;
 }
 
-.edit-form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.edit-top {
-    display: flex;
-    gap: 6px;
-}
-
-.note-description-input-editing {
-    text-align: left;
-    padding:7px;
-    width: 270%;
-    height: 150px;
+.clear-btn {
+    display: block;
+    margin: 0 auto;
+    /* background-color: white;
+    color: rgb(255, 121, 121); */
+    width: 100px;
+    height: 46px;
+    border: none;
     border-radius: 7px;
-    border-color: rgb(255, 121, 121);
-    border-style: solid;
-    border-width: 2px;
-    padding-right: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
     padding-top: 2px;
     padding-bottom: 2px;
+    transition: background-color 0.3s ease, color 0.3s ease;
     outline: none;
+
+    background-color: lightseagreen;
+    justify-content: center;
+    color: white;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+    font-weight: bold;      
+}
+
+.clear-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.clear-btn:hover {
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.clear-btn .btn-text {
+    font-size: 23px;
+    font-weight: bold;
     position: relative;
-    top: 1px;
-    font-size: 12px;
+    display: inline-block;
+    top: -5px;
+    left: -5px;
+    outline: none;
 }

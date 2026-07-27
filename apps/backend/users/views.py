@@ -7,10 +7,10 @@ from django.contrib.auth.hashers import make_password, check_password
 from .forms import LoginForm, RegisterForm
 import sqlite3
 
-def sign_up(request):
+def register(request):
     if request.method == 'GET':
         form = RegisterForm()
-        return render(request, 'register.html', {'form': form})    
+        return render(request, 'register_page.html', {'form': form})    
    
     if request.method == 'POST':
         form = RegisterForm(request.POST) 
@@ -23,13 +23,13 @@ def sign_up(request):
             if email == "":
                 messages.error(request, "Email is required")
                 conn.close()
-                return render(request, "register.html", {"form": form})
+                return render(request, "register_page.html", {"form": form})
             cursor.execute("SELECT id FROM users WHERE username=? OR email=?", (username, email))
             existing_user=cursor.fetchone()
             if existing_user:
                 messages.error(request, "Username or email already exists")
                 conn.close()
-                return render(request, "register.html", {"form": form})
+                return render(request, "register_page.html", {"form": form})
                 
             cursor.execute(
                 "INSERT INTO users (username, password_hash, email) VALUES (?, ?, ?)",
@@ -44,14 +44,14 @@ def sign_up(request):
             return redirect("/")
         
         else:
-            return render(request, 'register.html', {'form': form})
+            return render(request, 'register_page.html', {'form': form})
             
 
 def sign_in(request):
     list(messages.get_messages(request))
     if request.method == 'GET':
         form = LoginForm()
-        return render(request,'login.html', {'form': form})
+        return render(request,'login_page.html', {'form': form})
     
     elif request.method == 'POST':
         form = LoginForm(request.POST)
@@ -67,7 +67,7 @@ def sign_in(request):
             if not stored_hash:
                 messages.error(request, "Username does not exist, please try again!")
                 conn.close()
-                return render(request, "login.html", {"form": form})
+                return render(request, "login_page.html", {"form": form})
             if check_password(password, stored_hash[0]):
                 request.session["username"] = username
                 return redirect("/")
@@ -75,7 +75,7 @@ def sign_in(request):
             #should be checked if user is in databasse
         
         messages.error(request,"Invalid password")
-        return render(request,'login.html',{'form': form})
+        return render(request,'login_page.html',{'form': form})
         
     
 def sign_out(request):
