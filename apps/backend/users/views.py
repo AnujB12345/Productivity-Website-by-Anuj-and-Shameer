@@ -70,7 +70,7 @@ def sign_in(request):
                 return render(request, "login_page.html", {"form": form})
             if check_password(password, stored_hash[0]):
                 request.session["username"] = username
-                return render(request, 'home_page.html', {'username': username})
+                return render(request, 'home_page.html')
 
             #should be checked if user is in databasse
         
@@ -79,6 +79,5 @@ def sign_in(request):
         
     
 def sign_out(request):
-    logout(request)
-    messages.success(request,f'You have been logged out.')
-    return redirect('login') 
+    request.session.flush()
+    return redirect("/")

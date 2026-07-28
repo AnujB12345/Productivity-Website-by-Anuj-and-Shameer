@@ -32,8 +32,8 @@
           <li><a class="nav-link" href="{% url 'home' %}">Home</a></li>
           <li><a class="nav-link" href="{% url 'todo:todo_list' %}">To-do</a></li>
           <li><a class="nav-link" href="{% url 'calendar:calendar' %}">Calendar</a></li>
-          {% if username is not None %}
-              <li><a class="nav-link" href="{% url 'home' %}">Logout</a></li>
+          {% if request.session.username %}
+              <li><a class="nav-link" href="{% url 'users:logout' %}">Logout</a></li>
           {% else %}
               <li><a class="nav-link" href="{% url 'users:login' %}">Login</a></li>
               <li><a class="nav-link" href="{% url 'users:register' %}">Register</a></li>
