@@ -16,15 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from myApp.views import ReactView
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("myApp.urls")),
+    path('', include("homepage.urls")),
     path("user/", include("users.urls")),
     path("todo/", include("todo.urls")),
     path("notes/", include("notes.urls")),
-    path("calendar/", include("calendar_app.urls")),
-    path('wel/', ReactView.as_view(), name="react-view"),
+    path("calendar/", include("calendar_app.urls"))
 ]

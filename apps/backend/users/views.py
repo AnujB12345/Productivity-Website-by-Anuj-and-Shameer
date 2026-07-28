@@ -70,7 +70,7 @@ def sign_in(request):
                 return render(request, "login_page.html", {"form": form})
             if check_password(password, stored_hash[0]):
                 request.session["username"] = username
-                return redirect("/")
+                return render(request, 'home_page.html', {'username': username})
 
             #should be checked if user is in databasse
         
