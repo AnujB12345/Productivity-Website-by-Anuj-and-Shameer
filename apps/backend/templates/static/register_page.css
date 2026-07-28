@@ -83,25 +83,28 @@ body {
     display: flex;
     justify-content: center;
     margin-top: 60px;
+    
 }
 
 .register-button {
-    background-color: lightseagreen;
-    justify-content: center;
+    background-color: rgba(78, 121, 206);
+    font-size: 20px;
     color: white;
-    font-family: Arial;       
-    font-weight: bold;
-    font-size: 16px;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease; 
+    border: none; 
 }
 
 .register-button:hover {
-    background-color: rgb(27, 141, 135);
-    color: rgb(224, 224, 224);
+    text-decoration: none;
+    color: white;
+    background-color: rgb(35, 82, 175);
+    cursor: pointer;
 }
 
 .frame {
@@ -120,10 +123,12 @@ body {
     text-align: center;
     margin-top: 20px;
     font-family: Arial;       
-    font-weight: bold;
     font-size: 14px;
-    color: lightseagreen;
+    color: white;
 }
 
-
+.login-link-text {
+    color: rgba(78, 121, 206);
+    text-decoration: underline;
+}
 
