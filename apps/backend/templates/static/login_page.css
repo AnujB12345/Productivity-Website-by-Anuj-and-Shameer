@@ -1,5 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=SquadaOne&display=swap');
 
+:root {
+    --a-color: rgba(26, 26, 25);
+    --b-color:  rgba(44, 44, 42);
+    --c-color: rgb(188, 187, 174);
+    --d-color: rgba(117, 117, 117);
+}
+
+body {
+    background-color: var(--a-color);
+}
 
 .title {
     font-family: 'SquadaOne', sans-serif;   
@@ -8,40 +18,64 @@
     color: white;
     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
     padding-top: 30px;
-    padding-bottom: 15px;
+    padding-bottom: 0px;
     text-align: center;
 }
 
+.subtitle {
+    font-family: Arial;   
+    font-size: 16px;
+    color:rgba(192, 191, 179, 0.6);
+    text-align: center;
+}
+
+.login-container {
+    text-align: center;
+    margin-bottom: 60px;
+    margin-top: 30px;
+}
 
 .field{
-    text-align: center;
+    display: block;
     padding-bottom: 30px;
+    width: 300px;
+    margin: 0 auto 30px auto;
 }
 
 .field input{
-    text-align: center;
-    width: 50%;
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
     border-radius: 7px;
-    border-color: rgb(255, 121, 121);
+    border-color: var(--d-color);
+    background-color: var(--b-color);
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     padding-left: 6px;
     padding-top: 2px;
     padding-bottom: 2px;
+    color: var(--c-color);
+    outline: none;
 
+}
+
+.field input::placeholder {
+  color: var(--c-color);
+  opacity: 0.6;
+  padding-left: 7px;
 }
 
 
 .field label{
     display: block;
-    font-family: Arial;       
-    font-weight: bold;
+    font-family: Arial;
     font-size: 14px;
-    color: rgb(255, 121, 121);
-    text-align: center;
+    color: var(--c-color);
+    text-align: left;
     line-height: 1;
     padding-top: 10px;
 }
+
 
 .errorlist {
     color: red;
@@ -69,14 +103,14 @@
 
 
 .login-button {
-    background-color: rgb(255, 121, 121);
+    background-color: lightseagreen;
     justify-content: center;
     color: white;
     font-family: Arial;       
     font-weight: bold;
     font-size: 16px;
     padding: 10px 20px;
-    border: 2px solid white;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -85,16 +119,21 @@
 
 
 .login-button:hover {
-    background-color: rgb(235, 110, 110);
+    background-color: rgb(27, 141, 135);
     color: rgb(224, 224, 224);
 }
 /*Colour of login button changes slightly when you hover over it*/
 
 .frame {
-    background-color: white;
+    margin: 0 auto;
+    background-color: var(--b-color);
+    outline: solid var(--b-color) 1px;
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 20px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+        0 0 3px rgba(97, 97, 97, 0.1),
+        inset 0 0 5px rgba(0, 0, 0, 0.25);
+    width: 500px;
 }
 /* The entire white frame which encloses everything within the login page*/
 
@@ -104,7 +143,7 @@
     font-family: Arial;       
     font-weight: bold;
     font-size: 14px;
-    color: rgb(255, 121, 121);
+    color: lightseagreen;
 }
 
 

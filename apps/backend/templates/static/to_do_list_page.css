@@ -1,11 +1,29 @@
 @import url('https://fonts.googleapis.com/css2?family=SquadaOne&display=swap');
 
 
+:root {
+    --a-color: rgba(26, 26, 25);
+    --b-color:  rgba(44, 44, 42);
+    --c-color: rgb(188, 187, 174);
+    --d-color: rgba(117, 117, 117);
+}
+
+body {
+    background-color: var(--a-color);
+}
+
+
+
 .todo-container {
-    background-color: white;
-    padding: 30px;
+    margin: 0 auto;
+    background-color: var(--b-color);
+    outline: solid var(--b-color) 1px;
+    padding-top: 5px;
     border-radius: 15px;
-    box-shadow: 0 20px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+        0 0 3px rgba(97, 97, 97, 0.1),
+        inset 0 0 5px rgba(0, 0, 0, 0.25);
+    width: 650px;
 }
 
 .title {
@@ -15,8 +33,17 @@
     color: white;
     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
     padding-top: 30px;
-    padding-bottom: 15px;
     text-align: center;
+}
+
+
+.subtitle {
+    display: block;
+    text-align: center;
+    font-family: Arial;   
+    font-size: 14px;
+    color: lightseagreen;
+    padding-bottom: 20px;
 }
 
 .input-group {
@@ -24,31 +51,40 @@
     display: flex;
     justify-content: center;
     padding-top: 30px;
+    padding-bottom: 40px;
     outline: none;
 }
 
 .task-input {
-    text-align: center;
-    width: 50%;
+    text-align: left;
+    width: 565px;
     border-radius: 7px;
-    /* border-color: rgb(255, 121, 121); */
-    border-color: lightseagreen;
+    border-color: var(--d-color);
+    background-color: var(--b-color);
+    color: var(--c-color);
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     padding-right: 6px;
+    padding-left: 7px;
     padding-top: 2px;
     padding-bottom: 2px;
     outline: none;
 }
 
+.task-input::placeholder {
+  color: var(--c-color);
+  opacity: 0.6;
+  padding-left: 6px;
+}
+
 .spacer {
-    width: 4px; 
+    width: 5px; 
 }
 
 .add-btn {
     /* background-color: white;
     color: rgb(255, 121, 121); */
-    width: 40px;
+    width: 80px;
     height: 40px;
     border: none;
     border-radius: 7px;
@@ -78,12 +114,8 @@
 }
 
 .add-btn .btn-text {
-    font-size: 40px;
-    font-weight: bold;
-    position: relative;
+    font-size: 18px;
     display: inline-block;
-    top: -16px;
-    left: -4px;
     outline: none;
 }
 
@@ -93,7 +125,6 @@
     font-family: Arial;       
     font-weight: bold;
     font-size: 16px;
-    /* color: rgb(255, 121, 121); */
     color: lightseagreen;
     padding-top: 20px;
 }
@@ -101,24 +132,45 @@
 
 .task {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 5px;
-    padding-top: 30px;
+    padding-top: 5px;
     padding-left: 20px;
     padding-right: 30px;
-    /* border-bottom: 2px solid rgb(255, 121, 121); */
-    border-bottom: 2px lightseagreen;
+    border-bottom: 1px solid var(--d-color);
 
+}
+
+.task-right-side {
+    align-items: left;
+    display: flex;
 }
 
 .task-text {
+    color: var(--c-color);
     font-size: 20px;
+    align-items: left;
+    padding-left: 20px;
+}
+
+.task-text.done {
+    text-decoration: line-through;
+    color: var(--d-color)
 }
 
 
+.btn-group {
+    align-items: right;
+}
+
+
+
+
+
 .save-btn {
-    background-color: white;
+    background-color: var(--b-color);
     color: lightseagreen;
     width: 40px;
     height: 40px;
@@ -141,29 +193,28 @@
 .save-btn:hover {
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+    color:#138f83;
 }
 
-.save-btn .btn-text {
-    font-size: 23px;
-    font-weight: bold;
-    position: relative;
-    display: inline-block;
-    top: -5px;
-    left: -5px;
-    outline: none;
+.save-btn .btn-text .icon {
+    width: 20px;
+    height: 20px;
+    color: inherit;
 }
 
 .edit-input {
     text-align: center;
-    width: 50%;
+    align-items: left;
     border-radius: 7px;
-    border-color: lightseagreen;
+    border-color: var(--c-color);
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     padding-right: 6px;
     padding-top: 2px;
     padding-bottom: 2px;
     outline: none;
+    background-color: var(--b-color);
+    color: var(--c-color)
 }
 
 .checkbox {
@@ -173,13 +224,13 @@
     width: 20px;
     height: 20px;
 
-    border: 2px solid lightseagreen;
+    border: 1px solid var(--c-color);
     border-radius: 5px;
-    background: white;
+    background: var(--b-color);
 
     cursor: pointer;
     position: relative;
-    top: 9px;
+    top: 6px;
 }
 
 .checkbox:checked {
@@ -187,24 +238,26 @@
 }
 
 .checkbox:checked::before {
-    content: "✓"; 
+    content: "";
     position: absolute;
-    left: 50%;
+
+    width: 15px;
+    height: 15px;
+
     top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
-    color: white;
-    font-size: 14px;
-    font-weight: bold;
+
+    background-color: white;
+
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5L10 17L19 8' fill='none' stroke='black' stroke-width='4' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E") center/contain no-repeat;
+
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5L10 17L19 8' fill='none' stroke='black' stroke-width='4' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E") center/contain no-repeat;
 }
 
-.footer span {
-    display: block;
-    text-align: center;
-    font-family: Arial;       
-    font-weight: bold;
-    font-size: 14px;
-    color: lightseagreen;
-    padding-top: 30px;
+
+.clear-form{
+    padding-top:60px;
     padding-bottom: 20px;
 }
 
@@ -214,21 +267,16 @@
     /* background-color: white;
     color: rgb(255, 121, 121); */
     width: 100px;
-    height: 46px;
-    border: none;
+    height: 35px;
+    border: 1px solid var(--d-color);
     border-radius: 7px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 2px;
-    padding-bottom: 2px;
     transition: background-color 0.3s ease, color 0.3s ease;
     outline: none;
 
-    background-color: lightseagreen;
+    background-color: var(--b-color);
     justify-content: center;
-    color: white;
+    color: red;
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
-    font-weight: bold;      
 }
 
 .clear-btn:focus {
@@ -250,3 +298,59 @@
     left: -5px;
     outline: none;
 }
+
+
+
+.btn-edit {
+    color: lightseagreen;
+    background-color: var(--b-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-edit:hover {
+    color: #138f83;
+}
+
+.btn-edit,
+.btn-edit:focus,
+.btn-edit:focus-visible,
+.btn-edit:active {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+
+.btn-delete {
+    color: crimson;
+    background-color: var(--b-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-delete:hover {
+    color: darkred;
+}
+
+.btn-delete,
+.btn-delete:focus,
+.btn-delete:focus-visible,
+.btn-delete:active {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+.btn-edit .icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    color: inherit;         
+}
+
+.btn-delete .icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    color: inherit;         
+}
+

@@ -3,12 +3,15 @@
 
 {% block body_class %}login{% endblock %}
 {% block extra_css %}  
-<link rel = "stylesheet" href = "{% static 'my_app/login_page.css' %}">
+<link rel = "stylesheet" href = "{% static 'login_page.css' %}">
 {% endblock%}
 
 
 {% block content %}
-<h2 class="title">Login</h2>
+<div class="login-container">
+<h2 class="title">Welcome back</h2>
+<span class="subtitle">Log in to pick up where you left off</span>
+</div>
 <div class="frame">
 
 	{% if messages %}
@@ -30,8 +33,7 @@
 					{% endfor %}
 				</div>
 				{% endif %}
-				{{ field.label_tag }} 
-
+				{{ field.label_tag }}
 			{{ field }}
 			</div>
 			{% endfor %}

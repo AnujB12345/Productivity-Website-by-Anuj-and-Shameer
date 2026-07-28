@@ -7,6 +7,10 @@ def todo_list(request):
         return redirect("users:login")
 
     todos = Todo.objects.filter(username=request.session["username"])
+    checked_count=0
+    for todo in todos:
+                if todo.checkbox:
+                    checked_count+=1
 
     if request.method == "POST":
 
@@ -39,8 +43,10 @@ def todo_list(request):
         if "clear_all" in request.POST:
             Todo.objects.all().delete()
             return redirect("todo:todo_list")
+                
         
     return render(request, "to_do_list_page.html", {
         "todos": todos,
-        "task_count": todos.count()
+        "task_count": todos.count(),
+        "checked_count": checked_count
     })
