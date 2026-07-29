@@ -1,0 +1,46 @@
+{% extends "base_page.html" %} {% block title %} Dashboard Page {% endblock %} <!-- This page extends base_page.html-->
+
+{% load static %}
+
+{% block body_class %}dashboard-page{% endblock %}
+{% block extra_css %}  
+<link rel = "stylesheet" href = "{% static 'dashboard_page.css' %}">
+<script src="https://kit.fontawesome.com/dce4d5d2ec.js" crossorigin="anonymous"></script>
+
+
+{% endblock%}
+
+{% block content %}
+<h1 class = "title">Welcome back, {{ request.session.username }}</h1> 
+
+<h2 class = "subheading">Your calendar, to-do list and revision notes, all in one place</h2>
+
+<div class = "grid-container">
+
+    <a class="individual-feature" href="{% url 'todo:todo_list' %}">
+        <div>
+            <i class="fa-solid fa-list-check" id= "icon"></i>
+            <h3 class = "feature-name">To-do list</h3>
+            <p class = "feature-summary">Create your own to-do list to stay organised</p>
+        </div>
+    </a>
+
+    <a class="individual-feature" href="{% url 'notes:notes' %}">
+        <div>
+            <i class="fa-solid fa-book" id= "icon"></i>
+            <h3 class = "feature-name">Revision Notes</h3>
+            <p class = "feature-summary">Create and organise revision notes for exam preparation</p>
+        </div>
+    </a>
+
+    <a class = "individual-feature" href="{% url 'calendar:calendar' %}">
+        <div> 
+            <i class="fa-regular fa-calendar" id = "icon"></i>
+            <h3 class = "feature-name">Calendar</h3>
+            <p class = "feature-summary">Plan out your day, hour by hour</p> 
+        </div>
+    </a>
+</div>
+
+
+{% endblock %}

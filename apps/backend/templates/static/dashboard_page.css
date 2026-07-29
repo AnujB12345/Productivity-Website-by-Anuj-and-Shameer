@@ -1,0 +1,123 @@
+.title {
+    font-family: 'SquadaOne', sans-serif;   
+    font-weight: bold;
+    font-size: 40px;
+    color: white;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    padding-top: 40px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+/*Styling for the title 'Welcome to the productivity app*/
+
+.subheading {
+    font-weight: bold;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    padding-top: 10px;
+    padding-bottom: 0;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color:rgba(192, 191, 179, 0.6);
+}
+
+.grid-container {
+    display: grid;
+    padding: 0;
+    gap: 5px;
+    margin: 50px;
+    column-gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+
+}
+
+.individual-feature {
+    background-color: rgba(44, 45, 42);
+    border-radius: 10px;
+    padding: 8px;
+    margin: 5px;
+}
+
+.individual-feature:hover {
+    text-decoration: none;
+    background-color: rgb(52, 53, 51);
+    cursor: pointer;
+}
+
+#icon {
+    background-color: white;
+    border-radius: 8px;
+    padding: 5px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: left;
+    margin-left: 20px;
+    margin-top: 15px;
+
+}
+.feature-name {
+    display: flex;
+    justify-content: left;
+    margin-left: 20px;
+    margin-top: 15px;
+    margin-bottom: 0;
+    font-size: 20px;
+    color: rgba(248, 251, 250);
+}
+
+.feature-summary {
+    display: flex;
+    justify-content: left;
+    margin: 20px;
+    font-size: 20px;
+    align-items: center;
+    color:rgba(192, 191, 179, 0.6);
+}
+
+.register-section {
+    color: white;
+    text-align: center;
+    background-color: rgba(44, 45, 42);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 50px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-account-prompt {
+    margin-top: 20px;
+    padding: 0;
+    font-size: 20px;
+    color: white;
+}
+
+.create-account-description {
+    font-size: 20px;
+    color:rgba(192, 191, 179, 0.6);   
+}
+
+.register-box {
+    background-color: rgba(78, 121, 206);
+    font-size: 20px;
+    color: white;
+    padding: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin: 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;  
+}
+
+.register-box:hover {
+    text-decoration: none;
+    color: white;
+    background-color: rgb(35, 82, 175);
+    cursor: pointer;
+}

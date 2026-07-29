@@ -41,7 +41,7 @@ def register(request):
             messages.success(request, "Account created successfully")
             list(messages.get_messages(request))
             request.session["username"] = username
-            return redirect("/")
+            return redirect("dashboard:dashboard") #redirects to the dashboard after account is successfully created
         
         else:
             return render(request, 'register_page.html', {'form': form})
@@ -70,7 +70,8 @@ def sign_in(request):
                 return render(request, "login_page.html", {"form": form})
             if check_password(password, stored_hash[0]):
                 request.session["username"] = username
-                return render(request, 'home_page.html')
+                # return render(request, 'home_page.html')
+                return render(request, 'dashboard_page.html')
 
             #should be checked if user is in databasse
         
@@ -80,4 +81,4 @@ def sign_in(request):
     
 def sign_out(request):
     request.session.flush()
-    return redirect("/")
+    return redirect("/") #redirects to the homepage after you sign out

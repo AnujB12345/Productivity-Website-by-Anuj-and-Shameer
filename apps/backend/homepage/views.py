@@ -6,6 +6,6 @@ from django.shortcuts import render, HttpResponse
 def home(request):
     return render(request, "home_page.html")
 
-def about(request):
-    return HttpResponse("About Page")
+# def about(request):
+#     return HttpResponse("About Page")
 

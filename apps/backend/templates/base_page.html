@@ -23,8 +23,8 @@
   <body class = "{%block body_class %} {% endblock %}">
 
     <nav class="navbar navbar-light" id = "main-navigation-bar">
-      <a class="navbar-name" href="{% url 'home' %}">Productivity App</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span>
+      <!-- <a class="navbar-name" href="{% url 'home' %}">Productivity App</a> -->
+      <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span>
       </button>
       
       <div class = "collapse navbar-collapse" id = "navbar">
@@ -39,7 +39,38 @@
               <li><a class="nav-link" href="{% url 'users:register' %}">Register</a></li>
           {% endif %}
         </ul>
-      </div>
+      </div> -->
+      {% if request.session.username %}
+        <a class="navbar-name" href="{% url 'dashboard:dashboard' %}">Productivity App</a>
+
+        
+        <div class = "dashboard-navbar">
+          <ul class ="nav-links">
+              <li><a class="nav-link" href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
+              <li><a class="nav-link" href="{% url 'todo:todo_list' %}">To-do</a></li>
+              <li><a class="nav-link" href="{% url 'notes:notes' %}">Revision Notes</a></li>
+              <li><a class="nav-link" href="{% url 'calendar:calendar' %}">Calendar</a></li>
+          </ul>
+        </div>
+        <a class = "logout-button" href="{% url 'users:logout' %}">
+          <div>Logout</div>
+        </a>
+        <!-- <li><a class="nav-link" href="{% url 'users:login' %}">Login</a></li>
+        <li><a class="nav-link" href="{% url 'users:register' %}">Register</a></li>     -->
+      {% else %}
+        <a class="navbar-name" href="{% url 'home' %}">Productivity App</a>
+
+        <div class = "account-buttons">
+          <a class = "homepage-login-button" href="{% url 'users:login' %}">
+            <div>Login</div>
+          </a>
+
+          <a class = "homepage-register-button" href="{% url 'users:register' %}">
+            <div>Register</div>
+          </a>
+
+        </div>
+      {% endif %}
     </nav>
     
     <div class="container">
