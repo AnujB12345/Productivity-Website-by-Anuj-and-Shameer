@@ -106,10 +106,12 @@
 <!-- FOOTER -->
 <div class="footer">
 
-    <form method="POST" class="clear-form">
-        {% csrf_token %}
-        <button type="submit" name="clear_all" class="clear-btn"> Clear all tasks </button>
-    </form>
+    {% if task_count != 0 %}
+        <form method="POST" class="clear-form">
+            {% csrf_token %}
+            <button type="submit" name="clear_all" class="clear-btn"> Clear all tasks </button>
+        </form>
+    {% endif %}
 </div>
 
 

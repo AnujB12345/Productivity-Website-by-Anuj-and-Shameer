@@ -22,7 +22,7 @@
 
   <body class = "{%block body_class %} {% endblock %}">
 
-    <nav class="navbar navbar-light" id = "main-navigation-bar">
+    <nav class="navbar" id = "main-navigation-bar">
       <!-- <a class="navbar-name" href="{% url 'home' %}">Productivity App</a> -->
       <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle Navigation"><span class="navbar-toggler-icon"></span>
       </button>
@@ -41,10 +41,9 @@
         </ul>
       </div> -->
       {% if request.session.username %}
-        <a class="navbar-name" href="{% url 'dashboard:dashboard' %}">Productivity App</a>
-
-        
+      
         <div class = "dashboard-navbar">
+        <a class="navbar-name" href="{% url 'dashboard:dashboard' %}">Productivity App</a>
           <ul class ="nav-links">
               <li><a class="nav-link" href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
               <li><a class="nav-link" href="{% url 'todo:todo_list' %}">To-do</a></li>

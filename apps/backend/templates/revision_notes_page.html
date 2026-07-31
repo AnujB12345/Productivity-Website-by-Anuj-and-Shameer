@@ -4,33 +4,33 @@
 {% block body_class %}todo{% endblock %}
 {% block extra_css %}  
 <link rel = "stylesheet" href = "{% static 'revision_notes_page.css' %}">
-
 {% endblock %}
 
 {% block content %}
 
     <h2 class="title">Notes App</h2>
 
+    <span class="subtitle">{{ note_count }} notes</span>
+
     
-    <div class="todo-container">
     <!-- ADD TASK -->
     <form method="POST">
         {% csrf_token %}
         <div class="input-group">
             <input class="note-input" type="text" name="title" placeholder="Add your new note title" required>
+            <textarea class="note-description-input" type="text" name="description" placeholder="Add your new note description"></textarea>
+            
             <div class="spacer"></div>
             <button class="add-btn" type="submit" name="add_note">
-                <span class="btn-text">+</span>
+                <span class="btn-text">+ Add note</span>
             </button>
-            
-            <textarea class="note-description-input" type="text" name="description" placeholder="Add your new note description"></textarea>
         </div>
     </form>
 
     <!-- TASK LIST -->
 
-    
     {% for note in notes %}
+    <div class="notes-container">
     <div class="note">
 
         <!-- NORMAL TEXT -->
@@ -44,70 +44,70 @@
               class="edit-form"
               style="display:none;">
             {% csrf_token %}
-           <form id="edit-{{ note.id }}" class="edit-form" style="display:none;">
-    {% csrf_token %}
-    <input type="hidden" name="note_id" value="{{ note.id }}">
+           
+        <input type="hidden" name="note_id" value="{{ note.id }}">
 
-    <div class="edit-top">
-        <input
-            type="text"
-            name="new_title"
-            value="{{ note.title }}"
-            class="edit-input"
-            required>
+        <div class="edit-top">
+            <input
+                type="text"
+                name="new_title"
+                value="{{ note.title }}"
+                class="edit-input"
+                required>
 
-        <button
-            type="submit"
-            name="edit_note"
-            class="btn save-btn">
-            ✔
-        </button>
-    </div>
-
-    <textarea
-        class="note-description-input-editing"
-        name="new_description"
-        >{{ note.description }}</textarea>
-</form>
-
-        <!-- BUTTONS -->
-        <div class="btn-group">
-            <button type="button"
-                    onclick="enableEdit({{ note.id }})"
-                    class="btn btn-edit">
-                ✏
+            <button
+                type="submit"
+                name="edit_note"
+                class="btn save-btn">
+                ✔
             </button>
+        </div>
 
-            <form method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="note_id" value="{{ note.id }}">
-                <button type="submit"
-                        name="delete_note"
-                        class="btn btn-delete">
-                    🗑
-                </button>
-            </form>
-            <div style="width: 20px;"></div>
-            
+        <textarea
+            class="note-description-input-editing"
+            name="new_description"
+            >{{ note.description }}
+        </textarea>
+        </form>
+
+                <!-- BUTTONS -->
+                <div class="btn-group">
+                    <button type="button"
+                            onclick="enableEdit({{ note.id }})"
+                            class="btn btn-edit">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L14.96 5.12l3.75 3.75 2-1.66z"/>
+                        </svg>
+                    </button>
+
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="note_id" value="{{ note.id }}">
+                        <button type="submit"
+                                name="delete_note"
+                                class="btn btn-delete">
+                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm3-9h2v8H9v-8zm4 0h2v8h-2v-8zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/>
+                            </svg>
+                        </button>
+                    </form>
+                    <div style="width: 20px;"></div>
+                    
+
+                </div>
 
         </div>
 
-    </div>
-
-    <div class="note-description"
-         id="description-{{ note.id }}">
-            {{ note.description }}
+        <div class="note-description"
+            id="description-{{ note.id }}">
+                {{ note.description }}
         </div>
+        </div> 
+
     {% empty %}
-        <p class="no-notes">No notes yet</p>
+    <p class="no-notes">No notes yet</p>
     {% endfor %}
 
-    <!-- FOOTER -->
-    <div class="footer">
-        <span>You have {{ note_count }} notes</span>
-
-    </div>
-</div>
 
 
 <script>

@@ -2,11 +2,30 @@
 
 
 
-.todo-container {
-    background-color: white;
-    padding: 30px;
+:root {
+    --a-color: rgba(26, 26, 25);
+    --b-color:  rgba(44, 44, 42);
+    --c-color: rgb(188, 187, 174);
+    --d-color: rgba(117, 117, 117);
+}
+
+body {
+    background-color: var(--a-color);
+}
+
+
+
+.notes-container {
+    margin: 0 auto;
+    margin-bottom: 14px;
+    background-color: var(--b-color);
+    outline: solid var(--b-color) 1px;
     border-radius: 15px;
-    box-shadow: 0 20px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+        0 0 3px rgba(97, 97, 97, 0.1),
+        inset 0 0 5px rgba(0, 0, 0, 0.25);
+    width: 650px;
+    height: 160px;
 }
 
 .title {
@@ -16,44 +35,63 @@
     color: white;
     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
     padding-top: 30px;
-    padding-bottom: 15px;
     text-align: center;
+}
+
+
+.subtitle {
+    display: block;
+    text-align: center;
+    font-family: Arial;   
+    font-size: 14px;
+    color: lightseagreen;
+    padding-bottom: 20px;
 }
 
 .input-group {
-    text-align: center;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
+    align-items: center;
     padding-top: 30px;
+    padding-bottom: 40px;
     outline: none;
+    width: 650px;
+    gap: 5px;
 }
 
 .note-input {
-    text-align: center;
-    width: 50%;
+    text-align: left;
+    width: 650px;
     border-radius: 7px;
-    border-color: rgb(255, 121, 121);
+    border-color: var(--d-color);
+    background-color: var(--b-color);
+    color: var(--c-color);
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     padding-right: 6px;
+    padding-left: 7px;
     padding-top: 2px;
-    padding-bottom: 2px;
+    padding-bottom: 8px;
     outline: none;
-    font-size: 20px;
+}
+
+.note-input::placeholder {
+  color: var(--c-color);
+  opacity: 0.6;
+  padding-left: 6px;
 }
 
 .note-description-input {
     text-align: left;
-    padding:7px;
-    width: 55.5%;
-    height: 150px;
+    width: 650px;
+    height: 100px;
     border-radius: 7px;
-    border-color: rgb(255, 121, 121);
+    border-color: var(--d-color);
+    background-color: var(--b-color);
+    color: var(--c-color);
     border-style: solid;
-    border-width: 2px;
-    padding-right: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    border-width: 1px;
     outline: none;
     position: relative;
     top: 3px;
@@ -61,23 +99,22 @@
     
 }
 
-.spacer {
-    width: 4px; 
+.spacer{
+    display: block;
+    height: 70px;
 }
 
 .add-btn {
-    background-color: white;
-    color: rgb(255, 121, 121);
-    width: 40px;
+    width: 100px;
     height: 40px;
     border: none;
     border-radius: 7px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 2px;
-    padding-bottom: 2px;
     transition: background-color 0.3s ease, color 0.3s ease;
     outline: none;
+    background-color: lightseagreen;
+    color: white;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+    font-weight: bold; 
 
 }
 
@@ -92,12 +129,8 @@
 }
 
 .add-btn .btn-text {
-    font-size: 40px;
-    font-weight: bold;
-    position: relative;
+    font-size: 14px;
     display: inline-block;
-    top: -16px;
-    left: -4px;
     outline: none;
 }
 
@@ -107,24 +140,30 @@
     font-family: Arial;       
     font-weight: bold;
     font-size: 16px;
-    color: rgb(255, 121, 121);
+    color: lightseagreen;
     padding-top: 20px;
+    padding-bottom: 30px;
 }
 
 
 .note {
     display: flex;
+    width: 100%;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 5px;
-    padding-top: 30px;
+    padding-top: 5px;
     padding-left: 20px;
     padding-right: 30px;
-    border-bottom: 2px solid rgb(255, 121, 121);
+    border-bottom: 1px solid var(--d-color);
+
 }
 
 .note-text {
+    color: var(--c-color);
     font-size: 20px;
+    align-items: left;
+    padding-left: 20px;
 }
 
 .note-description {
@@ -137,10 +176,19 @@
     
 }
 
+.note-right-side {
+    align-items: left;
+    display: flex;
+}
+
+.btn-group {
+    align-items: right;
+}
+
 
 .save-btn {
-    background-color: white;
-    color: rgb(255, 121, 121);
+    background-color: var(--b-color);
+    color: lightseagreen;
     width: 40px;
     height: 40px;
     border: none;
@@ -162,41 +210,31 @@
 .save-btn:hover {
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
     cursor: pointer;
+    color:#138f83;
 }
 
-.save-btn .btn-text {
-    font-size: 23px;
-    font-weight: bold;
-    position: relative;
-    display: inline-block;
-    top: -5px;
-    left: -5px;
-    outline: none;
+.save-btn .btn-text .icon {
+    width: 20px;
+    height: 20px;
+    color: inherit;
 }
 
 .edit-input {
     text-align: center;
-    width: 50%;
+    align-items: left;
     border-radius: 7px;
-    border-color: rgb(255, 121, 121);
+    border-color: var(--c-color);
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     padding-right: 6px;
     padding-top: 2px;
     padding-bottom: 2px;
     outline: none;
+    background-color: var(--b-color);
+    color: var(--c-color)
 }
 
-.footer span {
-    display: block;
-    text-align: center;
-    font-family: Arial;       
-    font-weight: bold;
-    font-size: 14px;
-    color: rgb(255, 121, 121);
-    padding-top: 30px;
-    padding-bottom: 20px;
-}
+
 
 .edit-form {
     display: flex;
@@ -212,12 +250,14 @@
 .note-description-input-editing {
     text-align: left;
     padding:7px;
-    width: 270%;
+    width: 500px;
     height: 150px;
+    color: var(--c-color);
+    background-color: var(--b-color);
     border-radius: 7px;
-    border-color: rgb(255, 121, 121);
+    border-color: var(--c-color);
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     padding-right: 6px;
     padding-top: 2px;
     padding-bottom: 2px;
@@ -225,4 +265,58 @@
     position: relative;
     top: 1px;
     font-size: 12px;
+}
+
+
+.btn-edit {
+    color: lightseagreen;
+    background-color: var(--b-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-edit:hover {
+    color: #138f83;
+}
+
+.btn-edit,
+.btn-edit:focus,
+.btn-edit:focus-visible,
+.btn-edit:active {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+
+.btn-delete {
+    color: crimson;
+    background-color: var(--b-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-delete:hover {
+    color: darkred;
+}
+
+.btn-delete,
+.btn-delete:focus,
+.btn-delete:focus-visible,
+.btn-delete:active {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+.btn-edit .icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    color: inherit;         
+}
+
+.btn-delete .icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+    color: inherit;         
 }

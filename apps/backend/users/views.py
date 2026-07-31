@@ -9,10 +9,16 @@ import sqlite3
 
 def register(request):
     if request.method == 'GET':
-        form = RegisterForm()
-        return render(request, 'register_page.html', {'form': form})    
+        try:
+            if request.session["username"] is not None:
+                        return redirect("dashboard:dashboard")
+        except:
+            form = RegisterForm()
+            return render(request, 'register_page.html', {'form': form})    
    
     if request.method == 'POST':
+
+            # return redirect("dashboard:dashboard")
         form = RegisterForm(request.POST) 
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -50,8 +56,12 @@ def register(request):
 def sign_in(request):
     list(messages.get_messages(request))
     if request.method == 'GET':
-        form = LoginForm()
-        return render(request,'login_page.html', {'form': form})
+        try:
+            if request.session["username"] is not None:
+                        return redirect("dashboard:dashboard")
+        except:
+            form = LoginForm()
+            return render(request,'login_page.html', {'form': form})
     
     elif request.method == 'POST':
         form = LoginForm(request.POST)
@@ -71,7 +81,7 @@ def sign_in(request):
             if check_password(password, stored_hash[0]):
                 request.session["username"] = username
                 # return render(request, 'home_page.html')
-                return render(request, 'dashboard_page.html')
+                return redirect("dashboard:dashboard")
 
             #should be checked if user is in databasse
         

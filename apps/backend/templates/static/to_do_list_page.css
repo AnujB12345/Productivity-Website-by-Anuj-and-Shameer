@@ -91,7 +91,7 @@
 
 .task {
     display: flex;
-    flex: 1;
+    /* flex: 1; */
     justify-content: space-between;
     align-items: center;
     padding-bottom: 3px;
@@ -114,6 +114,8 @@
     padding-left: 15px;
     flex: 1;
     min-width: 0;
+    display: block;
+    overflow-wrap: anywhere;
 }
 /* Text for the title of each task */
 

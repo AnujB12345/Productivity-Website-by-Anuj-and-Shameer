@@ -11,15 +11,9 @@ body {
     padding: 0;
     display: flex;
     /* justify-content: space-between; */
-    justify-content: space-between;
     /* justify-content: right; */
-    /* align-items: center; */
+    align-items: space-between;
     list-style: none;
-}
-
-.dashboard-navbar {
-    display: flex;
-    justify-content: left;
 }
 
 .navbar-name {
@@ -27,7 +21,14 @@ body {
     font-size: 30px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     color: white;
-    margin: 10px;
+    margin-left: 10px;
+    align-items: left;
+}
+
+.dashboard-navbar {
+    display: flex;
+    align-items: left;
+    gap: 25px;
 }
 
 .nav-links {
@@ -38,6 +39,7 @@ body {
     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     margin: 0;
     padding: 0;
+    align-items: left;
     /* gap: 5px; */
 }
 
@@ -102,6 +104,8 @@ body {
     border-radius: 8px;
     text-decoration: none;
     margin: 15px;
+    display: flex;
+    align-items: right;
     /* padding: 10px; */
 }
 .homepage-login-button:hover {
