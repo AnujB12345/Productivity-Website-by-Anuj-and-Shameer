@@ -8,22 +8,20 @@
     --d-color: rgba(117, 117, 117);
 }
 
-body {
-    background-color: var(--a-color);
+.tasks-container {
+    border: 1px solid rgba(117, 117, 117);
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 10px;
 }
 
-
-
 .todo-container {
-    margin: 0 auto;
     background-color: var(--b-color);
-    outline: solid var(--b-color) 1px;
-    padding-top: 5px;
-    border-radius: 15px;
-    box-shadow: 
-        0 0 3px rgba(97, 97, 97, 0.1),
-        inset 0 0 5px rgba(0, 0, 0, 0.25);
-    width: 650px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    width: 100%;
+    gap: 10px;
 }
 
 .title {
@@ -32,7 +30,8 @@ body {
     font-size: 40px;
     color: white;
     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
-    padding-top: 30px;
+    padding-top: 40px;
+    padding-bottom: 5px;
     text-align: center;
 }
 
@@ -41,110 +40,70 @@ body {
     display: block;
     text-align: center;
     font-family: Arial;   
-    font-size: 14px;
-    color: lightseagreen;
-    padding-bottom: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    color: grey;
+    margin-bottom: 20px;
 }
 
 .input-group {
-    text-align: center;
     display: flex;
-    justify-content: center;
-    padding-top: 30px;
-    padding-bottom: 40px;
-    outline: none;
+    margin-bottom: 30px;
+    gap: 15px;
+
 }
 
 .task-input {
     text-align: left;
-    width: 565px;
-    border-radius: 7px;
-    border-color: var(--d-color);
-    background-color: var(--b-color);
-    color: var(--c-color);
-    border-style: solid;
-    border-width: 1px;
-    padding-right: 6px;
-    padding-left: 7px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    outline: none;
+    flex: 8;
+    border-radius: 8px;
+    background-color: rgba(44, 44, 42);
+    color: white;
+    padding: 5px;
+    border: 0 solid white;
+    font-size: 20px;
 }
 
 .task-input::placeholder {
-  color: var(--c-color);
   opacity: 0.6;
   padding-left: 6px;
 }
 
-.spacer {
-    width: 5px; 
-}
 
-.add-btn {
-    /* background-color: white;
-    color: rgb(255, 121, 121); */
-    width: 80px;
-    height: 40px;
-    border: none;
-    border-radius: 7px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    outline: none;
-
-    /* background-color: rgb(255, 121, 121); */
-    background-color: lightseagreen;
+.add-button {
+    background-color: rgba(78, 121, 206);
+    font-size: 20px;
     color: white;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
-    font-weight: bold; 
-
+    flex: 1;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: 0; 
 }
 
-.add-btn:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.add-btn:hover {
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+.add-button:hover {
+    text-decoration: none;
+    color: white;
+    background-color: rgb(35, 82, 175);
     cursor: pointer;
-}
-
-.add-btn .btn-text {
-    font-size: 18px;
-    display: inline-block;
-    outline: none;
-}
-
-
-.no-tasks {
-    text-align: center;
-    font-family: Arial;       
-    font-weight: bold;
-    font-size: 16px;
-    color: lightseagreen;
-    padding-top: 20px;
 }
 
 
 .task {
     display: flex;
-    width: 100%;
+    flex: 1;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 5px;
-    padding-top: 5px;
+    padding-bottom: 3px;
+    padding-top: 3px;
     padding-left: 20px;
-    padding-right: 30px;
-    border-bottom: 1px solid var(--d-color);
+    padding-right: 20px;
 
 }
+/* The entire task, consisting of text, checkbox, icons */
 
 .task-right-side {
-    align-items: left;
+    align-items: right;
     display: flex;
 }
 
@@ -152,26 +111,21 @@ body {
     color: var(--c-color);
     font-size: 20px;
     align-items: left;
-    padding-left: 20px;
+    padding-left: 15px;
+    flex: 1;
+    min-width: 0;
 }
+/* Text for the title of each task */
 
 .task-text.done {
     text-decoration: line-through;
-    color: var(--d-color)
+    color: var(--d-color);
 }
-
-
-.btn-group {
-    align-items: right;
-}
-
-
-
-
+/*Line crossed through the task when it is completed (checked) */
 
 .save-btn {
     background-color: var(--b-color);
-    color: lightseagreen;
+    color: white;
     width: 40px;
     height: 40px;
     border: none;
@@ -182,7 +136,6 @@ body {
     padding-bottom: 2px;
     transition: background-color 0.3s ease, color 0.3s ease;
     outline: none;
-
 }
 
 .save-btn:focus {
@@ -193,29 +146,41 @@ body {
 .save-btn:hover {
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    color:#138f83;
+    color: var(--c-color);
 }
 
 .save-btn .btn-text .icon {
-    width: 20px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     color: inherit;
 }
 
+.edit-form {
+    display: flex;
+    width: 100%;
+    align-items: left; 
+    border-radius: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
 .edit-input {
-    text-align: center;
-    align-items: left;
+    display: flex;
+    text-align: left;  
+    flex: 1;
     border-radius: 7px;
     border-color: var(--c-color);
     border-style: solid;
     border-width: 1px;
+    padding-left: 6px;
     padding-right: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    /* padding-top: 2px;
+    padding-bottom: 2px; */
     outline: none;
     background-color: var(--b-color);
-    color: var(--c-color)
+    color: var(--c-color);
 }
+/* Styling for when you clicked the edit icon, and are editing the task title */
 
 .checkbox {
     appearance: none;
@@ -232,9 +197,10 @@ body {
     position: relative;
     top: 6px;
 }
+/* Checkbox for each task (on the left) */
 
 .checkbox:checked {
-    background: lightseagreen;
+    background-color: green;
 }
 
 .checkbox:checked::before {
@@ -249,66 +215,36 @@ body {
     transform: translate(-50%, -50%);
 
     background-color: white;
-
     -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5L10 17L19 8' fill='none' stroke='black' stroke-width='4' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E") center/contain no-repeat;
-
     mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5L10 17L19 8' fill='none' stroke='black' stroke-width='4' stroke-linecap='square' stroke-linejoin='miter'/%3E%3C/svg%3E") center/contain no-repeat;
 }
 
+.footer {
+    display: flex;
+    justify-content: center;
+}
+/* Bottom of the page, Where the clear all tasks button lies*/
 
 .clear-form{
-    padding-top:60px;
-    padding-bottom: 20px;
-}
-
-.clear-btn {
-    display: block;
-    margin: 0 auto;
-    /* background-color: white;
-    color: rgb(255, 121, 121); */
-    width: 100px;
-    height: 35px;
-    border: 1px solid var(--d-color);
-    border-radius: 7px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    outline: none;
-
-    background-color: var(--b-color);
-    justify-content: center;
-    color: red;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
-}
-
-.clear-btn:focus {
-  outline: none;
-  box-shadow: none;
-}
-
-.clear-btn:hover {
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-}
-
-.clear-btn .btn-text {
-    font-size: 23px;
-    font-weight: bold;
-    position: relative;
-    display: inline-block;
-    top: -5px;
-    left: -5px;
-    outline: none;
+    padding-top:50px;
 }
 
 
+.btn-group {
+    display: flex;
+    justify-content: end;
+    flex-shrink: 0;
+}
+/*Buttons for editing and deleting a task */
 
 .btn-edit {
-    color: lightseagreen;
+    color: var(--c-color);
     background-color: var(--b-color);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-edit:hover {
-    color: #138f83;
+    color: var(--d-color);
 }
 
 .btn-edit,
@@ -322,7 +258,7 @@ body {
 
 
 .btn-delete {
-    color: crimson;
+    color: var(--c-color);
     background-color: var(--b-color);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -340,17 +276,48 @@ body {
     border: none;
 }
 
-.btn-edit .icon {
-    width: 20px;
-    height: 20px;
+#edit-icon{
+    width: 18px;
+    height: 18px;
     display: block;
     color: inherit;         
 }
+/* Editing a task icon */
 
-.btn-delete .icon {
-    width: 20px;
-    height: 20px;
+#delete-icon{
+    width: 18px;
+    height: 18px;
     display: block;
     color: inherit;         
 }
+/* Deleting a task icon */
 
+
+.no-tasks {
+    text-align: center;
+    font-family: Arial;       
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    padding-top: 20px;
+}
+/*When there are no tasks, 'No tasks' shows up */
+
+.clear-btn {
+    border: 1px solid var(--d-color);
+    border-radius: 7px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+    background-color: var(--a-color);
+    color: rgb(203, 58, 58);
+    font-family:Arial, Helvetica, sans-serif; 
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+/* Styling for the button 'Clear all tasks' */
+
+.clear-btn:hover {
+    text-decoration: underline;
+}

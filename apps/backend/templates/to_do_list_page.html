@@ -4,124 +4,112 @@
 {% block body_class %}todo{% endblock %}
 {% block extra_css %}  
 <link rel = "stylesheet" href = "{% static 'to_do_list_page.css' %}">
+<script src="https://kit.fontawesome.com/dce4d5d2ec.js" crossorigin="anonymous"></script>
+
 {% endblock %}
 
 {% block content %}
 
 
-    <h2 class="title">To-do List</h2>
+<h2 class="title">Your to-do List</h2>
 
-    <span class="subtitle">{{ task_count }} tasks, {{ checked_count }} completed</span>
+<span class="subtitle">{{ task_count }} tasks, {{ checked_count }} completed</span>
 
-    <!-- ADD TASK -->
-    <form method="POST">
-        {% csrf_token %}
-        <div class="input-group">
-            <input class="task-input" type="text" name="title" placeholder="Add your new todo" required>
-            <div class="spacer"></div>
-            <button class="add-btn" type="submit" name="add_task">
-                <span class="btn-text">+ Add</span>
-            </button>
-        </div>
-    </form>
-    
+<!-- ADD TASK -->
+<form method="POST">
+    {% csrf_token %}
+    <div class="input-group">
+        <input class="task-input" type="text" name="title" placeholder="Add your new todo" required>
+        <button class="add-button" type="submit" name="add_task">
+            <span class="btn-text">+ Add</span>
+        </button>
+    </div>
+</form>
+
+
+{% for todo in todos %}
+
+<div class="tasks-container">
+
     <div class="todo-container">
+        <!-- TASK LIST -->
+        <div class="task">
 
-    <!-- TASK LIST -->
-    {% for todo in todos %}
-    <div class="task">
+            <div class="task-right-side">
 
-        <div class="task-right-side">
+                <form method="POST" style="margin: 0;">
+                    {% csrf_token %}
+                    <input type="hidden" name="task_id" value="{{ todo.id }}">
+                    <input type="hidden" name="check_task" value="off">
+                    <input class="checkbox" type="checkbox" name="check_task" value="on"
+                        onchange="this.form.submit()"
+                        {% if todo.checkbox %} checked {% endif %}>
+                </form>
 
-            <form method="POST" style="margin: 0;">
-                {% csrf_token %}
-                <input type="hidden" name="task_id" value="{{ todo.id }}">
-                <input type="hidden" name="check_task" value="off">
-                <input class="checkbox" type="checkbox" name="check_task" value="on"
-                    onchange="this.form.submit()"
-                    {% if todo.checkbox %} checked {% endif %}>
-            </form>
-
-        <!-- NORMAL TEXT -->
-        <span id="text-{{ todo.id }}" class="task-text {% if todo.checkbox %}done{% endif %}">
-            {{ todo.title }}
-        </span>
-
-        </div>
-
-        <!-- EDIT MODE -->
-        <form method="POST"
-              id="edit-{{ todo.id }}"
-              class="edit-form"
-              style="display:none;">
-            {% csrf_token %}
-            <input type="hidden" name="task_id" value="{{ todo.id }}">
-            <input type="text"
-                   name="new_title"
-                   value="{{ todo.title }}"
-                   class="edit-input"
-                   required>
-            <div class="spacer"></div>
-            <button type="submit"
-                    name="edit_task"
-                    class="btn save-btn">
-                <span class="btn-text">
-                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path
-                            d="M5 12.5L10 17L19 8"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="3.5"
-                            stroke-linecap="square"
-                            stroke-linejoin="miter"/>
-                    </svg>
+                <!-- NORMAL TEXT -->
+                <span id="text-{{ todo.id }}" class="task-text {% if todo.checkbox %}done{% endif %}">
+                    {{ todo.title }}
                 </span>
-            </button>
-        </form>
 
-        <!-- BUTTONS -->
-        <div class="btn-group">
-            <button type="button"
-                    onclick="enableEdit({{ todo.id }})"
-                    class="btn-edit">
-                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L14.96 5.12l3.75 3.75 2-1.66z"/>
-                </svg>
-            </button>
+            </div>
 
-
-            <form method="POST">
+            <!-- EDIT MODE -->
+            <form method="POST"
+                id="edit-{{ todo.id }}"
+                class="edit-form"
+                style="display:none;">
                 {% csrf_token %}
                 <input type="hidden" name="task_id" value="{{ todo.id }}">
-                <button type="submit"
-                        name="delete_task"
-                        class="btn-delete">
-                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm3-9h2v8H9v-8zm4 0h2v8h-2v-8zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/>
-                    </svg>
+                <input type="text" name="new_title" value="{{ todo.title }}" class="edit-input" required>
+                <button type="submit" name="edit_task" class="btn save-btn">
+                    <span class="btn-text">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M5 12.5L10 17L19 8" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+                        </svg>
+                    </span>
                 </button>
             </form>
 
+            <!-- BUTTONS -->
+            <div class="btn-group">
+                <button type="button"
+                        onclick="enableEdit({{ todo.id }})"
+                        class="btn-edit">
+                    <!-- <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L14.96 5.12l3.75 3.75 2-1.66z"/>
+                    </svg> -->
+                    <i class="fa-regular fa-pen-to-square" id = "edit-icon"></i>
+                </button>
+
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="task_id" value="{{ todo.id }}">
+                    <button type="submit" name="delete_task" class="btn-delete">
+                        <!-- <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm3-9h2v8H9v-8zm4 0h2v8h-2v-8zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/>
+                        </svg> -->
+                        <i class="fa-regular fa-trash-can" id = "delete-icon"></i>
+                    </button>
+                </form>
+            </div>
+
         </div>
 
     </div>
-    
-    {% empty %}
-        <p class="no-tasks">No tasks yet</p>
-    {% endfor %}
+</div>
 
-    <!-- FOOTER -->
-    <div class="footer">
+{% empty %}
+    <h3 class="no-tasks">No tasks yet</h3>
+{% endfor %}
 
-        <form method="POST" class="clear-form">
-            {% csrf_token %}
-            <button type="submit"
-                    name="clear_all"
-                    class="clear-btn">
-                Clear All
-            </button>
-        </form>
-    </div>
+<!-- FOOTER -->
+<div class="footer">
+
+    <form method="POST" class="clear-form">
+        {% csrf_token %}
+        <button type="submit" name="clear_all" class="clear-btn"> Clear all tasks </button>
+    </form>
 </div>
 
 
