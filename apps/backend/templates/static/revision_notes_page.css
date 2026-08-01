@@ -9,15 +9,10 @@
     --d-color: rgba(117, 117, 117);
 }
 
-body {
-    background-color: var(--a-color);
-}
-
-
 
 .notes-container {
     margin: 0 auto;
-    margin-bottom: 14px;
+    margin-bottom: 30px;
     background-color: var(--b-color);
     outline: solid var(--b-color) 1px;
     border-radius: 15px;
@@ -25,8 +20,11 @@ body {
         0 0 3px rgba(97, 97, 97, 0.1),
         inset 0 0 5px rgba(0, 0, 0, 0.25);
     width: 650px;
-    height: 160px;
+    height: 170px;
+    display: flex;
+    flex-direction: column;
 }
+
 
 .title {
     font-family: 'SquadaOne', sans-serif;   
@@ -34,7 +32,8 @@ body {
     font-size: 40px;
     color: white;
     text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
-    padding-top: 30px;
+    padding-top: 40px;
+    padding-bottom: 5px;
     text-align: center;
 }
 
@@ -43,9 +42,10 @@ body {
     display: block;
     text-align: center;
     font-family: Arial;   
-    font-size: 14px;
-    color: lightseagreen;
-    padding-bottom: 20px;
+    font-weight: bold;
+    font-size: 16px;
+    color: grey;
+    margin-bottom: 20px;
 }
 
 .input-group {
@@ -57,27 +57,21 @@ body {
     padding-bottom: 40px;
     outline: none;
     width: 650px;
-    gap: 5px;
+    gap: 2px;
 }
 
 .note-input {
     text-align: left;
     width: 650px;
-    border-radius: 7px;
-    border-color: var(--d-color);
-    background-color: var(--b-color);
-    color: var(--c-color);
-    border-style: solid;
-    border-width: 1px;
-    padding-right: 6px;
-    padding-left: 7px;
-    padding-top: 2px;
-    padding-bottom: 8px;
-    outline: none;
+    border-radius: 8px;
+    background-color: rgba(44, 44, 42);
+    color: white;
+    padding: 5px;
+    border: 0 solid white;
+    font-size: 20px;
 }
 
 .note-input::placeholder {
-  color: var(--c-color);
   opacity: 0.6;
   padding-left: 6px;
 }
@@ -85,13 +79,12 @@ body {
 .note-description-input {
     text-align: left;
     width: 650px;
-    height: 100px;
-    border-radius: 7px;
-    border-color: var(--d-color);
-    background-color: var(--b-color);
-    color: var(--c-color);
-    border-style: solid;
-    border-width: 1px;
+    height: 150px;
+    border-radius: 8px;
+    background-color: rgba(44, 44, 42);
+    color: white;
+    padding: 5px;
+    border: 0 solid white;
     outline: none;
     position: relative;
     top: 3px;
@@ -105,16 +98,14 @@ body {
 }
 
 .add-btn {
-    width: 100px;
-    height: 40px;
-    border: none;
-    border-radius: 7px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    outline: none;
-    background-color: lightseagreen;
+    background-color: rgba(78, 121, 206);
+    font-size: 20px;
     color: white;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
-    font-weight: bold; 
+    flex: 1;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border: 0; 
 
 }
 
@@ -124,7 +115,9 @@ body {
 }
 
 .add-btn:hover {
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    color: white;
+    background-color: rgb(35, 82, 175);
     cursor: pointer;
 }
 
@@ -139,22 +132,19 @@ body {
     text-align: center;
     font-family: Arial;       
     font-weight: bold;
-    font-size: 16px;
-    color: lightseagreen;
+    font-size: 20px;
+    color: white;
     padding-top: 20px;
-    padding-bottom: 30px;
 }
 
 
 .note {
     display: flex;
-    width: 100%;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 5px;
-    padding-top: 5px;
-    padding-left: 20px;
-    padding-right: 30px;
+    /* flex: 1; */
+    padding-bottom: 3px;
+    padding-top: 3px;
+    height: 37px;
+    
     border-bottom: 1px solid var(--d-color);
 
 }
@@ -163,7 +153,14 @@ body {
     color: var(--c-color);
     font-size: 20px;
     align-items: left;
-    padding-left: 20px;
+    padding-left: 35px;
+    padding-right: 20px;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    word-break: anywhere;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .note-description {
@@ -172,31 +169,36 @@ body {
     padding-top: 5px;
     padding-left: 20px;
     padding-right: 30px;
-    padding-bottom: 40px;
-    
-}
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+            line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    }
+
 
 .note-right-side {
-    align-items: left;
     display: flex;
 }
 
 .btn-group {
-    align-items: right;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    margin-bottom: auto;
 }
 
 
 .save-btn {
+    color: var(--c-color);
     background-color: var(--b-color);
-    color: lightseagreen;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     border: none;
     border-radius: 7px;
     padding-left: 10px;
     padding-right: 10px;
-    padding-top: 2px;
-    padding-bottom: 2px;
     transition: background-color 0.3s ease, color 0.3s ease;
     outline: none;
 
@@ -208,9 +210,7 @@ body {
 }
 
 .save-btn:hover {
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    color:#138f83;
+    color: var(--d-color);
 }
 
 .save-btn .btn-text .icon {
@@ -220,26 +220,34 @@ body {
 }
 
 .edit-input {
-    text-align: center;
-    align-items: left;
+    display: flex;
+    text-align: left;  
+    flex: 1;
     border-radius: 7px;
     border-color: var(--c-color);
-    border-style: solid;
+    border-style: none;
     border-width: 1px;
+    padding-left: 6px;
     padding-right: 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    margin-top: 2px;
+    margin-bottom: 7px;
+    /* padding-top: 2px;
+    padding-bottom: 2px; */
     outline: none;
+    height: 30px;
     background-color: var(--b-color);
-    color: var(--c-color)
+    color: var(--c-color);
 }
 
 
 
 .edit-form {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    width: 100%;
+    align-items: left; 
+    border-radius: 7px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .edit-top {
@@ -251,12 +259,12 @@ body {
     text-align: left;
     padding:7px;
     width: 500px;
-    height: 150px;
+    height: 100px;
     color: var(--c-color);
     background-color: var(--b-color);
     border-radius: 7px;
     border-color: var(--c-color);
-    border-style: solid;
+    border-style: none;
     border-width: 1px;
     padding-right: 6px;
     padding-top: 2px;
@@ -269,13 +277,13 @@ body {
 
 
 .btn-edit {
-    color: lightseagreen;
+    color: var(--c-color);
     background-color: var(--b-color);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .btn-edit:hover {
-    color: #138f83;
+    color: var(--d-color);
 }
 
 .btn-edit,
@@ -289,7 +297,7 @@ body {
 
 
 .btn-delete {
-    color: crimson;
+    color: var(--c-color);
     background-color: var(--b-color);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -307,16 +315,78 @@ body {
     border: none;
 }
 
-.btn-edit .icon {
-    width: 20px;
-    height: 20px;
+
+.full-note-btn {
+    color: var(--c-color);
+    background-color: var(--b-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.full-note-btn:hover {
+    color: var(--d-color);
+}
+
+.full-note-btn,
+.full-note-btn:focus,
+.full-note-btn:focus-visible,
+.full-note-btn:active {
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+
+
+.note-footer {
+    display: flex;
+    margin-top: auto;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 5px;
+    padding-bottom: 2px;
+}
+
+.note-created-at {
+    font-size: 12px;
+    color: var(--d-color);
+}
+
+.note-created-at p {
+    margin: 0;
+}
+
+.full-note {
+    margin-left: auto;
+}
+
+#full-note-icon{
+    width: 18px;
+    height: 18px;
     display: block;
     color: inherit;         
 }
 
-.btn-delete .icon {
-    width: 20px;
-    height: 20px;
+#edit-icon{
+    width: 18px;
+    height: 18px;
     display: block;
     color: inherit;         
 }
+
+
+
+#save-icon{
+    width: 18px;
+    height: 18px;
+    display: block;
+    color: inherit;         
+}
+/* Editing a task icon */
+
+#delete-icon{
+    width: 18px;
+    height: 18px;
+    display: block;
+    color: inherit;         
+}
+/* Deleting a task icon */

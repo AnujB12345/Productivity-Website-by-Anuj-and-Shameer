@@ -4,6 +4,7 @@
 {% block body_class %}todo{% endblock %}
 {% block extra_css %}  
 <link rel = "stylesheet" href = "{% static 'revision_notes_page.css' %}">
+<script src="https://kit.fontawesome.com/dce4d5d2ec.js" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block content %}
@@ -30,11 +31,11 @@
     <!-- TASK LIST -->
 
     {% for note in notes %}
-    <div class="notes-container">
-    <div class="note">
+    <div class="notes-container" id="notes-container-{{ note.id }}">
+    <div class="note" id="note-{{ note.id }}">
 
         <!-- NORMAL TEXT -->
-        <div id="text-{{ note.id }}" class="note-text">
+        <div id="note-text-{{ note.id }}" class="note-text">
             {{ note.title }}
         </div>
 
@@ -59,7 +60,7 @@
                 type="submit"
                 name="edit_note"
                 class="btn save-btn">
-                ✔
+                <i class="fa-solid fa-check" id="save-icon"></i>
             </button>
         </div>
 
@@ -75,9 +76,7 @@
                     <button type="button"
                             onclick="enableEdit({{ note.id }})"
                             class="btn btn-edit">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L14.96 5.12l3.75 3.75 2-1.66z"/>
-                        </svg>
+                         <i class="fa-regular fa-pen-to-square" id = "edit-icon"></i>
                     </button>
 
                     <form method="POST">
@@ -86,9 +85,7 @@
                         <button type="submit"
                                 name="delete_note"
                                 class="btn btn-delete">
-                            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm3-9h2v8H9v-8zm4 0h2v8h-2v-8zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/>
-                            </svg>
+                            <i class="fa-regular fa-trash-can" id = "delete-icon"></i>
                         </button>
                     </form>
                     <div style="width: 20px;"></div>
@@ -99,8 +96,24 @@
         </div>
 
         <div class="note-description"
-            id="description-{{ note.id }}">
+            id="note-description-{{ note.id }}">
                 {{ note.description }}
+        </div>
+
+        <div class="note-footer">
+
+            <div class="note-created-at">
+                <p>
+                    Last updated at: {{ note.updated_at|date:"M d, Y" }}
+                </p>
+            </div>
+
+            <div class="full-note">
+                <button class="full-note-btn" id="full-note-btn-{{ note.id }}" type="submit" onclick="fullNote({{note.id}})">
+                    <i class="fa-solid fa-expand" id="full-note-icon"></i>
+                </button>
+            </div>
+
         </div>
         </div> 
 
@@ -112,9 +125,39 @@
 
 <script>
 function enableEdit(id) {
-    document.getElementById("text-" + id).style.display = "none";
-    document.getElementById("description-" + id).style.display = "none";
-    document.getElementById("edit-" + id).style.display = "flex";
+    document.getElementById("note-text-" + id).style.display = "none";
+    document.getElementById("note-description-" + id).style.display = "none";
+    document.getElementById("edit-" + id).style.display = "block";
+}
+
+function fullNote(id) {
+    const container = document.getElementById("notes-container-" + id);
+
+     if (container.classList.contains("expanded")){
+        container.style.height = "170px";
+        document.getElementById("note-description-"+id).style.overflow = "hidden";
+        document.getElementById("note-description-"+id).style.display = "-webkit-box";
+        document.getElementById("note-text-"+id).style.overflow = "hidden";
+        document.getElementById("note-"+id).style.height = "37px";
+        document.getElementById("note-text-"+id).style.whiteSpace = "nowrap";
+        document.getElementById("full-note-btn-"+id).innerHTML = '<i class="fa-solid fa-expand"></i>';
+        container.classList.remove("expanded");
+
+    }
+    else{
+        
+        document.getElementById("note-description-"+id).style.overflow = "visible";
+        document.getElementById("note-description-"+id).style.display = "flex";
+        if (container.scrollHeight>170){
+            container.style.height = "auto";
+        }
+        document.getElementById("note-text-"+id).style.overflow = "visible";
+        document.getElementById("note-"+id).style.height = "auto";
+        document.getElementById("note-text-"+id).style.whiteSpace = "wrap";
+        document.getElementById("full-note-btn-"+id).innerHTML = '<i class="fa-solid fa-compress"></i>';
+        container.classList.add("expanded")
+    }
+
 }
 </script>
 
