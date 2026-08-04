@@ -21,101 +21,167 @@
             <input class="note-input" type="text" name="title" placeholder="Add your new note title" required>
             <textarea class="note-description-input" type="text" name="description" placeholder="Add your new note description"></textarea>
             
-            <div class="spacer"></div>
-            <button class="add-btn" type="submit" name="add_note">
-                <span class="btn-text">+ Add note</span>
-            </button>
+
+            <div class="bottom-row">
+                <input class="note-subject-input" id="note-subject-input" type="text" name="subject" placeholder="Add your new note subject" list="all-subjects"></input>
+                <datalist id="all-subjects">
+                    {% for subject in subjects %}
+                        {% if subject %}
+                            <option value="{{ subject }}">{{ subject }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </datalist>
+                <input class="note-subject-colour" id="note-subject-colour" type="color" name="subject_colour" value="{{ subject.subject_colour }}">
+                <button class="add-btn" type="submit" name="add_note">
+                    <span class="btn-text">+ Add note</span>
+                </button>
+            </div> 
         </div>
     </form>
+
+    <script>
+        const subjectColours = {
+        {% for note in notes %}
+            "{{ note.subject }}": "{{ note.subject_colour }}",
+        {% endfor %}
+        };
+
+        const input = document.getElementById("note-subject-input");
+        const colour = document.getElementById("note-subject-colour");
+
+        input.addEventListener("input", () => {
+            colour.value = subjectColours[input.value] || "#000000";
+            if (subjectColours[input.value]) {
+                colour.disabled = true;
+            } else {
+                colour.disabled = false;
+            }
+        });
+    </script>
+
+    <div class="filter-container">
+        <label for="subject-filter">Filter by subject:</label>
+        <select id="subject-filter" name="subject-filter" onchange="filterNotes()">
+            <option value="">All</option>
+            {% for subject in subjects %}
+                {% if subject %}
+                    <option value="{{ subject }}">{{ subject }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
 
     <!-- TASK LIST -->
 
     {% for note in notes %}
-    <div class="notes-container" id="notes-container-{{ note.id }}">
-    <div class="note" id="note-{{ note.id }}">
-
-        <!-- NORMAL TEXT -->
-        <div id="note-text-{{ note.id }}" class="note-text">
-            {{ note.title }}
-        </div>
-
-        <!-- EDIT MODE -->
-        <form method="POST"
-              id="edit-{{ note.id }}"
-              class="edit-form"
-              style="display:none;">
-            {% csrf_token %}
-           
-        <input type="hidden" name="note_id" value="{{ note.id }}">
-
-        <div class="edit-top">
-            <input
-                type="text"
-                name="new_title"
-                value="{{ note.title }}"
-                class="edit-input"
-                required>
-
-            <button
-                type="submit"
-                name="edit_note"
-                class="btn save-btn">
-                <i class="fa-solid fa-check" id="save-icon"></i>
-            </button>
-        </div>
-
-        <textarea
-            class="note-description-input-editing"
-            name="new_description"
-            >{{ note.description }}
-        </textarea>
-        </form>
-
-                <!-- BUTTONS -->
-                <div class="btn-group">
-                    <button type="button"
-                            onclick="enableEdit({{ note.id }})"
-                            class="btn btn-edit">
-                         <i class="fa-regular fa-pen-to-square" id = "edit-icon"></i>
-                    </button>
-
-                    <form method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="note_id" value="{{ note.id }}">
-                        <button type="submit"
-                                name="delete_note"
-                                class="btn btn-delete">
-                            <i class="fa-regular fa-trash-can" id = "delete-icon"></i>
-                        </button>
-                    </form>
-                    <div style="width: 20px;"></div>
-                    
-
+    <div class="wrapper">
+        {% if note.subject %}
+            <div class="subject-container" style="background-color: {{ note.subject_colour }};">
+                <div class="note-subject">
+                    {{ note.subject }}
                 </div>
+            </div>
+        {% endif %}
+        <div class="notes-container" id="notes-container-{{ note.id }}">
+        <div class="note" id="note-{{ note.id }}">
 
-        </div>
 
-        <div class="note-description"
-            id="note-description-{{ note.id }}">
-                {{ note.description }}
-        </div>
-
-        <div class="note-footer">
-
-            <div class="note-created-at">
-                <p>
-                    Last updated at: {{ note.updated_at|date:"M d, Y" }}
-                </p>
+            <!-- NORMAL TEXT -->
+            <div id="note-text-{{ note.id }}" class="note-text">
+                {{ note.title }}
             </div>
 
-            <div class="full-note">
-                <button class="full-note-btn" id="full-note-btn-{{ note.id }}" type="submit" onclick="fullNote({{note.id}})">
-                    <i class="fa-solid fa-expand" id="full-note-icon"></i>
+            <!-- EDIT MODE -->
+            <form method="POST"
+                id="edit-{{ note.id }}"
+                class="edit-form"
+                style="display:none;">
+                {% csrf_token %}
+            
+            <input type="hidden" name="note_id" value="{{ note.id }}">
+
+            <div class="edit-top">
+                <input
+                    type="text"
+                    name="new_title"
+                    value="{{ note.title }}"
+                    class="edit-input"
+                    required>
+
+                <button
+                    type="submit"
+                    name="edit_note"
+                    class="btn save-btn">
+                    <i class="fa-solid fa-check" id="save-icon"></i>
                 </button>
             </div>
 
+            <textarea
+                class="note-description-input-editing"
+                name="new_description"
+                >{{ note.description }}
+            </textarea>
+
+            <input
+                class="note-subject-input-editing"
+                type="text"
+                name="new_subject"
+                value="{{ note.subject }}"
+                list="all-subjects">
+            <input
+                class="note-subject-colour-editing"
+                type="color"
+                name="new_subject_colour"
+                value="{{ note.subject_colour }}">
+            </form>
+
+
+                    <!-- BUTTONS -->
+                    <div class="btn-group">
+                        <button type="button"
+                                onclick="enableEdit({{ note.id }})"
+                                class="btn btn-edit">
+                            <i class="fa-regular fa-pen-to-square" id = "edit-icon"></i>
+                        </button>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="note_id" value="{{ note.id }}">
+                            <button type="submit"
+                                    name="delete_note"
+                                    class="btn btn-delete">
+                                <i class="fa-regular fa-trash-can" id = "delete-icon"></i>
+                            </button>
+                        </form>
+                        <div style="width: 20px;"></div>
+                        
+
+                    </div>
+
+            </div>
+
+            <div class="note-description"
+                id="note-description-{{ note.id }}">
+                    {{ note.description }}
+            </div>
+
+            <div class="note-footer">
+
+                <div class="note-created-at">
+                    <p>
+                        Last updated at: {{ note.updated_at|date:"M d, Y" }}
+                    </p>
+                </div>
+
+                <div class="full-note">
+                    <button class="full-note-btn" id="full-note-btn-{{ note.id }}" type="submit" onclick="fullNote({{note.id}})">
+                        <i class="fa-solid fa-expand" id="full-note-icon"></i>
+                    </button>
+                </div>
+
+            </div>
+            </div> 
         </div>
-        </div> 
 
     {% empty %}
     <p class="no-notes">No notes yet</p>
@@ -124,6 +190,30 @@
 
 
 <script>
+
+function filterNotes() {
+    const selectedSubject = document.getElementById("subject-filter").value;
+    const notes = document.getElementsByClassName("wrapper");
+    let subject = "";
+
+    for (let i = 0; i < notes.length; i++) {
+        const note = notes[i];
+        const subjectContainer = document.getElementsByClassName("subject-container")[i];
+       if (subjectContainer) {
+            subject = subjectContainer.textContent.trim();
+        } else {
+            subject = "";
+        }
+        if (selectedSubject === "" || subject === selectedSubject) {
+            note.style.display = "block";
+        } else {
+            note.style.display = "none";
+        }
+    }
+}
+
+
+
 function enableEdit(id) {
     document.getElementById("note-text-" + id).style.display = "none";
     document.getElementById("note-description-" + id).style.display = "none";
@@ -153,7 +243,7 @@ function fullNote(id) {
         }
         document.getElementById("note-text-"+id).style.overflow = "visible";
         document.getElementById("note-"+id).style.height = "auto";
-        document.getElementById("note-text-"+id).style.whiteSpace = "wrap";
+        document.getElementById("note-text-"+id).style.whiteSpace = "normal";
         document.getElementById("full-note-btn-"+id).innerHTML = '<i class="fa-solid fa-compress"></i>';
         container.classList.add("expanded")
     }
