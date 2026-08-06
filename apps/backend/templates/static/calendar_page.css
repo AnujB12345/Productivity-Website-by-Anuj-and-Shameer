@@ -1,0 +1,447 @@
+/* * {
+    border: 1px solid red;
+} */
+
+.main-container {
+    margin-left: 10px;
+    margin-right: 0px;
+}
+
+.title {
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+    color: white;
+    padding-top: 40px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+.subtitle {
+    display: block;
+    text-align: center;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: grey;
+    margin-bottom: 20px;
+}
+
+.top-display-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-right: 10px;
+}
+
+.e1 {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+
+.e2 {
+    display: flex;
+    align-items: center;
+}
+
+.month-year-display {
+    color: white;
+    font-size: 25px;
+}
+
+.change-month:hover {
+    color: grey;
+}
+
+#left-icon {
+    color: white;
+    width: 20px;
+    height: 20px;
+}
+
+#right-icon {
+    color: white;
+    width: 20px;
+    height: 20px;
+    font-weight: bold;
+}
+
+.add-event-btn {
+    background-color: rgba(78, 121, 206);
+    font-size: 16px;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-block: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.date-time {
+    display: flex;
+    gap: 10px;
+}
+
+.add-event-btn:hover {
+    text-decoration: none;
+    color: white;
+    background-color: rgb(35, 82, 175);
+    cursor: pointer;
+}
+
+.add-event-btn-top {
+    background-color: rgba(78, 121, 206);
+    font-size: 20px;
+    color: white;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-block: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.add-event-btn-bottom {
+    background-color: rgba(35, 35, 35);
+    font-size: 20px;
+    color: white;
+    border-radius: 8px;
+    border: 1px white dotted;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-top: 20px;
+    padding: 10px;
+    /* display: flex; */
+    text-align: center;
+    align-items: center;
+}
+
+
+.add-event-btn-top:hover {
+    text-decoration: none;
+    color: white;
+    background-color: rgb(35, 82, 175);
+    cursor: pointer;
+}
+
+.calendar-add-event-container {
+    display: flex;
+}
+
+.calendar-container {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 8px;
+    table-layout: fixed;
+}
+
+.days-on-grid {
+    text-align: left;
+    color: rgb(188, 187, 174);
+    font-family: sans-serif;
+}
+
+.individual-day-box {
+    height: 90px;
+    width: 90px;
+    text-align: start;
+    vertical-align: top;
+    /* padding-left: 5px; */
+    border-radius: 8px;
+    background-color: rgba(44, 44, 42);
+
+    word-wrap: break-word;
+}
+
+.day-calendar {
+    color: white;
+    align-items: left;
+    padding-left: 5px;
+    font-size: 16px;
+}
+
+.event-name-on-calendar {
+    color: rgba(137, 155, 191);
+    font-family: sans-serif;
+    background-color: rgba(41, 53, 81);
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 8px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.events-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    gap: 8px;
+}
+
+.events-list-container-top {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: top;
+    justify-content: space-between;
+}
+
+.events-list-container {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    background-color: rgba(35, 35, 35);
+    margin-left: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    width: 500px;
+    overflow-wrap: anywhere;
+
+    transform: translateX(500px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.events-list-container.show {
+    transform: translateX(0px);
+    opacity: 1;
+    visibility: visible;
+}
+
+#show-events-cancel-btn {
+    background-color: rgba(35, 35, 35);
+    color: white;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    display: flex;
+    justify-content: right;
+}
+
+#add-event-cancel-btn {
+    background-color: rgba(35, 35, 35);
+    color: white;
+    outline: none;
+    box-shadow: none;
+    border: none;
+    display: flex;
+    justify-content: right;
+}
+
+.events-heading {
+    color: white;
+    font-size: 20px;
+}
+
+.event-time {
+    color: rgb(188, 187, 174);
+    margin: 0;
+    font-size: 16px;
+}
+
+.icons {
+    padding: 0;
+    margin: 0;
+}
+
+.event-title {
+    color: white;
+    font-size: 16px;
+    font-family: sans-serif;
+    margin: 0;
+
+    /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
+
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.event-description {
+    background-color: rgba(44, 44, 42);
+    list-style: none;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.event-description-top {
+    display: flex;
+    justify-content: space-between;
+}
+
+.save-btn {
+    background-color: rgba(78, 121, 206);
+    color: white;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.save-btn:hover {
+    text-decoration: none;
+    color: white;
+    background-color: rgb(35, 82, 175);
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: rgb(26, 26, 26);
+    color: white;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    padding-left: 10px;
+    padding-right: 10px;
+    align-items: center;
+    outline: 1px solid rgba(117, 117, 117);
+}
+
+.cancel-btn:hover {
+    text-decoration: none;
+    color: white;
+    background-color: rgb(41, 40, 40);
+    cursor: pointer;
+}
+
+.btn-edit,
+.btn-delete {
+    color: rgb(188, 187, 174);
+    background-color: rgba(44, 44, 42);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none;
+    box-shadow: none;
+    border: none;
+}
+
+.btn-delete:hover {
+    color: darkred;
+}
+
+.btn-edit:hover {
+    color: rgba(117, 117, 117);
+}
+
+/* #edit-icon,
+#delete-icon {
+    color: white;
+    border-radius: 8px;
+    border: none;
+    text-decoration: none;
+} */
+
+.event-label-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-event-heading {
+    color: white;
+    font-size: 20px;
+    padding-bottom: 5px;
+}
+
+.event-label {
+    color: rgb(188, 187, 174);
+    padding-bottom: 10px;
+}
+
+.event-count {
+    color: rgb(188, 187, 174);
+    font-size: 16px;
+    padding-bottom: 10px;
+}
+
+#description-label {
+    padding-bottom: 30px;
+}
+
+.add-event-entry {
+    background-color: rgba(44, 44, 42);
+    border: 1px solid rgba(117, 117, 117);
+    border-radius: 8px;
+    color: white;
+    padding: 10px;
+}
+
+.add-event-entry::placeholder {
+    opacity: 0.6;
+    padding-left: 6px;
+}
+
+.no-events-prompt {
+    color: white;
+    font-family: sans-serif;
+    padding-top: 5px;
+}
+
+.add-cancel-event {
+    display: flex;
+    gap: 10px;
+}
+
+.add-event-container-top {
+    display: flex;
+    flex-direction: row;
+    align-items: top;
+    justify-content: space-between;
+}
+
+.add-event-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    background-color: rgba(35, 35, 35);
+    margin-left: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    transform: translateX(500px);
+    opacity: 0;
+    visibility: hidden;
+    transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.add-event-container.show {
+    transform: translateX(0px);
+    opacity: 1;
+    visibility: visible;
+}
+
+.hidden {
+    display: none;
+}

@@ -3,119 +3,187 @@
 {% load static %}
 
 {% block body_class %}calendar{% endblock %}
-{% block extra_css %}  
-<link rel = "stylesheet" href = "{% static 'calendar_page.css' %}">
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'calendar_page.css' %}">
+<script src="https://kit.fontawesome.com/dce4d5d2ec.js" crossorigin="anonymous"></script>
+
 {% endblock%}
 
 {% block content %}
 
-<h1>{{ month|date:"F" }} {{ year }}</h1>
+<h1 class="title">Calendar </h1>
+<h3 class="subtitle">Plan out your day, hour by hour</h3>
 
-<a href="?month={{ prev_month }}&year={{ prev_year }}{% if selected_date %}&date={{ selected_date }}{% endif %}">&larr; Previous</a>
-&nbsp;
-<a href="?month={{ next_month }}&year={{ next_year }}{% if selected_date %}&date={{ selected_date }}{% endif %}">Next &rarr;</a>
+<div class="top-display-container">
+  <div class="e1">
+    <h1 class="month-year-display"> {{month_name}} {{year}}</h1>
 
-<br><br>
+    <!-- <a href="?month={{ prev_month }}&year={{ prev_year }}{% if selected_date %}&date={{ selected_date }}{% endif %}" -->
+    <a href="?month={{ prev_month }}&year={{ prev_year }}"
 
-<!-- Calendar Table -->
-<table border="1" cellpadding="8" cellspacing="0">
-  <thead>
-    <tr>
-      <th>Mon</th>
-      <th>Tue</th>
-      <th>Wed</th>
-      <th>Thu</th>
-      <th>Fri</th>
-      <th>Sat</th>
-      <th>Sun</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for week in calendar %}
-      <tr>
+      class="change-month"><i class="fa-solid fa-chevron-left" id="left-icon" title="Previous month"></i></a>
+    &nbsp;
+    <a href="?month={{ next_month }}&year={{ next_year }}"
+      class="change-month"><i class="fa-solid fa-chevron-right" id="right-icon"></i></a>
+  </div>
+  <div class="e2">
+    <button type="submit" name="
+    " class="add-event-btn-top">+ Add Event</button>
+  </div>
+</div>
+
+
+<div class="calendar-add-event-container">
+  <table class="calendar-container">
+    <thead>
+      <tr class="days-labels">
+        <th class="days-on-grid">Mon</th>
+        <th class="days-on-grid">Tue</th>
+        <th class="days-on-grid">Wed</th>
+        <th class="days-on-grid">Thu</th>
+        <th class="days-on-grid">Fri</th>
+        <th class="days-on-grid">Sat</th>
+        <th class="days-on-grid">Sun</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for week in calendar %}
+      <tr class="calendar-row">
         {% for day in week %}
-          {% if day == 0 %}
-            <td>&nbsp;</td>
-          {% else %}
-            <td>
-              <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}">
-                {% if day == today.day and month == today.month and year == today.year %}
-                  <strong>{{ day }} (Today)</strong>
-                {% else %}
-                  {{ day }}
-                {% endif %}
-              </a>
-              <br>
-              {% for event in events %}
-                {% if event.date.day == day and event.date.month == month and event.date.year == year %}
-                  <small>&#8226; {{ event.title }}</small><br>
-                {% endif %}
-              {% endfor %}
-            </td>
-          {% endif %}
+        {% if day == 0 %}
+          <td class="individual-day-box">&nbsp;</td>
+        {% else %}
+          <td class="individual-day-box">
+            <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
+              class="day-calendar">
+              {% if day == today.day and month == today.month and year == today.year %}
+              {{ day }} (Today)
+              {% else %}
+              {{ day }}
+              {% endif %}
+            </a>
+            {% for event in calendar_events %}
+            {% if event.date.day == day and event.date.month == month and event.date.year == year %}
+              <p class="event-name-on-calendar"> {{ event.title }}</p>
+            {% endif %}
+            {% endfor %}
+          </td>
+        {% endif %}
         {% endfor %}
       </tr>
-    {% endfor %}
-  </tbody>
-</table>
+      {% endfor %}
+    </tbody>
+  </table>
 
-<br>
+  <!-- Add event form -->
+  <div class="add-event-container hidden">
 
-<!-- Events list -->
-<h2>
-  Events
-  {% if selected_date %} &mdash; {{ selected_date }}{% endif %}
-</h2>
+    <div class="add-event-container-top">
+      <h3 class="add-event-heading">Add Event</h3>
+      <button type="submit" name="cancel" id="add-event-cancel-btn"><i class="fa-solid fa-xmark"
+          id="cancel-show-events"></i></button>
+    </div>
 
-{% if events %}
-  <ul>
-    {% for event in events %}
-      <li>
-        <strong>{{ event.title }}</strong> &mdash; {{ event.date }} at {{ event.time|time:"H:i" }}
-        {% if event.description %}<br><em>{{ event.description }}</em>{% endif %}
-        &nbsp;
-
-        <!-- Edit button -->
-        <button onclick="document.getElementById('edit-form-{{ event.id }}').style.display='block'">Edit</button>
-
-        <!-- Delete form -->
-        <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this event?');">
-          {% csrf_token %}
-          <input type="hidden" name="event_id" value="{{ event.id }}">
-          <button type="submit" name="delete_event">Delete</button>
-        </form>
-
-        <!-- Inline edit form (hidden by default) -->
-        <div id="edit-form-{{ event.id }}" style="display:none; margin-top: 8px;">
-          <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="event_id" value="{{ event.id }}">
-            <label>Title: <input type="text" name="title" value="{{ event.title }}" required></label><br>
-            <label>Date: <input type="date" name="date" value="{{ event.date }}" required></label><br>
-            <label>Time: <input type="time" name="time" value="{{ event.time|time:'H:i' }}" required></label><br>
-            <label>Description: <input type="text" name="description" value="{{ event.description }}"></label><br>
-            <button type="submit" name="edit_event">Save</button>
-            <button type="button" onclick="document.getElementById('edit-form-{{ event.id }}').style.display='none'">Cancel</button>
-          </form>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="event-label-container">
+        <label class="event-label">Title <input type="text" name="title" required class="add-event-entry"
+            placeholder="Add a title"></label>
+        <div class="date-time">
+          <label class="event-label">Date <input type="date" name="date"
+              value="{% if selected_date %}{{ selected_date }}{% else %}{{today}}{% endif %}" required
+              class="add-event-entry"></label>
+          <label class="event-label">Time <input type="time" name="time" required class="add-event-entry"></label>
         </div>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>No events{% if selected_date %} on this day{% endif %}.</p>
-{% endif %}
+        <label class="event-label">Description <input type="text" name="description" class="add-event-entry"
+            id="description-label" placeholder="Add a description"></label>
+      </div>
+      <div class="add-cancel-event">
+        <button type="submit" name="add_event" class="add-event-btn">Add Event</button>
+        <button type="submit" name="cancel" class="cancel-btn">Cancel</button>
+      </div>
 
-<br>
+    </form>
+  </div>
 
-<!-- Add event form -->
-<h3>Add Event</h3>
-<form method="POST">
-  {% csrf_token %}
-  <label>Title: <input type="text" name="title" required></label><br><br>
-  <label>Date: <input type="date" name="date" value="{{ selected_date }}" required></label><br><br>
-  <label>Time: <input type="time" name="time" required></label><br><br>
-  <label>Description: <input type="text" name="description"></label><br><br>
-  <button type="submit" name="add_event">Add Event</button>
-</form>
+  <!-- Events list -->
+  <div class="events-list-container {% if not selected_date %}hidden{% endif %} {% if selected_date %}show{% endif %}">
+
+    <div class="events-list-container-top">
+      <h2 class="events-heading">Events {% if selected_date %} on {{selected_date}}{% endif %}</h2>
+      <button type="submit" name="cancel" id="show-events-cancel-btn"><i class="fa-solid fa-xmark"
+          id="cancel-show-events"></i></button>
+    </div>
+
+    {% if selected_date_events %} <!--Case in which there are events-->
+      <h4 class="event-count">{% if event_count == 1 %} {{event_count}} event {% else %} {{event_count}} events {% endif %}</h4>
+
+      <ul class="events-list">
+        {% for event in selected_date_events %}
+          <li class="event-description">
+            <div class="event-description-top">
+              <p class="event-time">{{ event.time|time:"H:i" }} </p>
+               
+
+              <div class="icons">
+                <!-- Edit button -->
+                <button onclick="document.getElementById('edit-form-{{ event.id }}').style.display='block'" class="btn-edit">
+                  <i class="fa-regular fa-pen-to-square" id="edit-icon"></i>
+                </button>
+
+                <!-- Delete form -->
+                <form method="POST" style="display:inline;" onsubmit="return confirm('Delete this event?');">
+                  {% csrf_token %}
+                  <input type="hidden" name="event_id" value="{{ event.id }}">
+
+                  <button type="submit" name="delete_event" class="btn-delete">
+                    <i class="fa-regular fa-trash-can" id="delete-icon"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <p class = "event-title">{{ event.title }}</p>
+
+            <!-- Inline edit form (hidden by default) -->
+            <div id="edit-form-{{ event.id }}" style="display:none; margin-top: 8px;" class="edit-form">
+              <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="event_id" value="{{ event.id }}">
+                <div class="event-label-container">
+                  <label class="event-label">Title: <input type="text" name="title" value="{{ event.title }}" required
+                      class="add-event-entry" placeholder="Add a title"></label>
+                  <label class="event-label">Date: <input type="date" name="date" value="{{ selected_date }}" required
+                      class="add-event-entry"></label>
+                  <label class="event-label">Time: <input type="time" name="time" value="{{ event.time|time:'H:i' }}"
+                      required class="add-event-entry"></label>
+                  <label class="event-label">Description: <input type="text" name="description"
+                      value="{{ event.description }}" class="add-event-entry" placeholder="Add a description"></label>
+                </div>
+                <button type="submit" name="edit_event" class="save-btn">Save</button>
+                <button type="button" onclick="document.getElementById('edit-form-{{ event.id }}').style.display='none'"
+                  class="cancel-btn">Cancel</button>
+              </form>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+
+    {% else %}
+      <p class="no-events-prompt">No events{% if selected_date %} on this day{% endif %}</p>
+    {% endif %}
+
+    <button type="submit" name="
+    " class="add-event-btn-bottom">+ Add Event</button>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{% static 'calendar/calendar_page.js' %}"></script>
 
 {% endblock %}
