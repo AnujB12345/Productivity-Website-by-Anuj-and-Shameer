@@ -54,3 +54,19 @@ showEventsCancelButton.addEventListener("click", () => { //Makes the show-events
 
     addEventPopup.classList.remove("show"); //Removes the show class
 })
+
+
+// function highlightDate(id) {
+//     const container = document.querySelector(".individual-day-box");
+
+//     const 
+//      if (container.classList.contains("highlighted-date")){
+//         container.style.border = "none";
+//         container.classList.remove(".highlighted-date");
+//     }
+
+//     else{
+//         container.classList.add(".highlighted-date");
+//     }
+
+// }

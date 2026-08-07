@@ -163,7 +163,16 @@
     background-color: rgba(44, 44, 42);
 
     word-wrap: break-word;
+    overflow: hidden;
 }
+
+/* .highlighted-date {
+    border: 1px solid rgb(35, 82, 175);
+}
+
+#selected-day {
+    border: 1px solid rgb(35, 82, 175);
+} */
 
 .day-calendar {
     color: white;
@@ -174,7 +183,7 @@
 
 .day-calendar-selected {
     color: rgba(78, 121, 206);
-    color: pink;
+    /* color: pink; */
     align-items: left;
     padding-left: 5px;
     font-size: 16px;    
@@ -193,6 +202,10 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.event-name-on-calendar:nth-child(n+4) {
+    display: none;
 }
 
 .events-list {
