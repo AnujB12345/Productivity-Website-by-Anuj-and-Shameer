@@ -13,7 +13,7 @@
 
 <h2 class="title">Your to-do List</h2>
 
-<span class="subtitle">{{ task_count }} tasks, {{ checked_count }} completed</span>
+<span class="completed-tasks-check">{{ task_count }} tasks, {{ checked_count }} completed</span>
 
 <!-- ADD TASK -->
 <form method="POST">
@@ -75,20 +75,15 @@
                 <button type="button"
                         onclick="enableEdit({{ todo.id }})"
                         class="btn-edit">
-                    <!-- <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M3 17.25V21h3.75L17.8 9.94l-3.75-3.75L3 17.25zm17.71-10.04a1.003 1.003 0 0 0 0-1.42l-2.5-2.5a1.003 1.003 0 0 0-1.42 0L14.96 5.12l3.75 3.75 2-1.66z"/>
-                    </svg> -->
                     <i class="fa-regular fa-pen-to-square" id = "edit-icon"></i>
                 </button>
 
 
-                <form method="POST">
+                <form method="POST" onsubmit="return confirm('Delete this task?');">
                     {% csrf_token %}
                     <input type="hidden" name="task_id" value="{{ todo.id }}">
                     <button type="submit" name="delete_task" class="btn-delete">
-                        <!-- <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zm3-9h2v8H9v-8zm4 0h2v8h-2v-8zM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/>
-                        </svg> -->
+
                         <i class="fa-regular fa-trash-can" id = "delete-icon"></i>
                     </button>
                 </form>
@@ -107,7 +102,7 @@
 <div class="footer">
 
     {% if task_count != 0 %}
-        <form method="POST" class="clear-form">
+        <form method="POST" class="clear-form" onsubmit="return confirm('Are you sure you want to clear all tasks?');">
             {% csrf_token %}
             <button type="submit" name="clear_all" class="clear-btn"> Clear all tasks </button>
         </form>
