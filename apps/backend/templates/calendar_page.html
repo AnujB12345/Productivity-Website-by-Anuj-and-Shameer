@@ -53,7 +53,11 @@
         {% if day == 0 %}
           <td class="individual-day-box">&nbsp;</td>
         {% else %}
-          <td class="individual-day-box">
+          <td {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
+                  class="individual-day-box-selected"
+                  {% else %}
+                  class="individual-day-box"
+                  {% endif %}>
             {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
               <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
                 class="day-calendar-selected">
@@ -73,7 +77,7 @@
                 {% endif %}
               </a>
             {% endif %}
-            
+
             {% for event in calendar_events %}
             {% if event.date.day == day and event.date.month == month and event.date.year == year %}
               <p class="event-name-on-calendar"> {{ event.title }}</p>
