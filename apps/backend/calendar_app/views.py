@@ -115,6 +115,8 @@ def calendar_event(request):
         "calendar_events": calendar_events,
         "event_count": event_count,
         "selected_date": selected_date,
+        "selected_date_obj": selected_date_obj,
+
         "next_month": next_month,
         "next_year": next_year,
         "prev_month": prev_month,
