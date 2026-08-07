@@ -18,7 +18,7 @@
     border-radius: 15px;
     box-shadow: 
         0 0 3px rgba(97, 97, 97, 0.1),
-        0 -6px 12px var(--a-color),
+        /* 0 -6px 12px var(--a-color), */
         inset 0 0 5px rgba(0, 0, 0, 0.25);
     width: 650px;
     height: 170px;
@@ -90,6 +90,8 @@
     text-align: left;
     width: 650px;
     height: 150px;
+    max-height: 300px;
+    min-height: 150px;
     border-radius: 8px;
     background-color: rgba(44, 44, 42);
     color: white;
@@ -98,7 +100,7 @@
     outline: none;
     position: relative;
     top: 3px;
-    font-size: 12px;
+    font-size: 16px;
     
 }
 
@@ -190,6 +192,8 @@
     font-size: 14px;
     display: inline-block;
     outline: none;
+    position: relative;
+    top: -3px;
 }
 
 .filter-container {
@@ -245,7 +249,7 @@
     color: var(--c-color);
     font-size: 20px;
     align-items: left;
-    padding-left: 35px;
+    padding-left: 10px;
     padding-right: 20px;
     flex: 1;
     min-width: 0;
@@ -256,10 +260,10 @@
 }
 
 .note-description {
-    font-size: 12px;
+    font-size: 16px;
     color: rgb(100, 100, 100);
     padding-top: 5px;
-    padding-left: 20px;
+    padding-left: 10px;
     padding-right: 30px;
     overflow-wrap: anywhere;
     overflow: hidden;
@@ -287,8 +291,8 @@
     display: flex;
     position: relative;
     z-index: 1;
-    left: 100px;
-    top: 10px;
+    left: 651px;
+    top: 49px;
     width: 150px;
     height: 50px;
     text-align: center;
@@ -297,6 +301,10 @@
     border-radius: 7px;
     color: white;
     
+}
+
+.subjects-list-container {
+    background-color: red;
 }
 
 .note-subject{
@@ -516,15 +524,15 @@
 }
 
 #full-note-icon{
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     display: block;
     color: inherit;         
 }
 
 #edit-icon{
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     display: block;
     color: inherit;         
 }
@@ -532,16 +540,16 @@
 
 
 #save-icon{
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     display: block;
     color: inherit;         
 }
 /* Editing a task icon */
 
 #delete-icon{
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     display: block;
     color: inherit;         
 }
