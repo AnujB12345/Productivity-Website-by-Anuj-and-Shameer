@@ -90,6 +90,8 @@
     text-align: left;
     width: 650px;
     height: 150px;
+    min-height: 100px;
+    max-height: 300px;
     border-radius: 8px;
     background-color: rgba(44, 44, 42);
     color: white;
@@ -98,7 +100,7 @@
     outline: none;
     position: relative;
     top: 3px;
-    font-size: 12px;
+    font-size: 14px;
     
 }
 
@@ -231,7 +233,6 @@
 
 .note {
     display: flex;
-    /* flex: 1; */
     padding-bottom: 3px;
     padding-top: 3px;
     height: 37px;
@@ -245,7 +246,7 @@
     color: var(--c-color);
     font-size: 20px;
     align-items: left;
-    padding-left: 35px;
+    padding-left: 10px;
     padding-right: 20px;
     flex: 1;
     min-width: 0;
@@ -256,10 +257,10 @@
 }
 
 .note-description {
-    font-size: 12px;
+    font-size: 14px;
     color: rgb(100, 100, 100);
     padding-top: 5px;
-    padding-left: 20px;
+    padding-left: 10px;
     padding-right: 30px;
     overflow-wrap: anywhere;
     overflow: hidden;
@@ -546,3 +547,5 @@
     color: inherit;         
 }
 /* Deleting a task icon */
+
+
