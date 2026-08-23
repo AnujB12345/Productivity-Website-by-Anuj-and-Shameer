@@ -55,18 +55,19 @@ showEventsCancelButton.addEventListener("click", () => { //Makes the show-events
     addEventPopup.classList.remove("show"); //Removes the show class
 })
 
+const chooseMonth = document.querySelector(".change-month-year-entry")
 
-// function highlightDate(id) {
-//     const container = document.querySelector(".individual-day-box");
+chooseMonth.addEventListener("change", () => {
 
-//     const 
-//      if (container.classList.contains("highlighted-date")){
-//         container.style.border = "none";
-//         container.classList.remove(".highlighted-date");
-//     }
+    if (chooseMonth.value == "") {
+        return;
+    }
+    const userInput = chooseMonth.value.split("-");
 
-//     else{
-//         container.classList.add(".highlighted-date");
-//     }
+    if (isNaN(userInput[1]) || isNaN(userInput[0])) {
+        console.log("Invalid date, must be a number");
+        return;
+    }
+    window.location.href = `/calendar/?month=${userInput[1]}&year=${userInput[0]}`  
 
-// }
+})

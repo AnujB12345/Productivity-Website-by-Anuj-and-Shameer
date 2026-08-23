@@ -16,15 +16,14 @@
 
 <div class="top-display-container">
   <div class="e1">
-    <h1 class="month-year-display"> {{month_name}} {{year}}</h1>
+    <label class="month-year-display"> <input type="month" name="month" value="{{month_year_format}}" required
+      class="change-month-year-entry"></label>
 
-    <!-- <a href="?month={{ prev_month }}&year={{ prev_year }}{% if selected_date %}&date={{ selected_date }}{% endif %}" -->
-    <a href="?month={{ prev_month }}&year={{ prev_year }}"
-
-      class="change-month"><i class="fa-solid fa-chevron-left" id="left-icon" title="Previous month"></i></a>
+    <a href="?month={{ prev_month }}&year={{ prev_year }}" class="change-month"><i class="fa-solid fa-chevron-left"
+        id="left-icon" title="Previous month"></i></a>
     &nbsp;
-    <a href="?month={{ next_month }}&year={{ next_year }}"
-      class="change-month"><i class="fa-solid fa-chevron-right" id="right-icon"></i></a>
+    <a href="?month={{ next_month }}&year={{ next_year }}" class="change-month"><i class="fa-solid fa-chevron-right"
+        id="right-icon"></i></a>
   </div>
   <div class="e2">
     <button type="submit" name="
@@ -51,39 +50,36 @@
       <tr class="calendar-row">
         {% for day in week %}
         {% if day == 0 %}
-          <td class="individual-day-box">&nbsp;</td>
+        <td class="individual-day-box">&nbsp;</td>
         {% else %}
-          <td {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
-                  class="individual-day-box-selected"
-                  {% else %}
-                  class="individual-day-box"
-                  {% endif %}>
-            {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
-              <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
-                class="day-calendar-selected">
-                {% if day == today.day and month == today.month and year == today.year %}
-                  {{ day }} (Today)
-                {% else %}
-                {{ day }}
-                {% endif %}
-              </a>
+        <td {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
+          class="individual-day-box-selected" {% else %} class="individual-day-box" {% endif %}>
+          {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
+          <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
+            class="day-calendar-selected">
+            {% if day == today.day and month == today.month and year == today.year %}
+            {{ day }} (Today)
             {% else %}
-              <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
-                class="day-calendar">
-                {% if day == today.day and month == today.month and year == today.year %}
-                {{ day }} (Today)
-                {% else %}
-                {{ day }}
-                {% endif %}
-              </a>
+            {{ day }}
             {% endif %}
+          </a>
+          {% else %}
+          <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
+            class="day-calendar">
+            {% if day == today.day and month == today.month and year == today.year %}
+            {{ day }} (Today)
+            {% else %}
+            {{ day }}
+            {% endif %}
+          </a>
+          {% endif %}
 
-            {% for event in calendar_events %}
-            {% if event.date.day == day and event.date.month == month and event.date.year == year %}
-              <p class="event-name-on-calendar"> {{ event.title }}</p>
-            {% endif %}
-            {% endfor %}
-          </td>
+          {% for event in calendar_events %}
+          {% if event.date.day == day and event.date.month == month and event.date.year == year %}
+            <p class="event-name-on-calendar"> {{ event.time|time:"H:i" }} {{ event.title }}</p>
+          {% endif %}
+          {% endfor %}
+        </td>
         {% endif %}
         {% endfor %}
       </tr>
@@ -139,11 +135,11 @@
           <li class="event-description">
             <div class="event-description-top">
               <p class="event-time">{{ event.time|time:"H:i" }} </p>
-               
 
               <div class="icons">
                 <!-- Edit button -->
-                <button onclick="document.getElementById('edit-form-{{ event.id }}').style.display='block'" class="btn-edit">
+                <button onclick="document.getElementById('edit-form-{{ event.id }}').style.display='block'"
+                  class="btn-edit">
                   <i class="fa-regular fa-pen-to-square" id="edit-icon"></i>
                 </button>
 
@@ -159,7 +155,7 @@
               </div>
             </div>
 
-            <p class = "event-title">{{ event.title }}</p>
+            <p class="event-title">{{ event.title }}</p>
 
             <!-- Inline edit form (hidden by default) -->
             <div id="edit-form-{{ event.id }}" style="display:none; margin-top: 8px;" class="edit-form">
@@ -186,7 +182,7 @@
       </ul>
 
     {% else %}
-      <p class="no-events-prompt">No events{% if selected_date %} on this day{% endif %}</p>
+      <p class="no-events-prompt">No events{% if selected_date %} on this day {% endif %}</p>
     {% endif %}
 
     <button type="submit" name="
