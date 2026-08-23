@@ -153,14 +153,37 @@
     font-family: sans-serif;
 }
 
+
+
 .individual-day-box {
     height: 90px;
     width: 90px;
     text-align: start;
     vertical-align: top;
+
+    flex: 0 0 90px;
+    max-width: fit-content;
+    max-height: fit-content;    
     /* padding-left: 5px; */
     border-radius: 8px;
     background-color: rgba(44, 44, 42);
+
+    word-wrap: break-word;
+}
+
+.individual-day-box-selected {
+    height: 90px;
+    width: 90px;
+    text-align: start;
+    vertical-align: top;
+
+    flex: 0 0 90px;
+    max-width: fit-content;
+    max-height: fit-content;    
+    /* padding-left: 5px; */
+    border-radius: 8px;
+    background-color: rgba(44, 44, 42);
+    border: 2px solid rgba(78, 121, 206);
 
     word-wrap: break-word;
 }
@@ -174,7 +197,7 @@
 
 .day-calendar-selected {
     color: rgba(78, 121, 206);
-    color: pink;
+    font-weight: bold;
     align-items: left;
     padding-left: 5px;
     font-size: 16px;    
