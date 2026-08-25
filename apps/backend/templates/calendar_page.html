@@ -53,15 +53,31 @@
         {% if day == 0 %}
           <td class="individual-day-box">&nbsp;</td>
         {% else %}
-          <td class="individual-day-box">
-            <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
-              class="day-calendar">
-              {% if day == today.day and month == today.month and year == today.year %}
-              {{ day }} (Today)
-              {% else %}
-              {{ day }}
-              {% endif %}
-            </a>
+          <td {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
+                  class="individual-day-box-selected"
+                  {% else %}
+                  class="individual-day-box"
+                  {% endif %} >
+            {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
+              <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
+                class="day-calendar-selected">
+                 {% if day == today.day and month == today.month and year == today.year %}
+                  {{ day }} (Today)
+                  {% else %}
+                  {{ day }}
+                  {% endif %}
+              </a>
+            {% else %}
+              <a href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
+                class="day-calendar">
+                {% if day == today.day and month == today.month and year == today.year %}
+                {{ day }} (Today)
+                {% else %}
+                {{ day }}
+                {% endif %}
+              </a>
+            {% endif %}
+
             {% for event in calendar_events %}
             {% if event.date.day == day and event.date.month == month and event.date.year == year %}
               <p class="event-name-on-calendar"> {{ event.title }}</p>
@@ -107,7 +123,7 @@
   </div>
 
   <!-- Events list -->
-  <div class="events-list-container {% if not selected_date %}hidden{% endif %} {% if selected_date %}show{% endif %}">
+  <div class="events-list-container {% if not selected_date_obj %}hidden{% endif %} {% if selected_date_obj %}show{% endif %}">
 
     <div class="events-list-container-top">
       <h2 class="events-heading">Events {% if selected_date %} on {{selected_date}}{% endif %}</h2>
