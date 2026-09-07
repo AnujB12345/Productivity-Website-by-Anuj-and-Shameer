@@ -16,8 +16,26 @@ def register(request):
             form = RegisterForm() #Creates an empty form
             return render(request, 'register_page.html', {'form': form})    
    
-    if request.method == 'POST': #If the user has submitted the registration form
-        form = RegisterForm(request.POST) #Fill the form with information the user just submitted
+    if request.method == 'POST':
+
+        conn = sqlite3.connect("users.db")
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE
+        )
+        """)
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+            # return redirect("dashboard:dashboard")
+        form = RegisterForm(request.POST) 
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
