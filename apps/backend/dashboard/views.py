@@ -7,7 +7,8 @@ import json
 
 from todo.models import Todo
 from notes.models import Note
-from calendar_app.models import CalendarEvent  # ⚠️ adjust to your actual app name/path
+from calendar_app.models import CalendarEvent  # ⚠️ adjust to your actual app path
+from dashboard.models import Goal
 
 
 def dashboard(request):
@@ -15,8 +16,24 @@ def dashboard(request):
     if not username:
         return redirect("users:login")
 
+    if request.method == "POST" and ("update_goal" in request.POST or "update_pomodoro_goal" in request.POST):
+        goal_obj, _ = Goal.objects.get_or_create(username=username)
+
+        if "update_goal" in request.POST:
+            new_goal = request.POST.get("notes_goal")
+            if new_goal and new_goal.isdigit() and int(new_goal) > 0:
+                goal_obj.notes_goal = int(new_goal)
+        else:
+            new_pomo_goal = request.POST.get("pomodoro_goal")
+            if new_pomo_goal and new_pomo_goal.isdigit() and int(new_pomo_goal) > 0:
+                goal_obj.pomodoro_goal = int(new_pomo_goal)
+
+        goal_obj.save()
+        return redirect("dashboard:dashboard")
+
     now = timezone.now()
     today = now.date()
+    month_start = today.replace(day=1)
 
     # --- Rolling 7-day windows for week-over-week comparison ---
     week_0_start = now - timedelta(days=7)
@@ -57,6 +74,29 @@ def dashboard(request):
     completion_rate = round((total_completed_tasks / total_tasks) * 100) if total_tasks else 0
     total_notes = Note.objects.filter(username=username).count()
 
+    # --- Task reminder widget: top 3 highest-priority incomplete tasks ---
+    incomplete_tasks = Todo.objects.filter(username=username, checkbox=False)
+    tasks_remaining = incomplete_tasks.count()
+    top_tasks = incomplete_tasks.order_by('-priority', 'id')[:3]
+
+    # --- Progress tracker ---
+    tasks_completed_this_month = Todo.objects.filter(
+        username=username, checkbox=True, completed_at__gte=month_start
+    ).count()
+    tasks_progress_pct = round((tasks_completed_this_month / total_tasks) * 100) if total_tasks else 0
+
+    goal_obj, _ = Goal.objects.get_or_create(username=username)
+    notes_created_this_month = Note.objects.filter(username=username, created_at__gte=month_start).count()
+    notes_progress_pct = min(round((notes_created_this_month / goal_obj.notes_goal) * 100), 100) if goal_obj.notes_goal else 0
+
+    events_this_month_total = CalendarEvent.objects.filter(
+        username=username, date__year=today.year, date__month=today.month
+    ).count()
+    events_this_month_done = CalendarEvent.objects.filter(
+        username=username, date__year=today.year, date__month=today.month, date__lt=today
+    ).count()
+    events_progress_pct = round((events_this_month_done / events_this_month_total) * 100) if events_this_month_total else 0
+
     # --- Year-so-far chart: monthly totals ---
     year = today.year
 
@@ -92,4 +132,17 @@ def dashboard(request):
         "completion_rate": completion_rate,
         "total_notes": total_notes,
         "chart_data": json.dumps(chart_data),
+
+        "tasks_remaining": tasks_remaining,
+        "top_tasks": top_tasks,
+
+        "tasks_progress_pct": tasks_progress_pct,
+        "tasks_completed_this_month": tasks_completed_this_month,
+        "notes_progress_pct": notes_progress_pct,
+        "notes_created_this_month": notes_created_this_month,
+        "notes_goal": goal_obj.notes_goal,
+        "pomodoro_goal": goal_obj.pomodoro_goal,   # add this line
+        "events_progress_pct": events_progress_pct,
+        "events_this_month_done": events_this_month_done,
+        "events_this_month_total": events_this_month_total,
     })
