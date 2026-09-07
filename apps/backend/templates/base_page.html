@@ -1,70 +1,115 @@
 {% load static %}
 
-<!DOCTYPE html>
+<!doctype html>
 
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>
-      {% block title %} Productivity App {% endblock %}
-    </title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"  />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap">
-    
-    <link rel = "stylesheet" href="{% static 'base_page.css' %}">  <!--Link the CSS file for base_page.html-->
+    <title>{% block title %} Taskira {% endblock %}</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap"
+    />
 
+    <link rel="stylesheet" href="{% static 'base_page.css' %}" />
+    <!--Link the CSS file for base_page.html-->
 
-    {% block extra_css %}{% endblock %} <!--Additional CSS files for other pages-->
+    {% block extra_css %}{% endblock %}
+    <!--Additional CSS files for other pages-->
   </head>
 
-  <body class = "{%block body_class %} {% endblock %}">
-
-    <div class="navbar" id = "main-navigation-bar">
+  <body class="{%block body_class %} {% endblock %}">
+    <div class="navbar" id="main-navigation-bar">
       {% if request.session.username %}
-      
-        <div class = "dashboard-navbar">
-        <a class="navbar-name" href="{% url 'dashboard:dashboard' %}">Productivity App</a>
-          <ul class ="nav-links">
-              <li><a class="nav-link" href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
-              <li><a class="nav-link" href="{% url 'todo:todo_list' %}">To-do</a></li>
-              <li><a class="nav-link" href="{% url 'notes:notes' %}">Revision Notes</a></li>
-              <li><a class="nav-link" href="{% url 'calendar:calendar' %}">Calendar</a></li>
-          </ul>
+
+      <div class="dashboard-navbar">
+        <a class="navbar-name" href="{% url 'dashboard:dashboard' %}"
+          >Taskira</a
+        >
+        <ul class="nav-links">
+          <li>
+            <a class="nav-link" href="{% url 'dashboard:dashboard' %}"
+              >Dashboard</a
+            >
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'todo:todo_list' %}">To-do</a>
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'notes:notes' %}"
+              >Revision Notes</a
+            >
+          </li>
+          <li>
+            <a class="nav-link" href="{% url 'calendar:calendar' %}"
+              >Calendar</a
+            >
+          </li>
+        </ul>
+      </div>
+      <!--Account button-->
+      <div class="account-button-container">
+        <button class="account-button" id="account-button">
+          <i class="fa-regular fa-circle-user"></i>
+        </button>
+        <div class="account-sidebar" id="account-sidebar">
+          <a class="sidebar-link" href="{% url 'dashboard:dashboard' %}"
+            >Settings</a
+          >
+          <a class="sidebar-link" href="{% url 'users:logout' %}">Logout</a>
         </div>
-        <a class = "logout-button" href="{% url 'users:logout' %}">
-          <div>Logout</div>
-        </a>
-        
+      </div>
+
       {% else %}
-        <a class="navbar-name" href="{% url 'home' %}">Productivity App</a>
+      <a class="navbar-name" href="{% url 'home' %}">Taskira</a>
 
-        <div class = "account-buttons">
-          <a class = "homepage-login-button" href="{% url 'users:login' %}">
-            <div>Login</div>
-          </a>
+      <div class="account-buttons">
+        <a class="homepage-login-button" href="{% url 'users:login' %}">
+          <div>Login</div>
+        </a>
 
-          <a class = "homepage-register-button" href="{% url 'users:register' %}">
-            <div>Register</div>
-          </a>
-        </div>
+        <a class="homepage-register-button" href="{% url 'users:register' %}">
+          <div>Register</div>
+        </a>
+      </div>
       {% endif %}
     </div>
-    
+
     <!--Contains all of the extra content in the webpages-->
-    <div class="main-container">
-      {% block content %} {% endblock %} 
-    </div>
+    <div class="main-container">{% block content %} {% endblock %}</div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" ></script>
-  
-  {% block scripts %}
-  {% endblock %}
-  
-  </body>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 
+    {% block scripts %}
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const accountButton = document.getElementById("account-button");
+        const accountSidebar = document.getElementById("account-sidebar");
+
+        accountButton.addEventListener("click", function (e) {
+          e.stopPropagation();
+          accountSidebar.classList.toggle("sidebar-open");
+        });
+
+        //Click on anywhere in the page and it will hide the sidebar
+        document.addEventListener("click", function (e) {
+          if (
+            !accountSidebar.contains(e.target) &&
+            e.target !== accountButton
+          ) {
+            accountSidebar.classList.remove("sidebar-open");
+          }
+        });
+      });
+    </script>
+    {% endblock %}
+  </body>
 </html>
- 
