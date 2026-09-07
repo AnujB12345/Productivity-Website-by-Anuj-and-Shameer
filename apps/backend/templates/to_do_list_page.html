@@ -71,23 +71,56 @@
             </form>
 
             <!-- BUTTONS -->
-            <div class="btn-group">
-                <button type="button"
-                        onclick="enableEdit({{ todo.id }})"
-                        class="btn-edit">
-                    <i class="fa-regular fa-pen-to-square" id = "edit-icon"></i>
-                </button>
+            <!-- BUTTONS -->
+<div class="btn-group">
+
+    <!-- PRIORITY -->
+    <form method="POST" class="priority-form">
+        {% csrf_token %}
+
+        <input type="hidden" name="task_id" value="{{ todo.id }}">
+
+        <select
+            name="priority"
+            class="priority-select priority-{{ todo.priority }}"
+            onchange="this.form.submit()"
+        >
+            <option value="1" {% if todo.priority == 1 %}selected{% endif %}>
+                Priority 1
+            </option>
+
+            <option value="2" {% if todo.priority == 2 %}selected{% endif %}>
+                Priority 2
+            </option>
+
+            <option value="3" {% if todo.priority == 3 %}selected{% endif %}>
+                Priority 3
+            </option>
+        </select>
+
+        <input type="hidden" name="change_priority" value="1">
+    </form>
+
+    <!-- EDIT -->
+    <button type="button"
+            onclick="enableEdit({{ todo.id }})"
+            class="btn-edit">
+        <i class="fa-regular fa-pen-to-square" id="edit-icon"></i>
+    </button>
 
 
-                <form method="POST" onsubmit="return confirm('Delete this task?');">
-                    {% csrf_token %}
-                    <input type="hidden" name="task_id" value="{{ todo.id }}">
-                    <button type="submit" name="delete_task" class="btn-delete">
+    <!-- DELETE -->
+    <form method="POST" onsubmit="return confirm('Delete this task?');">
+        {% csrf_token %}
+        <input type="hidden" name="task_id" value="{{ todo.id }}">
 
-                        <i class="fa-regular fa-trash-can" id = "delete-icon"></i>
-                    </button>
-                </form>
-            </div>
+        <button type="submit" name="delete_task" class="btn-delete">
+            <i class="fa-regular fa-trash-can" id="delete-icon"></i>
+        </button>
+    </form>
+
+
+</div>
 
         </div>
 

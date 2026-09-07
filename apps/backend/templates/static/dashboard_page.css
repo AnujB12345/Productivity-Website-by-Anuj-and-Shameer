@@ -121,3 +121,147 @@
     background-color: rgb(35, 82, 175);
     cursor: pointer;
 }
+
+.stats-section {
+    margin: 50px;
+    margin-top: 20px;
+}
+
+.stats-title {
+    font-family: 'SquadaOne', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 16px;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background-color: rgba(44, 45, 42);
+    border-radius: 10px;
+    padding: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.stat-card:hover {
+    background-color: rgb(52, 53, 51);
+}
+
+.stat-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.stat-icon {
+    background-color: white;
+    border-radius: 8px;
+    padding: 6px;
+    width: 18px;
+    height: 18px;
+    font-size: 16px;
+    color: rgba(44, 45, 42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-change {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.stat-change.positive {
+    color: rgb(120, 210, 160);
+    background-color: rgba(120, 210, 160, 0.15);
+}
+
+.stat-change.negative {
+    color: rgb(230, 120, 115);
+    background-color: rgba(230, 120, 115, 0.15);
+}
+
+.stat-number {
+    font-family: 'SquadaOne', sans-serif;
+    font-size: 32px;
+    color: white;
+    margin: 0;
+}
+
+.stat-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: rgba(248, 251, 250, 0.85);
+    margin: 6px 0 0;
+}
+
+.stat-sublabel {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: rgba(192, 191, 179, 0.6);
+    margin: 4px 0 0;
+}
+
+.year-chart-container {
+    background-color: rgba(44, 45, 42);
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.year-chart-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.year-chart-title {
+    font-family: 'SquadaOne', sans-serif;
+    font-size: 22px;
+    color: white;
+    margin: 0;
+}
+
+.chart-toggle-group {
+    display: flex;
+    gap: 6px;
+}
+
+.chart-toggle {
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    background-color: rgba(78, 121, 206, 0.15);
+    color: rgba(248, 251, 250, 0.8);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.chart-toggle:hover {
+    background-color: rgba(78, 121, 206, 0.3);
+}
+
+.chart-toggle.active {
+    background-color: rgba(78, 121, 206);
+    color: white;
+}
+
+.chart-toggle.active:hover {
+    background-color: rgb(35, 82, 175);
+}

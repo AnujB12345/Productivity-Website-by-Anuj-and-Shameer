@@ -255,6 +255,37 @@ form {
     padding: 0;
     margin: 0;
 }
+.priority-form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.priority-select {
+    background-color: var(--b-color);
+    color: var(--c-color);
+    border: 1px solid var(--d-color);
+    border-radius: 6px;
+
+    height: 30px;
+    padding-left: 7px;
+    padding-right: 7px;
+
+    font-size: 14px;
+    cursor: pointer;
+
+    outline: none;
+}
+
+.priority-select:hover {
+    border-color: var(--c-color);
+}
+
+.priority-select:focus {
+    outline: none;
+    box-shadow: none;
+}
 .btn-edit,
 .btn-edit:focus,
 .btn-edit:focus-visible,
