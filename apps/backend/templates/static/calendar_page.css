@@ -516,3 +516,51 @@
 .hidden {
   display: none;
 }
+
+/* Month & Year Input Container */
+.month-year-display {
+  color: white;
+  font-size: 25px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Styled Month/Year Input */
+.change-month-year-entry {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: rgba(44, 44, 42, 0.9);
+  color: #ffffff;
+  font-family: sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  border: 1px solid rgba(117, 117, 117, 0.5);
+  border-radius: 8px;
+  padding: 6px 14px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover and Focus States */
+.change-month-year-entry:hover {
+  background-color: rgba(55, 55, 52, 1);
+  border-color: rgba(78, 121, 206, 0.8);
+}
+
+.change-month-year-entry:focus {
+  border-color: rgb(78, 121, 206);
+  box-shadow: 0 0 0 2px rgba(78, 121, 206, 0.3);
+}
+
+/* Native Calendar Icon Styling for Webkit Browsers (Chrome, Edge, Safari) */
+.change-month-year-entry::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(1); /* Inverts icon to white */
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.change-month-year-entry::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}

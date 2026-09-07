@@ -45,10 +45,10 @@ def notes(request):
             note.description = new_description
             note.subject = new_subject
             note.subject_colour = new_subject_colour or note.subject_colour
-            for note in notes:
-                if note.subject == new_subject and note.id != note_id:
-                    note.subject_colour = new_subject_colour or note.subject_colour
-                    note.save()
+            for n0te in notes:
+                if n0te.subject == new_subject and n0te.id != note_id:
+                    n0te.subject_colour = new_subject_colour or note.subject_colour
+                    n0te.save()
             if new_description is None:
                 note.description = ""
             if not new_title:

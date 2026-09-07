@@ -1,15 +1,20 @@
-{% extends "base_page.html" %} {% block title %} Home Page {% endblock %}
+{% extends "base_page.html" %} 
+{% block title %} Home Page {% endblock %}
 <!-- This page extends base_page.html-->
 
-{% load static %} {% block body_class %}calendar{% endblock %} {% block
-extra_css %}
+{% load static %} 
+
+{% block body_class %}calendar{% endblock %} 
+
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'calendar_page.css' %}" />
 <script
   src="https://kit.fontawesome.com/dce4d5d2ec.js"
   crossorigin="anonymous"
 ></script>
+{% endblock %}
 
-{% endblock%} {% block content %}
+{% block content %}
 
 <h1 class="title">Calendar</h1>
 <h3 class="subtitle">Plan out your day, hour by hour</h3>
@@ -23,27 +28,22 @@ extra_css %}
         value="{{month_year_format}}"
         required
         class="change-month-year-entry"
-    /></label>
+      /></label>
 
-    <a href="?month={{ prev_month }}&year={{ prev_year }}" class="change-month"
-      ><i
+    <a href="?month={{ prev_month }}&year={{ prev_year }}" class="change-month">
+      <i
         class="fa-solid fa-chevron-left"
         id="left-icon"
         title="Previous month"
-      ></i
-    ></a>
+      ></i>
+    </a>
     &nbsp;
-    <a href="?month={{ next_month }}&year={{ next_year }}" class="change-month"
-      ><i class="fa-solid fa-chevron-right" id="right-icon"></i
-    ></a>
+    <a href="?month={{ next_month }}&year={{ next_year }}" class="change-month">
+      <i class="fa-solid fa-chevron-right" id="right-icon"></i>
+    </a>
   </div>
   <div class="e2">
-    <button
-      type="submit"
-      name="
-    "
-      class="add-event-btn-top"
-    >
+    <button type="button" class="add-event-btn-top">
       + Add Event
     </button>
   </div>
@@ -65,55 +65,37 @@ extra_css %}
     <tbody>
       {% for week in calendar %}
       <tr class="calendar-row">
-        {% for day in week %} {% if day == 0 %}
-        <td class="individual-day-box">&nbsp;</td>
-        {% else %}
-        <td
-          {%
-          if
-          day=""
-          ="selected_date_obj.day"
-          and
-          month=""
-          ="selected_date_obj.month"
-          and
-          year=""
-          ="selected_date_obj.year"
-          %}
-          class="individual-day-box-selected"
-          {%
-          else
-          %}
-          class="individual-day-box"
-          {%
-          endif
-          %}
-        >
-          {% if day == selected_date_obj.day and month ==
-          selected_date_obj.month and year == selected_date_obj.year %}
-          <a
-            href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
-            class="day-calendar-selected"
-          >
-            {% if day == today.day and month == today.month and year ==
-            today.year %} {{ day }} (Today) {% else %} {{ day }} {% endif %}
-          </a>
+        {% for day in week %} 
+          {% if day == 0 %}
+            <td class="individual-day-box">&nbsp;</td>
           {% else %}
-          <a
-            href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
-            class="day-calendar"
-          >
-            {% if day == today.day and month == today.month and year ==
-            today.year %} {{ day }} (Today) {% else %} {{ day }} {% endif %}
-          </a>
-          {% endif %} {% for event in calendar_events %} {% if event.date.day ==
-          day and event.date.month == month and event.date.year == year %}
-          <p class="event-name-on-calendar">
-            {{ event.time|time:"H:i" }} {{ event.title }}
-          </p>
-          {% endif %} {% endfor %}
-        </td>
-        {% endif %} {% endfor %}
+            <td class="{% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}individual-day-box-selected{% else %}individual-day-box{% endif %}">
+              {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
+                <a
+                  href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
+                  class="day-calendar-selected"
+                >
+                  {% if day == today.day and month == today.month and year == today.year %} {{ day }} (Today) {% else %} {{ day }} {% endif %}
+                </a>
+              {% else %}
+                <a
+                  href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
+                  class="day-calendar"
+                >
+                  {% if day == today.day and month == today.month and year == today.year %} {{ day }} (Today) {% else %} {{ day }} {% endif %}
+                </a>
+              {% endif %} 
+              
+              {% for event in calendar_events %} 
+                {% if event.date.day == day and event.date.month == month and event.date.year == year %}
+                  <p class="event-name-on-calendar">
+                    {{ event.time|time:"H:i" }} {{ event.title }}
+                  </p>
+                {% endif %} 
+              {% endfor %}
+            </td>
+          {% endif %} 
+        {% endfor %}
       </tr>
       {% endfor %}
     </tbody>
@@ -123,7 +105,7 @@ extra_css %}
   <div class="add-event-container hidden">
     <div class="add-event-container-top">
       <h3 class="add-event-heading">Add Event</h3>
-      <button type="submit" name="cancel" id="add-event-cancel-btn">
+      <button type="button" id="add-event-cancel-btn">
         <i class="fa-solid fa-xmark" id="cancel-show-events"></i>
       </button>
     </div>
@@ -131,8 +113,7 @@ extra_css %}
     <form method="POST">
       {% csrf_token %}
       <div class="event-label-container">
-        <label class="event-label"
-          >Title
+        <label class="event-label">Title
           <input
             type="text"
             name="title"
@@ -141,22 +122,19 @@ extra_css %}
             placeholder="Add a title"
         /></label>
         <div class="date-time">
-          <label class="event-label"
-            >Date
+          <label class="event-label">Date
             <input
               type="date"
               name="date"
-              value="{% if selected_date %}{{ selected_date }}{% else %}{{today}}{% endif %}"
+              value="{% if selected_date %}{{ selected_date }}{% else %}{{ today }}{% endif %}"
               required
               class="add-event-entry"
           /></label>
-          <label class="event-label"
-            >Time
+          <label class="event-label">Time
             <input type="time" name="time" required class="add-event-entry"
           /></label>
         </div>
-        <label class="event-label"
-          >Description
+        <label class="event-label">Description
           <input
             type="text"
             name="description"
@@ -169,7 +147,7 @@ extra_css %}
         <button type="submit" name="add_event" class="add-event-btn">
           Add Event
         </button>
-        <button type="submit" name="cancel" class="cancel-btn">Cancel</button>
+        <button type="button" class="cancel-btn">Cancel</button>
       </div>
     </form>
   </div>
@@ -180,9 +158,9 @@ extra_css %}
   >
     <div class="events-list-container-top">
       <h2 class="events-heading">
-        Events {% if selected_date %} on {{selected_date}}{% endif %}
+        Events {% if selected_date %} on {{ selected_date }}{% endif %}
       </h2>
-      <button type="submit" name="cancel" id="show-events-cancel-btn">
+      <button type="button" id="show-events-cancel-btn">
         <i class="fa-solid fa-xmark" id="cancel-show-events"></i>
       </button>
     </div>
@@ -190,8 +168,7 @@ extra_css %}
     {% if selected_date_events %}
     <!--Case in which there are events-->
     <h4 class="event-count">
-      {% if event_count == 1 %} {{event_count}} event {% else %} {{event_count}}
-      events {% endif %}
+      {% if event_count == 1 %} {{ event_count }} event {% else %} {{ event_count }} events {% endif %}
     </h4>
 
     <ul class="events-list">
@@ -203,6 +180,7 @@ extra_css %}
           <div class="icons">
             <!-- Edit button -->
             <button
+              type="button"
               onclick="document.getElementById('edit-form-{{ event.id }}').style.display='block'"
               class="btn-edit"
             >
@@ -237,8 +215,7 @@ extra_css %}
             {% csrf_token %}
             <input type="hidden" name="event_id" value="{{ event.id }}" />
             <div class="event-label-container">
-              <label class="event-label"
-                >Title:
+              <label class="event-label">Title:
                 <input
                   type="text"
                   name="title"
@@ -247,8 +224,7 @@ extra_css %}
                   class="add-event-entry"
                   placeholder="Add a title"
               /></label>
-              <label class="event-label"
-                >Date:
+              <label class="event-label">Date:
                 <input
                   type="date"
                   name="date"
@@ -256,8 +232,7 @@ extra_css %}
                   required
                   class="add-event-entry"
               /></label>
-              <label class="event-label"
-                >Time:
+              <label class="event-label">Time:
                 <input
                   type="time"
                   name="time"
@@ -265,8 +240,7 @@ extra_css %}
                   required
                   class="add-event-entry"
               /></label>
-              <label class="event-label"
-                >Description:
+              <label class="event-label">Description:
                 <input
                   type="text"
                   name="description"
@@ -293,23 +267,18 @@ extra_css %}
 
     {% else %}
     <p class="no-events-prompt">
-      No events{% if selected_date %} on this day {% endif %}
+      No events{% if selected_date %} on this day{% endif %}
     </p>
     {% endif %}
 
-    <button
-      type="submit"
-      name="
-    "
-      class="add-event-btn-bottom"
-    >
+    <button type="button" class="add-event-btn-bottom">
       + Add Event
     </button>
   </div>
 </div>
 
-{% endblock %} {% block scripts %}
+{% endblock %} 
 
+{% block scripts %}
 <script src="{% static 'calendar/calendar_page.js' %}"></script>
-
 {% endblock %}
