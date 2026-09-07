@@ -51,6 +51,7 @@ def todo_list(request):
             Todo.objects.filter(username=request.session["username"]).delete()
             return redirect("todo:todo_list")
 
+    # Separate active and completed tasks for display
     todos = list(todos)
     active_todos = [t for t in todos if not t.checkbox]
     done_todos = [t for t in todos if t.checkbox]

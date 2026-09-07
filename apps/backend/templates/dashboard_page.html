@@ -1,5 +1,6 @@
 {% extends "base_page.html" %} {% block title %} Dashboard Page {% endblock %} <!-- This page extends base_page.html-->
 
+<!-- loading static files -->
 {% load static %}
 
 {% block body_class %}dashboard-page{% endblock %}
@@ -11,6 +12,7 @@
 {% endblock%}
 
 {% block content %}
+<!-- Initial title and subtitle -->
 <h1 class = "title">Welcome back, {{ request.session.username }}</h1> 
 
 <h2 class = "subheading">Your calendar, to-do list and revision notes, all in one place</h2>
@@ -56,6 +58,8 @@
 <!-- TASK REMINDER SECTION -->
 <a class="task-reminder-section" href="{% url 'todo:todo_list' %}">
 
+    <!-- If there is any remaining tasks, display a reminder and the top 3 tasks (values pre defined in views.py) -->
+
     {% if tasks_remaining > 0 %}
         <div class="task-reminder-top">
             <h2 class="task-reminder-title">You still have {{ tasks_remaining }} task{{ tasks_remaining|pluralize }} to do</h2>
@@ -79,10 +83,10 @@
 </a>
 
 <!-- PROGRESS TRACKER -->
-<!-- PROGRESS TRACKER -->
 <div class="progress-tracker-section">
     <h2 class="stats-title">Your progress this month</h2>
 
+    <!-- Progress cards for tasks, notes, and events, all values pre defined on views -->
     <div class="progress-cards">
 
         <div class="progress-card">
@@ -142,7 +146,7 @@
 <!-- STATS SECTION -->
 <div class="stats-section">
     <h2 class="stats-title">Your stats</h2>
-
+    <!-- Progress cards for tasks, notes, and events, all values pre defined on views -->
     <div class="stats-cards">
 
         <div class="stat-card">
@@ -209,6 +213,8 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+// Initialize the year chart
 
 const chartData = JSON.parse('{{ chart_data|escapejs }}');
 Chart.defaults.color = 'rgba(248, 251, 250, 0.7)';

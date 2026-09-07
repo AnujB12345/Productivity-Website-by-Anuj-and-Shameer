@@ -1,6 +1,7 @@
 # dashboard/models.py
 from django.db import models
 
+# Goal model to store user-specific goals for notes and pomodoro sessions
 class Goal(models.Model):
     username = models.CharField(max_length=100, unique=True)
     notes_goal = models.PositiveIntegerField(default=5)

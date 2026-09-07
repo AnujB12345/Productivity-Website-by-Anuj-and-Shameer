@@ -16,6 +16,7 @@ def dashboard(request):
     if not username:
         return redirect("users:login")
 
+    # Handle goal updates
     if request.method == "POST" and ("update_goal" in request.POST or "update_pomodoro_goal" in request.POST):
         goal_obj, _ = Goal.objects.get_or_create(username=username)
 
@@ -31,6 +32,7 @@ def dashboard(request):
         goal_obj.save()
         return redirect("dashboard:dashboard")
 
+    # --- Time calculations ---
     now = timezone.now()
     today = now.date()
     month_start = today.replace(day=1)
@@ -39,6 +41,7 @@ def dashboard(request):
     week_0_start = now - timedelta(days=7)
     week_1_start = now - timedelta(days=14)
 
+    # --- Week-over-week stats ---
     tasks_this_week = Todo.objects.filter(username=username, completed_at__gte=week_0_start).count()
     tasks_last_week = Todo.objects.filter(
         username=username, completed_at__gte=week_1_start, completed_at__lt=week_0_start
@@ -49,11 +52,13 @@ def dashboard(request):
         username=username, created_at__gte=week_1_start, created_at__lt=week_0_start
     ).count()
 
+    # --- Percentage change calculations ---
     def pct_change(current, previous):
         if previous == 0:
             return 100 if current > 0 else 0
         return round(((current - previous) / previous) * 100)
 
+    # --- Percentage changes stored ---
     tasks_change = pct_change(tasks_this_week, tasks_last_week)
     notes_change = pct_change(notes_this_week, notes_last_week)
 
@@ -85,6 +90,8 @@ def dashboard(request):
     ).count()
     tasks_progress_pct = round((tasks_completed_this_month / total_tasks) * 100) if total_tasks else 0
 
+
+    # --- Notes and events progress tracker ---
     goal_obj, _ = Goal.objects.get_or_create(username=username)
     notes_created_this_month = Note.objects.filter(username=username, created_at__gte=month_start).count()
     notes_progress_pct = min(round((notes_created_this_month / goal_obj.notes_goal) * 100), 100) if goal_obj.notes_goal else 0
@@ -100,6 +107,7 @@ def dashboard(request):
     # --- Year-so-far chart: monthly totals ---
     year = today.year
 
+    # --- Helper function to get monthly counts for tasks, notes, and events for the year for the chart ---
     def monthly_counts(queryset, date_field):
         counts = {m: 0 for m in range(1, 13)}
         annotated = (
@@ -112,6 +120,7 @@ def dashboard(request):
             counts[row["month"].month] = row["total"]
         return [counts[m] for m in range(1, 13)]
 
+    # --- Prepare chart data for tasks, notes, and events ---
     chart_data = {
         "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
         "tasks": monthly_counts(Todo.objects.filter(username=username, checkbox=True), "completed_at"),
@@ -119,6 +128,7 @@ def dashboard(request):
         "events": monthly_counts(CalendarEvent.objects.filter(username=username), "date"),
     }
 
+    # --- Render the dashboard template with all the calculated stats and data ---
     return render(request, "dashboard_page.html", {
         "tasks_this_week": tasks_this_week,
         "tasks_last_week": tasks_last_week,
