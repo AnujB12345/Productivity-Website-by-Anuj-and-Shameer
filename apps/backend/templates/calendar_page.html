@@ -1,16 +1,15 @@
 {% extends "base_page.html" %} {% block title %} Home Page {% endblock %}
 <!-- This page extends base_page.html-->
 
-{% load static %} {% block body_class %}calendar{% endblock %} {% block
-extra_css %}
+{% load static %} {% block body_class %}calendar{% endblock %} {% block extra_css %}
 <link rel="stylesheet" href="{% static 'calendar_page.css' %}" />
-<script
+<!-- <script
   src="https://kit.fontawesome.com/dce4d5d2ec.js"
   crossorigin="anonymous"
-></script>
+></script> -->
+{% endblock %} 
 
-{% endblock%} {% block content %}
-
+{% block content %}
 <h1 class="title">Calendar</h1>
 <h3 class="subtitle">Plan out your day, hour by hour</h3>
 
@@ -69,45 +68,27 @@ extra_css %}
         <td class="individual-day-box">&nbsp;</td>
         {% else %}
         <td
-          {%
-          if
-          day=""
-          ="selected_date_obj.day"
-          and
-          month=""
-          ="selected_date_obj.month"
-          and
-          year=""
-          ="selected_date_obj.year"
-          %}
-          class="individual-day-box-selected"
-          {%
-          else
-          %}
-          class="individual-day-box"
-          {%
-          endif
-          %}
+          {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
+            class="individual-day-box-selected"
+          {% else %}
+            class="individual-day-box"
+          {% endif %}
         >
-          {% if day == selected_date_obj.day and month ==
-          selected_date_obj.month and year == selected_date_obj.year %}
+          {% if day == selected_date_obj.day and month == selected_date_obj.month and year == selected_date_obj.year %}
           <a
             href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
             class="day-calendar-selected"
           >
-            {% if day == today.day and month == today.month and year ==
-            today.year %} {{ day }} (Today) {% else %} {{ day }} {% endif %}
+            {% if day == today.day and month == today.month and year == today.year %} {{ day }} (Today) {% else %} {{ day }} {% endif %}
           </a>
           {% else %}
           <a
             href="?month={{ month }}&year={{ year }}&date={{ year }}-{{ month|stringformat:'02d' }}-{{ day|stringformat:'02d' }}"
             class="day-calendar"
           >
-            {% if day == today.day and month == today.month and year ==
-            today.year %} {{ day }} (Today) {% else %} {{ day }} {% endif %}
+            {% if day == today.day and month == today.month and year == today.year %} {{ day }} (Today) {% else %} {{ day }} {% endif %}
           </a>
-          {% endif %} {% for event in calendar_events %} {% if event.date.day ==
-          day and event.date.month == month and event.date.year == year %}
+          {% endif %} {% for event in calendar_events %} {% if event.date.day == day and event.date.month == month and event.date.year == year %}
           <p class="event-name-on-calendar">
             {{ event.time|time:"H:i" }} {{ event.title }}
           </p>
