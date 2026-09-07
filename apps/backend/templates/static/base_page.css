@@ -1,123 +1,194 @@
 body {
-    background-color: rgb(26, 26, 26);
-    padding-bottom: 20px;
-    padding-left: 10px;
-    padding-right: 10px;
-    display: flex;
-    flex-direction: column;
+  background-color: rgb(26, 26, 26);
+  padding-bottom: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  flex-direction: column;
 }
 /*Default colour for all of the website pages (WILL CHANGE IN THE FUTURE)*/
 
-/* 
+/*
 .main-container {
     margin: 0;
     padding: 0;
 } */
 
 .navbar {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .navbar-name {
-    font-weight: bold;
-    font-size: 30px;
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: white;
-    margin-left: 10px;
-    align-items: left;
+  font-weight: bold;
+  font-size: 30px;
+  font-family:
+    "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+    Arial, sans-serif;
+  color: white;
+  margin-left: 10px;
+  align-items: left;
 }
 
 .dashboard-navbar {
-    display: flex;
-    align-items: center;
-    gap: 25px;
+  display: flex;
+  align-items: center;
+  gap: 25px;
 }
 
 .nav-links {
-    display: flex;
-    text-decoration:none;
-    list-style: none;
-    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  text-decoration: none;
+  list-style: none;
+  font-family:
+    "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+    Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .nav-link {
-    display: block;
-    color: white;
-    margin: 0;
-    gap: 0px;
-    padding: 5px, 16px;
-    border-color: black;
-    font-size: 20px;
-
+  display: block;
+  color: white;
+  margin: 0;
+  gap: 0px;
+  padding: 5px, 16px;
+  border-color: black;
+  font-size: 20px;
 }
 
 .nav-link:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
-
 .homepage-register-button {
-    background-color: rgba(78, 121, 206);
-    font-size: 20px;
-    color: white;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin: 5px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease; 
+  background-color: rgba(78, 121, 206);
+  font-size: 20px;
+  color: white;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .homepage-register-button:hover {
-    text-decoration: none;
-    color: white;
-    background-color: rgb(35, 82, 175);
-    cursor: pointer;
+  text-decoration: none;
+  color: white;
+  background-color: rgb(35, 82, 175);
+  cursor: pointer;
 }
 
 .homepage-login-button {
-    font-size: 20px;
-    color: white;
-    border: 1px solid white;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin: 5px;
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.3s ease, color 0.3s ease; 
+  font-size: 20px;
+  color: white;
+  border: 1px solid white;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 5px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .logout-button {
-    font-size: 20px;
-    color: white;
-    border: 1px solid white;
-    padding: 5px;
-    padding-left: 10px;
-    padding-right: 10px;
-    margin: 15px;
-    border-radius: 8px;
-    text-decoration: none;
+  font-size: 20px;
+  color: white;
+  border: 1px solid white;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin: 15px;
+  border-radius: 8px;
+  text-decoration: none;
 }
 .homepage-login-button:hover {
-    text-decoration: none;
-    color: white;
-    background-color: rgb(41, 40, 40);
-    cursor: pointer;
+  text-decoration: none;
+  color: white;
+  background-color: rgb(41, 40, 40);
+  cursor: pointer;
 }
 
 .account-buttons {
-    display: flex;
-    align-content: right;
-    margin: 10px;
-    padding: 5px;
+  display: flex;
+  align-content: right;
+  margin: 10px;
+  padding: 5px;
 }
 
+.account-button-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+}
+
+.account-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: white;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  outline: none;
+  box-shadow: none;
+}
+
+.account-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.account-button:hover {
+  color: rgba(192, 191, 179, 0.8);
+}
+
+.account-sidebar {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: rgba(44, 45, 42);
+  border-radius: 8px;
+  padding: 8px 0;
+  min-width: 160px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.account-sidebar.sidebar-open {
+  display: block;
+}
+
+.sidebar-link {
+  display: block;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-family:
+    "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+    Arial, sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-link:hover {
+  background-color: rgb(52, 53, 51);
+  text-decoration: none;
+  color: white;
+}

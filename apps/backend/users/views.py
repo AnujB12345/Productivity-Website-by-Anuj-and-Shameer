@@ -81,6 +81,7 @@ def sign_in(request):
             return render(request,'login_page.html', {'form': form})
     
     elif request.method == 'POST': #If the user has submitted the login form
+
         form = LoginForm(request.POST)
         
         if form.is_valid(): #Checks if the form's data is valid
