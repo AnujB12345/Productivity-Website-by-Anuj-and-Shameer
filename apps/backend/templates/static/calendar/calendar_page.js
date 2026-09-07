@@ -54,3 +54,20 @@ showEventsCancelButton.addEventListener("click", () => { //Makes the show-events
 
     addEventPopup.classList.remove("show"); //Removes the show class
 })
+
+const chooseMonth = document.querySelector(".change-month-year-entry")
+
+chooseMonth.addEventListener("change", () => {
+
+    if (chooseMonth.value == "") {
+        return;
+    }
+    const userInput = chooseMonth.value.split("-");
+
+    if (isNaN(userInput[1]) || isNaN(userInput[0])) {
+        console.log("Invalid date, must be a number");
+        return;
+    }
+    window.location.href = `/calendar/?month=${userInput[1]}&year=${userInput[0]}`  
+
+})

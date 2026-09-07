@@ -14,15 +14,23 @@ def calendar_event(request):
     month = request.GET.get("month")
     year = request.GET.get("year")
     #reads the url and retrieves the month and year
+    try:
+        today = datetime.date.today() #Date object representing today's date
+        year = int(year) if year else today.year
+        month = int(month) if month else today.month
+    except (ValueError, IndexError, TypeError):
+        return redirect("calendar:calendar")
+    
 
-    today = datetime.date.today() #Date object representing today's date
 
-    year = int(year) if year else today.year
-    month = int(month) if month else today.month
+
+
     month_name = calendar.month_name[month]
 
     cal = calendar.monthcalendar(year, month)
     #generates the month's calendar
+
+    month_year_format = "{:02d}-{:02d}".format(year, month)
 
     next_month = month + 1
     next_year = year
@@ -110,7 +118,7 @@ def calendar_event(request):
         "year": year,
         "month": month,
         "month_name": month_name,
-        # "events": events,
+        "month_year_format": month_year_format,
         "selected_date_events": selected_date_events,
         "calendar_events": calendar_events,
         "event_count": event_count,

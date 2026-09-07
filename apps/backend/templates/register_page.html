@@ -7,22 +7,67 @@
 {% endblock %}
 
 {% block content %}
-
-<form class= "register-page" method="POST" novalidate>
-	{% csrf_token %}
-	<h2 class="title">Register</h2>
-		
-	<div class="frame">
+<h2 class="title">Register</h2>
+<div class="frame">
 
 	{% if messages %}
 		{% for message in messages %}
-			<div class="message">
+			<div class="errorlist">
 				{{ message }}
 			</div>
 		{% endfor %}
 	{% endif %}
+
+	<form class= "register-page" method="POST" novalidate>
+		{% csrf_token %}
+			{% for field in form %}
+			<div class="field">
+				{{ field.label_tag }}
+				{{ field }}
+
+				{% if field.errors %}
+				<div class="errorlist">
+					{% for error in field.errors %}
+					<small class="error">{{ error }}</small>
+					{% endfor %}
+				</div>
+				{% endif %}
+			</div>
+			{% endfor %}
+			
+		<div class="button-container">
+			<input class= "register-button" type="submit" value="Register" onclick="openPopup()"/>
+		</div>
+	</form>
+
+	<div class="login-link">
+		<p>Already have an account? <a href="{% url 'users:login' %}" class= "login-link-text">Login here</a></p>
+	</div>
+
+</div>
+
+{% endblock content %}
+
+
+<!-- <form class= "register-page" method="POST" novalidate>
+	{% csrf_token %}
+	<h2 class="title">Register</h2>
+	<div class="frame">
+
+	{% if messages %}
+		{% for message in messages %}
+			<div class="errorlist">
+				{{ message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+
+	
 	{% for field in form %}
 	<div class="field">
+
+	 	{{ field.label_tag }} 
+		{{ field }}
 		{% if field.errors %}
 		<div class="errorlist">
 			{% for error in field.errors %}
@@ -30,9 +75,7 @@
 			{% endfor %}
 		</div>
 		{% endif %}
-	 	{{ field.label_tag }} 
 
-		{{ field }}
 	</div>
 	{% endfor %}
 
@@ -46,5 +89,4 @@
 
 	</div>
 
-</form>
-{% endblock content %}
+</form> -->
