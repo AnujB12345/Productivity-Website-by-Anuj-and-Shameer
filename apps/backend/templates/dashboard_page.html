@@ -1,5 +1,6 @@
 {% extends "base_page.html" %} {% block title %} Dashboard Page {% endblock %} <!-- This page extends base_page.html-->
 
+<!-- loading static files -->
 {% load static %}
 
 {% block body_class %}dashboard-page{% endblock %}
@@ -11,11 +12,13 @@
 {% endblock%}
 
 {% block content %}
+<!-- Initial title and subtitle -->
 <h1 class = "title">Welcome back, {{ request.session.username }}</h1> 
 
 <h2 class = "subheading">Your calendar, to-do list and revision notes, all in one place</h2>
 
-<div class = "grid-container">
+<!-- 2x2 FEATURE GRID -->
+<div class="feature-grid-2x2">
 
     <a class="individual-feature" href="{% url 'todo:todo_list' %}">
         <div>
@@ -40,7 +43,215 @@
             <p class = "feature-summary">Plan out your day, hour by hour</p> 
         </div>
     </a>
+
+    <div class="individual-feature coming-soon">
+        <div>
+            <span class="coming-soon-badge">Coming soon</span>
+            <i class="fa-solid fa-mug-hot" id= "icon"></i>
+            <h3 class = "feature-name">Pomodoro Timer</h3>
+            <p class = "feature-summary">Stay focused with timed work sessions</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- TASK REMINDER SECTION -->
+<a class="task-reminder-section" href="{% url 'todo:todo_list' %}">
+
+    <!-- If there is any remaining tasks, display a reminder and the top 3 tasks (values pre defined in views.py) -->
+
+    {% if tasks_remaining > 0 %}
+        <div class="task-reminder-top">
+            <h2 class="task-reminder-title">You still have {{ tasks_remaining }} task{{ tasks_remaining|pluralize }} to do</h2>
+            <i class="fa-solid fa-arrow-right task-reminder-arrow"></i>
+        </div>
+
+        <div class="task-preview-list">
+            {% for task in top_tasks %}
+            <div class="task-preview-item">
+                <span class="task-priority-dot priority-dot-{{ task.priority }}"></span>
+                <span class="task-preview-text">{{ task.title }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="task-reminder-top well-done">
+            <h2 class="task-reminder-title"><i class="fa-solid fa-circle-check"></i> All caught up — well done!</h2>
+        </div>
+    {% endif %}
+
+</a>
+
+<!-- PROGRESS TRACKER -->
+<div class="progress-tracker-section">
+    <h2 class="stats-title">Your progress this month</h2>
+
+    <!-- Progress cards for tasks, notes, and events, all values pre defined on views -->
+    <div class="progress-cards">
+
+        <div class="progress-card">
+            <div class="progress-ring" style="background: conic-gradient(rgb(120, 170, 240) 0% {{ tasks_progress_pct }}%, rgba(255,255,255,0.08) {{ tasks_progress_pct }}% 100%);">
+                <div class="progress-ring-inner">{{ tasks_progress_pct }}%</div>
+            </div>
+            <p class="progress-label">Tasks</p>
+            <div class="progress-tooltip">
+                {{ tasks_completed_this_month }} of {{ total_tasks }} tasks completed this month
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-ring" style="background: conic-gradient(rgb(240, 180, 110) 0% {{ notes_progress_pct }}%, rgba(255,255,255,0.08) {{ notes_progress_pct }}% 100%);">
+                <div class="progress-ring-inner">{{ notes_progress_pct }}%</div>
+            </div>
+            <p class="progress-label">Notes goal</p>
+            <div class="progress-tooltip">
+                {{ notes_created_this_month }} of {{ notes_goal }} notes created this month
+                <form method="POST" class="goal-edit-form">
+                    {% csrf_token %}
+                    <input type="number" name="notes_goal" min="1" value="{{ notes_goal }}" class="goal-edit-input">
+                    <button type="submit" name="update_goal" class="goal-edit-btn">Set</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="progress-card">
+            <div class="progress-ring" style="background: conic-gradient(rgb(130, 210, 160) 0% {{ events_progress_pct }}%, rgba(255,255,255,0.08) {{ events_progress_pct }}% 100%);">
+                <div class="progress-ring-inner">{{ events_progress_pct }}%</div>
+            </div>
+            <p class="progress-label">Events</p>
+            <div class="progress-tooltip">
+                {{ events_this_month_done }} of {{ events_this_month_total }} events this month have passed
+            </div>
+        </div>
+
+        <div class="progress-card coming-soon-card">
+            <span class="coming-soon-badge progress-coming-soon-badge">Coming soon</span>
+            <div class="progress-ring" style="background: conic-gradient(rgba(255,255,255,0.15) 0% 0%, rgba(255,255,255,0.08) 0% 100%);">
+                <div class="progress-ring-inner"><i class="fa-solid fa-mug-hot"></i></div>
+            </div>
+            <p class="progress-label">Pomodoro</p>
+            <div class="progress-tooltip">
+                Tracking starts once the Pomodoro timer launches. Set your monthly session target now:
+                <form method="POST" class="goal-edit-form">
+                    {% csrf_token %}
+                    <input type="number" name="pomodoro_goal" min="1" value="{{ pomodoro_goal }}" class="goal-edit-input">
+                    <button type="submit" name="update_pomodoro_goal" class="goal-edit-btn">Set</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- STATS SECTION -->
+<div class="stats-section">
+    <h2 class="stats-title">Your stats</h2>
+    <!-- Progress cards for tasks, notes, and events, all values pre defined on views -->
+    <div class="stats-cards">
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <i class="fa-solid fa-list-check stat-icon"></i>
+                <span class="stat-change {% if tasks_change >= 0 %}positive{% else %}negative{% endif %}">
+                    {% if tasks_change >= 0 %}+{% endif %}{{ tasks_change }}%
+                </span>
+            </div>
+            <h3 class="stat-number">{{ tasks_this_week }}</h3>
+            <p class="stat-label">Tasks completed this week</p>
+            <p class="stat-sublabel">{{ tasks_last_week }} last week</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <i class="fa-solid fa-book stat-icon"></i>
+                <span class="stat-change {% if notes_change >= 0 %}positive{% else %}negative{% endif %}">
+                    {% if notes_change >= 0 %}+{% endif %}{{ notes_change }}%
+                </span>
+            </div>
+            <h3 class="stat-number">{{ notes_this_week }}</h3>
+            <p class="stat-label">Notes created this week</p>
+            <p class="stat-sublabel">{{ notes_last_week }} last week</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <i class="fa-regular fa-calendar stat-icon"></i>
+            </div>
+            <h3 class="stat-number">{{ events_upcoming }}</h3>
+            <p class="stat-label">Events in the next 30 days</p>
+            <p class="stat-sublabel">{{ events_done_last_month }} done last month</p>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-card-top">
+                <i class="fa-solid fa-chart-simple stat-icon"></i>
+            </div>
+            <h3 class="stat-number">{{ completion_rate }}%</h3>
+            <p class="stat-label">Task completion rate</p>
+            <p class="stat-sublabel">{{ total_tasks }} tasks total</p>
+        </div>
+
+    </div>
+
+    <!-- YEAR CHART -->
+    <div class="year-chart-container">
+        <div class="year-chart-top">
+            <h3 class="year-chart-title">Your {% now "Y" %} so far</h3>
+            <div class="chart-toggle-group">
+                <button type="button" class="chart-toggle active" data-view="all">All</button>
+                <button type="button" class="chart-toggle" data-view="tasks">Tasks</button>
+                <button type="button" class="chart-toggle" data-view="notes">Notes</button>
+                <button type="button" class="chart-toggle" data-view="events">Events</button>
+            </div>
+        </div>
+        <canvas id="yearChart" height="90"></canvas>
+    </div>
 </div>
 
 
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+// Initialize the year chart
+
+const chartData = JSON.parse('{{ chart_data|escapejs }}');
+Chart.defaults.color = 'rgba(248, 251, 250, 0.7)';
+Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.08)';
+
+const ctx = document.getElementById('yearChart').getContext('2d');
+
+const datasetsAll = [
+    { label: 'Tasks completed', data: chartData.tasks, borderColor: 'rgb(120, 170, 240)', backgroundColor: 'rgba(120, 170, 240, 0.15)', tension: 0.3, fill: true },
+    { label: 'Notes created', data: chartData.notes, borderColor: 'rgb(240, 180, 110)', backgroundColor: 'rgba(240, 180, 110, 0.15)', tension: 0.3, fill: true },
+    { label: 'Events', data: chartData.events, borderColor: 'rgb(130, 210, 160)', backgroundColor: 'rgba(130, 210, 160, 0.15)', tension: 0.3, fill: true },
+];
+
+const yearChart = new Chart(ctx, {
+    type: 'line',
+    data: { labels: chartData.labels, datasets: datasetsAll },
+    options: {
+        responsive: true,
+        plugins: { legend: { position: 'bottom' } },
+        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
+    }
+});
+
+const singleDatasetMap = {
+    all: datasetsAll,
+    tasks: [datasetsAll[0]],
+    notes: [datasetsAll[1]],
+    events: [datasetsAll[2]],
+};
+
+document.querySelectorAll('.chart-toggle').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.chart-toggle').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        yearChart.data.datasets = singleDatasetMap[btn.dataset.view];
+        yearChart.update();
+    });
+});
+</script>
 {% endblock %}

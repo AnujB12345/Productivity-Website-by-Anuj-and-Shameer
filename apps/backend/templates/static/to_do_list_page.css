@@ -8,10 +8,25 @@
     --d-color: rgba(117, 117, 117);
 }
 
+/* Page container — matches the dashboard's spacing rhythm */
+.todo-page-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+@media (max-width: 700px) {
+    .todo-page-container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
 .tasks-container {
-    border: 1px solid rgba(117, 117, 117);
+    border: none;
     display: flex;
-    border-radius: 10px;
+    border-radius: 16px;
     overflow: hidden;
     margin-top: 10px;
 }
@@ -22,7 +37,10 @@
     padding-bottom: 8px;
     width: 100%;
     gap: 10px;
+    transition: background-color 0.25s ease;
 }
+
+
 
 .title {
     font-family: 'SquadaOne', sans-serif;   
@@ -56,10 +74,10 @@
 .task-input {
     text-align: left;
     flex: 8;
-    border-radius: 8px;
+    border-radius: 30px;
     background-color: rgba(44, 44, 42);
     color: white;
-    padding: 5px;
+    padding: 10px 16px;
     border: 0 solid white;
     font-size: 20px;
 }
@@ -75,10 +93,13 @@
     font-size: 20px;
     color: white;
     flex: 1;
-    border-radius: 8px;
+    border-radius: 30px;
     text-decoration: none;
     transition: background-color 0.3s ease, color 0.3s ease;
-    border: 0; 
+    border: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-weight: bold;
 }
 
 .add-button:hover {
@@ -236,8 +257,7 @@
     justify-content: center;
     align-items: bottom;
     align-content: center;
-
-    /* padding-top: 5px; */
+    gap: 14px;
 }
 /*Buttons for editing and deleting a task */
 
@@ -254,6 +274,38 @@
 form {
     padding: 0;
     margin: 0;
+}
+.priority-form {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.priority-select {
+    background-color: var(--b-color);
+    color: var(--c-color);
+    border: 1px solid var(--d-color);
+    border-radius: 20px;
+
+    height: 30px;
+    padding-left: 7px;
+    padding-right: 7px;
+
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    outline: none;
+}
+
+.priority-select:hover {
+    border-color: var(--c-color);
+}
+
+.priority-select:focus {
+    outline: none;
+    box-shadow: none;
 }
 .btn-edit,
 .btn-edit:focus,
@@ -314,7 +366,7 @@ form {
 
 .clear-btn {
     border: 1px solid var(--d-color);
-    border-radius: 7px;
+    border-radius: 30px;
     transition: background-color 0.3s ease, color 0.3s ease;
     outline: none;
     background-color: var(--a-color);
@@ -329,4 +381,124 @@ form {
 
 .clear-btn:hover {
     text-decoration: underline;
+}
+
+/* Priority select coloring by Low/Medium/High */
+.priority-select.priority-1 { color: rgb(130, 210, 160); }
+.priority-select.priority-2 { color: rgb(240, 180, 110); }
+.priority-select.priority-3 { color: rgb(230, 120, 115); }
+
+/* Completed tasks — custom dropdown, visually distinct from priority select */
+.completed-dropdown {
+    margin-top: 40px;
+}
+
+.completed-toggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(44, 45, 42);
+    border: none;
+    border-radius: 30px;
+    padding: 14px 22px;
+    cursor: pointer;
+    transition: background-color 0.25s ease;
+}
+
+.completed-toggle:hover {
+    background-color: rgb(52, 53, 51);
+}
+
+.completed-toggle-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.completed-toggle-icon {
+    color: rgb(130, 210, 160);
+    font-size: 16px;
+}
+
+.completed-toggle-text {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    color: rgba(248, 251, 250, 0.9);
+}
+
+.completed-count-badge {
+    background-color: rgba(120, 170, 240, 0.2);
+    color: rgb(150, 180, 240);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 2px 10px;
+    border-radius: 20px;
+}
+
+.completed-chevron {
+    color: rgba(248, 251, 250, 0.6);
+    font-size: 14px;
+    transition: transform 0.25s ease;
+}
+
+.completed-chevron.rotated {
+    transform: rotate(180deg);
+}
+
+.completed-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 0;
+}
+
+.completed-panel.open {
+    max-height: 2000px; /* large enough to fit any realistic list; transition still animates smoothly */
+    margin-top: 10px;
+}
+
+.completed-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    padding: 10px 16px;
+}
+
+.completed-row-text {
+    flex: 1;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgba(248, 251, 250, 0.5);
+    text-decoration: line-through;
+}
+
+.completed-priority-pill {
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.priority-pill-1 { color: rgb(130, 210, 160); background-color: rgba(130, 210, 160, 0.12); }
+.priority-pill-2 { color: rgb(240, 180, 110); background-color: rgba(240, 180, 110, 0.12); }
+.priority-pill-3 { color: rgb(230, 120, 115); background-color: rgba(230, 120, 115, 0.12); }
+
+.completed-delete-btn {
+    background: none;
+    border: none;
+    color: rgba(248, 251, 250, 0.4);
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s ease;
+}
+
+.completed-delete-btn:hover {
+    color: rgb(230, 120, 115);
 }

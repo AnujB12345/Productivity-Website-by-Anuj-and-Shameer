@@ -26,8 +26,8 @@
     </div>
 </form>
 
-
-{% for todo in todos %}
+<!-- ACTIVE TASKS -->
+{% for todo in active_todos %}
 
 <div class="tasks-container">
 
@@ -72,21 +72,45 @@
 
             <!-- BUTTONS -->
             <div class="btn-group">
+
+                <!-- PRIORITY -->
+                <form method="POST" class="priority-form">
+                    {% csrf_token %}
+
+                    <input type="hidden" name="task_id" value="{{ todo.id }}">
+
+                    <select
+                        name="priority"
+                        class="priority-select priority-{{ todo.priority }}"
+                        onchange="this.form.submit()"
+                    >
+                        <option value="1" {% if todo.priority == 1 %}selected{% endif %}>Low</option>
+                        <option value="2" {% if todo.priority == 2 %}selected{% endif %}>Medium</option>
+                        <option value="3" {% if todo.priority == 3 %}selected{% endif %}>High</option>
+                    </select>
+
+                    <input type="hidden" name="change_priority" value="1">
+                </form>
+
+                <!-- EDIT -->
                 <button type="button"
                         onclick="enableEdit({{ todo.id }})"
                         class="btn-edit">
-                    <i class="fa-regular fa-pen-to-square" id = "edit-icon"></i>
+                    <i class="fa-regular fa-pen-to-square" id="edit-icon"></i>
                 </button>
 
 
+                <!-- DELETE -->
                 <form method="POST" onsubmit="return confirm('Delete this task?');">
                     {% csrf_token %}
                     <input type="hidden" name="task_id" value="{{ todo.id }}">
-                    <button type="submit" name="delete_task" class="btn-delete">
 
-                        <i class="fa-regular fa-trash-can" id = "delete-icon"></i>
+                    <button type="submit" name="delete_task" class="btn-delete">
+                        <i class="fa-regular fa-trash-can" id="delete-icon"></i>
                     </button>
                 </form>
+
+
             </div>
 
         </div>
@@ -97,6 +121,52 @@
 {% empty %}
     <h3 class="no-tasks">No tasks yet</h3>
 {% endfor %}
+
+<!-- COMPLETED TASKS — dropdown -->
+{% if done_todos %}
+<div class="completed-dropdown">
+
+    <button type="button" class="completed-toggle" onclick="toggleCompleted()">
+        <div class="completed-toggle-left">
+            <i class="fa-solid fa-clipboard-check completed-toggle-icon"></i>
+            <span class="completed-toggle-text">Completed tasks</span>
+            <span class="completed-count-badge">{{ done_todos|length }}</span>
+        </div>
+        <i class="fa-solid fa-chevron-down completed-chevron" id="completed-chevron"></i>
+    </button>
+
+    <div class="completed-panel" id="completed-panel">
+        {% for todo in done_todos %}
+        <div class="completed-row">
+
+            <form method="POST" style="margin:0;">
+                {% csrf_token %}
+                <input type="hidden" name="task_id" value="{{ todo.id }}">
+                <input type="hidden" name="check_task" value="off">
+                <input class="checkbox completed-checkbox" type="checkbox" name="check_task" value="on"
+                    checked onchange="this.form.submit()">
+            </form>
+
+            <span class="completed-row-text">{{ todo.title }}</span>
+
+            <span class="completed-priority-pill priority-pill-{{ todo.priority }}">
+                {{ todo.get_priority_display }}
+            </span>
+
+            <form method="POST" onsubmit="return confirm('Delete this task?');" style="margin:0;">
+                {% csrf_token %}
+                <input type="hidden" name="task_id" value="{{ todo.id }}">
+                <button type="submit" name="delete_task" class="completed-delete-btn">
+                    <i class="fa-regular fa-trash-can"></i>
+                </button>
+            </form>
+
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endif %}
 
 <!-- FOOTER -->
 <div class="footer">
@@ -114,6 +184,13 @@
 function enableEdit(id) {
     document.getElementById("text-" + id).style.display = "none";
     document.getElementById("edit-" + id).style.display = "flex";
+}
+
+function toggleCompleted() {
+    const panel = document.getElementById("completed-panel");
+    const chevron = document.getElementById("completed-chevron");
+    panel.classList.toggle("open");
+    chevron.classList.toggle("rotated");
 }
 </script>
 
