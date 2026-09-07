@@ -121,3 +121,393 @@
     background-color: rgb(35, 82, 175);
     cursor: pointer;
 }
+
+.stats-section {
+    margin: 50px;
+    margin-top: 20px;
+}
+
+.stats-title {
+    font-family: 'SquadaOne', sans-serif;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
+    margin-bottom: 16px;
+}
+
+.stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-card {
+    background-color: rgba(44, 45, 42);
+    border-radius: 10px;
+    padding: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.stat-card:hover {
+    background-color: rgb(52, 53, 51);
+}
+
+.stat-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.stat-icon {
+    background-color: white;
+    border-radius: 8px;
+    padding: 6px;
+    width: 18px;
+    height: 18px;
+    font-size: 16px;
+    color: rgba(44, 45, 42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-change {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+.stat-change.positive {
+    color: rgb(120, 210, 160);
+    background-color: rgba(120, 210, 160, 0.15);
+}
+
+.stat-change.negative {
+    color: rgb(230, 120, 115);
+    background-color: rgba(230, 120, 115, 0.15);
+}
+
+.stat-number {
+    font-family: 'SquadaOne', sans-serif;
+    font-size: 32px;
+    color: white;
+    margin: 0;
+}
+
+.stat-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: rgba(248, 251, 250, 0.85);
+    margin: 6px 0 0;
+}
+
+.stat-sublabel {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: rgba(192, 191, 179, 0.6);
+    margin: 4px 0 0;
+}
+
+.year-chart-container {
+    background-color: rgba(44, 45, 42);
+    border-radius: 10px;
+    padding: 24px;
+}
+
+.year-chart-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.year-chart-title {
+    font-family: 'SquadaOne', sans-serif;
+    font-size: 22px;
+    color: white;
+    margin: 0;
+}
+
+.chart-toggle-group {
+    display: flex;
+    gap: 6px;
+}
+
+.chart-toggle {
+    font-family: Arial, Helvetica, sans-serif;
+    border: none;
+    background-color: rgba(78, 121, 206, 0.15);
+    color: rgba(248, 251, 250, 0.8);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.chart-toggle:hover {
+    background-color: rgba(78, 121, 206, 0.3);
+}
+
+.chart-toggle.active {
+    background-color: rgba(78, 121, 206);
+    color: white;
+}
+
+.chart-toggle.active:hover {
+    background-color: rgb(35, 82, 175);
+}
+
+/* 2x2 feature grid */
+.feature-grid-2x2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 50px;
+}
+
+@media (max-width: 700px) {
+    .feature-grid-2x2 {
+        grid-template-columns: 1fr;
+        margin: 20px;
+    }
+}
+
+.individual-feature.coming-soon {
+    opacity: 0.5;
+    cursor: default;
+    position: relative;
+}
+
+.individual-feature.coming-soon:hover {
+    background-color: rgba(44, 45, 42);
+}
+
+.coming-soon-badge {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background-color: rgba(78, 121, 206, 0.25);
+    color: rgb(150, 180, 240);
+    font-size: 11px;
+    font-weight: bold;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+
+/* Task reminder section */
+.task-reminder-section {
+    display: block;
+    background-color: rgba(44, 45, 42);
+    border-radius: 10px;
+    margin: 50px;
+    margin-top: 0;
+    padding: 24px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.task-reminder-section:hover {
+    background-color: rgb(52, 53, 51);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.task-reminder-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-reminder-title {
+    font-family: 'SquadaOne', sans-serif;
+    font-size: 24px;
+    color: white;
+    margin: 0;
+}
+
+.task-reminder-top.well-done .task-reminder-title {
+    color: rgb(120, 210, 160);
+}
+
+.task-reminder-arrow {
+    color: rgba(248, 251, 250, 0.5);
+    font-size: 18px;
+}
+
+.task-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.task-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-radius: 8px;
+    padding: 10px 14px;
+}
+
+.task-preview-text {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: rgba(248, 251, 250, 0.9);
+}
+
+.task-priority-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.priority-dot-1 { background-color: rgb(130, 210, 160); }
+.priority-dot-2 { background-color: rgb(240, 180, 110); }
+.priority-dot-3 { background-color: rgb(230, 120, 115); }
+
+/* Progress tracker */
+.progress-tracker-section {
+    margin: 50px;
+    margin-top: 0;
+}
+
+.progress-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.progress-card {
+    background-color: rgba(44, 45, 42);
+    border-radius: 10px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+.progress-card:hover {
+    background-color: rgb(52, 53, 51);
+}
+
+.progress-ring {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-ring-inner {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background-color: rgba(44, 45, 42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'SquadaOne', sans-serif;
+    font-size: 20px;
+    color: white;
+}
+
+.progress-label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: rgba(248, 251, 250, 0.85);
+    margin-top: 14px;
+}
+
+.progress-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(6px);
+    background-color: rgb(30, 31, 29);
+    color: rgba(248, 251, 250, 0.9);
+    font-size: 13px;
+    font-family: Arial, Helvetica, sans-serif;
+    padding: 12px 14px;
+    padding-bottom: 20px; /* bridges what used to be a dead gap, so hover never breaks on the way up */
+    border-radius: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.4);
+    z-index: 10;
+}
+
+.progress-card:hover .progress-tooltip,
+.progress-tooltip:hover {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+}
+
+.goal-edit-form {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.goal-edit-input {
+    width: 50px;
+    background-color: rgba(255,255,255,0.08);
+    border: none;
+    border-radius: 6px;
+    color: white;
+    padding: 4px 8px;
+    font-size: 13px;
+}
+
+.goal-edit-btn {
+    background-color: rgba(78, 121, 206);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.goal-edit-btn:hover {
+    background-color: rgb(35, 82, 175);
+}
+
+.progress-card.coming-soon-card {
+    opacity: 0.6;
+    position: relative;
+}
+
+.progress-card.coming-soon-card:hover {
+    opacity: 0.85;
+}
+
+.progress-coming-soon-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    top: -10px;
+    right: -6px;
+}
+
+.progress-ring-inner i {
+    font-size: 22px;
+    color: rgba(248, 251, 250, 0.6);
+}
