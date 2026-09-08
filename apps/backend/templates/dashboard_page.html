@@ -16,7 +16,10 @@
 <!-- Initial title and subtitle -->
 <h1 class = "title">Welcome back, {{ request.session.username }}</h1> 
 
-<h2 class = "subheading">Your calendar, to-do list and revision notes, all in one place</h2>
+<!-- <h2 class = "subheading">Your calendar, to-do list and revision notes, all in one place</h2> -->
+<div id = "quote">
+  <h2 class="subheading" id = "quote-text"></h2>
+</div>
 
 <!-- 2x2 FEATURE GRID -->
 <div class="feature-grid-2x2">
@@ -225,7 +228,17 @@
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
+  
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("/dashboard/api/quote/")
+        .then((response) => response.json())
+        .then((data) => {
+            document.getElementById("quote-text").textContent = data.quote + " - " + data.author;
+        })
+        .catch((error) => {
+            console.error("Failed to fetch quote:", error);
+        });
+});
 // Initialize the year chart
 
 const chartData = JSON.parse(document.getElementById('chart-data').textContent);
@@ -267,5 +280,6 @@ document.querySelectorAll('.chart-toggle').forEach(btn => {
         yearChart.update();
     });
 });
+
 </script>
 {% endblock %}

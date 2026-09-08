@@ -11,7 +11,9 @@ from calendar_app.models import CalendarEvent  # ⚠️ adjust to your actual ap
 from dashboard.models import Goal
 from timer.models import PomodoroSession
 
-
+import requests
+from django.http import JsonResponse
+from django.core.cache import cache
 def dashboard(request):
     username = request.session.get("username")
     if not username:
@@ -184,3 +186,24 @@ def dashboard(request):
         "events_this_month_done": events_this_month_done,
         "events_this_month_total": events_this_month_total,
     })
+
+
+def quote(request):
+
+    cached_quote = cache.get("daily_quote")
+
+    if cached_quote:
+        return JsonResponse(cached_quote)
+
+    response = requests.get("https://zenquotes.io/api/random")
+
+    data = response.json()
+
+    quote_data = {
+        "quote": data[0]["q"],
+        "author": data[0]["a"]
+    }
+
+    cache.set("daily_quote", quote_data, 86400)
+
+    return JsonResponse(quote_data)
