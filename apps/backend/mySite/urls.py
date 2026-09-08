@@ -24,5 +24,6 @@ urlpatterns = [
     path("user/", include("users.urls")),
     path("todo/", include("todo.urls")),
     path("notes/", include("notes.urls")),
-    path("calendar/", include("calendar_app.urls"))
+    path("calendar/", include("calendar_app.urls")),
+    path("timer/", include("timer.urls")),
 ]

@@ -1,0 +1,284 @@
+{% extends "base_page.html" %} {% block title %} Pomodoro Timer {% endblock %}
+{% load static %}
+
+{% block body_class %}timer{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'timer_page.css' %}">
+<script src="https://kit.fontawesome.com/dce4d5d2ec.js" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block content %}
+{{ settings_dict|json_script:"pomodoro-settings" }}
+<div class="timer-page-container">
+
+<h2 class="title">Pomodoro Timer</h2>
+<span class="subtitle">Stay focused with timed work sessions</span>
+
+{{ settings_json|json_script:"pomodoro-settings" }}
+
+<div class="timer-layout">
+
+    <!-- TIMER CARD -->
+    <div class="timer-card">
+        <div class="session-type-label" id="session-type-label">Focus session</div>
+
+        <div class="timer-ring-container">
+            <div class="timer-ring" id="timer-ring">
+                <div class="timer-ring-inner">
+                    <span class="timer-display" id="timer-display">25:00</span>
+                    <span class="timer-cycle-count" id="timer-cycle-count">Session 1 of {{ settings.sessions_before_long_break }}</span>
+                </div>
+            </div>
+        </div>
+
+        <input type="text" id="task-label-input" class="task-label-input" placeholder="What are you focusing on? (optional)">
+
+        <div class="timer-controls">
+            <button type="button" id="reset-btn" class="timer-btn timer-btn-secondary" title="Reset">
+                <i class="fa-solid fa-rotate-left"></i>
+            </button>
+            <button type="button" id="start-pause-btn" class="timer-btn timer-btn-primary" title="Start/Pause">
+                <i class="fa-solid fa-play" id="start-pause-icon"></i>
+            </button>
+            <button type="button" id="skip-btn" class="timer-btn timer-btn-secondary" title="Skip">
+                <i class="fa-solid fa-forward"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div class="timer-side-panel">
+
+        <div class="timer-stats-card">
+            <h3 class="side-panel-title">Today</h3>
+            <div class="timer-stat-row">
+                <span class="timer-stat-number">{{ sessions_today }}</span>
+                <span class="timer-stat-label">focus sessions completed</span>
+            </div>
+            <div class="timer-stat-row">
+                <span class="timer-stat-number">{{ focus_minutes_today }}</span>
+                <span class="timer-stat-label">minutes focused</span>
+            </div>
+        </div>
+
+        <details class="settings-dropdown">
+            <summary class="settings-summary">
+                <span><i class="fa-solid fa-sliders"></i>Timer settings</span>
+                <i class="fa-solid fa-chevron-down settings-arrow"></i>
+            </summary>
+
+            <form method="POST" class="settings-form">
+                {% csrf_token %}
+                <label class="settings-label">Work (minutes)
+                    <input type="number" min="1" max="120" name="work_minutes" value="{{ settings.work_minutes }}" class="settings-input">
+                </label>
+                <label class="settings-label">Short break (minutes)
+                    <input type="number" min="1" max="60" name="short_break_minutes" value="{{ settings.short_break_minutes }}" class="settings-input">
+                </label>
+                <label class="settings-label">Long break (minutes)
+                    <input type="number" min="1" max="60" name="long_break_minutes" value="{{ settings.long_break_minutes }}" class="settings-input">
+                </label>
+                <label class="settings-label">Sessions before long break
+                    <input type="number" min="2" max="12" name="sessions_before_long_break" value="{{ settings.sessions_before_long_break }}" class="settings-input">
+                </label>
+                <button type="submit" name="update_settings" class="settings-save-btn">Save settings</button>
+            </form>
+        </details>
+
+    </div>
+
+</div>
+
+<!-- RECENT SESSIONS -->
+<div class="recent-sessions-section">
+    <h3 class="side-panel-title">Recent sessions</h3>
+
+    {% if recent_sessions %}
+    <div class="recent-sessions-list">
+        {% for session in recent_sessions %}
+        <div class="recent-session-row">
+            <span class="session-type-pill session-type-{{ session.session_type }}">{{ session.get_session_type_display }}</span>
+            <span class="recent-session-text">{% if session.task_label %}{{ session.task_label }}{% else %}—{% endif %}</span>
+            <span class="recent-session-duration">{{ session.duration_minutes }} min</span>
+            <span class="recent-session-time">{{ session.completed_at|date:"M d, H:i" }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-sessions">No sessions logged yet — start your first one above!</p>
+    {% endif %}
+</div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const settings = JSON.parse(document.getElementById('pomodoro-settings').textContent);
+
+let mode = 'work';
+let secondsLeft = settings.work_minutes * 60;
+let totalSeconds = secondsLeft;
+let isRunning = false;
+let timerInterval = null;
+let completedWorkSessions = 0;
+
+const display = document.getElementById('timer-display');
+const ring = document.getElementById('timer-ring');
+const sessionLabel = document.getElementById('session-type-label');
+const cycleCount = document.getElementById('timer-cycle-count');
+const startPauseBtn = document.getElementById('start-pause-btn');
+const startPauseIcon = document.getElementById('start-pause-icon');
+const taskInput = document.getElementById('task-label-input');
+
+const MODE_LABELS = { work: 'Focus session', short_break: 'Short break', long_break: 'Long break' };
+const MODE_COLORS = { work: 'rgb(120, 170, 240)', short_break: 'rgb(130, 210, 160)', long_break: 'rgb(240, 180, 110)' };
+
+function durationForMode(m) {
+    if (m === 'work') return settings.work_minutes * 60;
+    if (m === 'short_break') return settings.short_break_minutes * 60;
+    return settings.long_break_minutes * 60;
+}
+
+function updateDisplay() {
+    const minutes = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
+    const seconds = (secondsLeft % 60).toString().padStart(2, '0');
+    display.textContent = `${minutes}:${seconds}`;
+
+    const elapsedPct = totalSeconds === 0 ? 0 : ((totalSeconds - secondsLeft) / totalSeconds) * 100;
+    ring.style.background = `conic-gradient(${MODE_COLORS[mode]} ${elapsedPct}%, rgba(255,255,255,0.08) ${elapsedPct}% 100%)`;
+
+    sessionLabel.textContent = MODE_LABELS[mode];
+    cycleCount.textContent = mode === 'work'
+        ? `Session ${(completedWorkSessions % settings.sessions_before_long_break) + 1} of ${settings.sessions_before_long_break}`
+        : 'Take a breather';
+
+    document.title = isRunning ? `${minutes}:${seconds} · ${MODE_LABELS[mode]}` : 'Pomodoro Timer';
+}
+
+function tick() {
+    if (secondsLeft <= 0) {
+        handleSessionComplete();
+        return;
+    }
+    secondsLeft -= 1;
+    updateDisplay();
+}
+
+function startTimer() {
+    if (isRunning) return;
+    isRunning = true;
+    startPauseIcon.classList.remove('fa-play');
+    startPauseIcon.classList.add('fa-pause');
+    timerInterval = setInterval(tick, 1000);
+}
+
+function pauseTimer() {
+    isRunning = false;
+    startPauseIcon.classList.remove('fa-pause');
+    startPauseIcon.classList.add('fa-play');
+    clearInterval(timerInterval);
+}
+
+function resetTimer() {
+    pauseTimer();
+    secondsLeft = durationForMode(mode);
+    totalSeconds = secondsLeft;
+    updateDisplay();
+}
+
+function switchMode(nextMode) {
+    mode = nextMode;
+    secondsLeft = durationForMode(mode);
+    totalSeconds = secondsLeft;
+    updateDisplay();
+}
+
+function advanceCycle() {
+    if (mode === 'work') {
+        completedWorkSessions += 1;
+        const nextIsLongBreak = completedWorkSessions % settings.sessions_before_long_break === 0;
+        switchMode(nextIsLongBreak ? 'long_break' : 'short_break');
+    } else {
+        switchMode('work');
+    }
+}
+
+function handleSessionComplete() {
+    pauseTimer();
+    logSession(mode, durationForMode(mode) / 60);
+    advanceCycle();
+    playChime();
+    notify();
+}
+
+function skipSession() {
+    pauseTimer();
+    advanceCycle();
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie) {
+        document.cookie.split(';').forEach(cookie => {
+            cookie = cookie.trim();
+            if (cookie.startsWith(name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            }
+        });
+    }
+    return cookieValue;
+}
+
+function logSession(sessionType, durationMinutes) {
+    const formData = new URLSearchParams();
+    formData.append('log_session', '1');
+    formData.append('session_type', sessionType);
+    formData.append('duration_minutes', Math.round(durationMinutes));
+    formData.append('task_label', taskInput.value || '');
+
+    fetch(window.location.href, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formData.toString(),
+    }).then(() => {
+        if (sessionType === 'work') taskInput.value = '';
+    }).catch(err => console.error('Could not log session', err));
+}
+
+function playChime() {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 880;
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+        oscillator.start();
+        oscillator.stop(ctx.currentTime + 0.6);
+    } catch (e) { /* Web Audio unavailable — fail silently */ }
+}
+
+function notify() {
+    if (!('Notification' in window)) return;
+    if (Notification.permission === 'granted') {
+        new Notification(MODE_LABELS[mode] + ' time!');
+    } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission();
+    }
+}
+
+startPauseBtn.addEventListener('click', () => isRunning ? pauseTimer() : startTimer());
+document.getElementById('reset-btn').addEventListener('click', resetTimer);
+document.getElementById('skip-btn').addEventListener('click', skipSession);
+
+updateDisplay();
+</script>
+{% endblock %}

@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "calendar_app",
     "notes",
+    "timer",
 ]
 
 MIDDLEWARE = [
