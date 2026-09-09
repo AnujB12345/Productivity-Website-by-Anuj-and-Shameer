@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     "calendar_app",
     "notes",
     "timer",
+    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -99,6 +100,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                "notifications.context_processors.vapid_public_key",
             ],
         },
     },
@@ -170,3 +172,7 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+VAPID_PRIVATE_KEY = str(BASE_DIR / "private_key.pem")
+VAPID_PUBLIC_KEY = "BOs7hsqfkha1GOgFtTfyNrpdGvTRfsKa3In7ZElvzGUqrQgZ6QhIMiWd1U10q8k630qzjJsxEBQXirFVj5seGwo"
+VAPID_ADMIN_EMAIL = "you@example.com"                       # any contact email, required by the push spec
