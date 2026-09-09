@@ -2,14 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import CalendarEvent
 import calendar
 import datetime
-
+from users.models import User
 
 def calendar_event(request):
 
-    username = request.session.get("username")
-    if not username:
-        return redirect("users:login")
     #if user isn't signed in, they get redirected to the login page
+    if not request.session.get("username"):
+        return redirect("users:login")
+    current_user = User.objects.get(username=request.session["username"])
 
     month = request.GET.get("month")
     year = request.GET.get("year")
@@ -20,13 +20,8 @@ def calendar_event(request):
         month = int(month) if month else today.month
     except (ValueError, IndexError, TypeError):
         return redirect("calendar:calendar")
-    
-
-
-
 
     month_name = calendar.month_name[month]
-
     cal = calendar.monthcalendar(year, month)
     #generates the month's calendar
 
@@ -59,17 +54,17 @@ def calendar_event(request):
             selected_date_obj = None #ignore if invalid date
 
 
-    calendar_events = CalendarEvent.objects.filter(username=username) #filters all of the events based on the username
+    calendar_events = CalendarEvent.objects.filter(user= current_user) #filters all of the events based on the username
 
     if selected_date_obj:
         selected_date_events = CalendarEvent.objects.filter( #searches the database and filters all the events for a certain date that has been selected
-            username=username,
+            user= current_user,
             date=selected_date_obj
         )
         event_count += len(selected_date_events)
         #returns every event for the user if no date selected
     else:
-        selected_date_events = CalendarEvent.objects.filter(username=username)
+        selected_date_events = CalendarEvent.objects.filter(user= current_user)
 
 
     if request.method == "POST": #when user submits an event, a POST request is sent
@@ -79,7 +74,7 @@ def calendar_event(request):
             #creates a new database row with all of the information for the new event
             CalendarEvent.objects.create( 
                 title=request.POST.get("title"),
-                username=username,
+                user= current_user,
                 description=request.POST.get("description"),
                 date=request.POST.get("date"),
                 time=request.POST.get("time")
@@ -90,7 +85,7 @@ def calendar_event(request):
         #EDIT AN EXISTING EVENT
         if "edit_event" in request.POST: #if user sends an edit event request
             event_id = request.POST.get("event_id") #retreives the event to edit from event id
-            event = get_object_or_404(CalendarEvent, id=event_id, username=username)
+            event = get_object_or_404(CalendarEvent, id=event_id, user= current_user)
 
             event.title = request.POST.get("title")
             event.description = request.POST.get("description")
@@ -104,7 +99,7 @@ def calendar_event(request):
         #DELETING AN EVENT
         if "delete_event" in request.POST:
             event_id = request.POST.get("event_id") #finds the edit to delete using the event ID
-            event = get_object_or_404(CalendarEvent, id=event_id, username=username)
+            event = get_object_or_404(CalendarEvent, id=event_id, user= current_user)
             event.delete() #permanently remove it from the database
 
             event_count -= 1
