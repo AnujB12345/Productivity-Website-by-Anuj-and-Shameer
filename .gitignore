@@ -4,3 +4,48 @@ __pycache__/
 *.pyd
 *.sqlite3
 *.db
+
+# --- Secrets generated during this conversation — never commit these ---
+private_key.pem
+public_key.pem
+vapid_key_output.txt
+
+# --- Django ---
+db.sqlite3
+db.sqlite3-journal
+*.log
+staticfiles/
+media/
+
+# --- Environment / secrets ---
+.env
+.env.*
+*.pem
+*.key
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+
+# --- Virtual environments ---
+venv/
+env/
+.venv/
+ENV/
+
+# --- Test artifacts ---
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Editor/IDE ---
+.vscode/
+.idea/
+*.swp
+
+# --- OS clutter ---
+.DS_Store
+Thumbs.db
