@@ -11,7 +11,7 @@
 
     <h2 class="title">Revision Notes</h2>
 
-    <span class="subtitle">{{ note_count }} notes</span>
+    <span class="subtitle">{% if note_count == 1 %}{{ note_count }} note {% else %} {{ note_count }} notes {% endif %}</span>
 
     
     <!-- ADD TASK -->
@@ -24,14 +24,7 @@
 
             <div class="bottom-row">
                 <input class="note-subject-input" id="note-subject-input" type="text" name="subject" placeholder="Add your new note subject" list="all-subjects"></input>
-                <!-- <label for="note-subject-option" class="subject-label">Add your new note subject:</label>
-                <select name="notes-subjects-icon">
-                    {% for subject in subjects %}
-                        {% if subject %}
-                            <option value="{{ subject }}">{{ subject }}</option>
-                        {% endif %}
-                    {% endfor %}
-                </select> -->
+
                 <datalist id="all-subjects">
                     {% for subject in subjects %}
                         {% if subject %}

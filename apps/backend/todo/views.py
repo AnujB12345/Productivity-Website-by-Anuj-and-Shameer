@@ -1,60 +1,69 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from .models import Todo
+from users.models import User
 
 def todo_list(request):
 
+    #If user is not logged in, redirect to the login page
     if not request.session.get("username"):
         return redirect("users:login")
 
-    todos = Todo.objects.filter(username=request.session["username"]).order_by('checkbox', '-priority')
+    current_user = User.objects.get(username=request.session["username"])
+    todos = Todo.objects.filter(user=current_user).order_by('checked', '-priority')
 
     if request.method == "POST":
 
+        #Handles add task
         if "add_task" in request.POST:
             title = request.POST.get("title")
             if title:
-                Todo.objects.create(title=title, username=request.session["username"])
+                Todo.objects.create(title=title, user=current_user)
             return redirect("todo:todo_list")
 
+        #Handles edit task
         if "edit_task" in request.POST:
             task_id = request.POST.get("task_id")
             new_title = request.POST.get("new_title")
-            todo = get_object_or_404(Todo, id=task_id, username=request.session["username"])
+            todo = get_object_or_404(Todo, id=task_id, user=current_user)
             todo.title = new_title
             todo.save()
             return redirect("todo:todo_list")
 
+        #Handles checking the task complete/ not complete
         if "check_task" in request.POST:
             task_id = request.POST.get("task_id")
-            todo = get_object_or_404(Todo, id=task_id, username=request.session["username"])
-            todo.checkbox = not todo.checkbox
-            todo.completed_at = timezone.now() if todo.checkbox else None
+            todo = get_object_or_404(Todo, id=task_id, user=current_user)
+            todo.checked = not todo.checked
+            todo.completed_at = timezone.now() if todo.checked else None
             todo.save()
             return redirect("todo:todo_list")
 
+        #Handles changing the priority of the task
         if "change_priority" in request.POST:
             task_id = request.POST.get("task_id")
             priority = request.POST.get("priority")
-            todo = get_object_or_404(Todo, id=task_id, username=request.session["username"])
-            todo.priority = int(priority)
+            todo = get_object_or_404(Todo, id=task_id, user=current_user)
+            todo.priority = str(priority)
             todo.save()
             return redirect("todo:todo_list")
 
+        #Handles deleting the task
         if "delete_task" in request.POST:
             task_id = request.POST.get("task_id")
-            todo = get_object_or_404(Todo, id=task_id, username=request.session["username"])
+            todo = get_object_or_404(Todo, id=task_id, user=current_user)
             todo.delete()
             return redirect("todo:todo_list")
 
+        #Deletes all the task matching the user
         if "clear_all" in request.POST:
-            Todo.objects.filter(username=request.session["username"]).delete()
+            Todo.objects.filter(user=current_user).delete()
             return redirect("todo:todo_list")
 
     # Separate active and completed tasks for display
     todos = list(todos)
-    active_todos = [t for t in todos if not t.checkbox]
-    done_todos = [t for t in todos if t.checkbox]
+    active_todos = [t for t in todos if not t.checked]
+    done_todos = [t for t in todos if t.checked]
 
     return render(request, "to_do_list_page.html", {
         "active_todos": active_todos,

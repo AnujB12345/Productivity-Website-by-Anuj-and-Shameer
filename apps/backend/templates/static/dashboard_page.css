@@ -21,14 +21,12 @@
     color:rgba(192, 191, 179, 0.6);
 }
 
-.grid-container {
+/* 2x2 feature grid */
+.feature-grid-2x2 {
     display: grid;
-    padding: 0;
-    gap: 5px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
     margin: 50px;
-    column-gap: 10px;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-
 }
 
 .individual-feature {
@@ -266,13 +264,6 @@
     background-color: rgb(35, 82, 175);
 }
 
-/* 2x2 feature grid */
-.feature-grid-2x2 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 50px;
-}
 
 @media (max-width: 700px) {
     .feature-grid-2x2 {
