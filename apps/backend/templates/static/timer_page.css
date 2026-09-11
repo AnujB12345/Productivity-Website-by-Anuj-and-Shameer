@@ -30,12 +30,13 @@
 }
 
 .subtitle {
-    display: block;
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    color: rgba(192, 191, 179, 0.6);
-    margin-bottom: 30px;
+  display: block;
+  text-align: center;
+  font-family: sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  color: grey;
+  margin-bottom: 20px;
 }
 
 .timer-layout {

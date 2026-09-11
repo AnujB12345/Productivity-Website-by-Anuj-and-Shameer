@@ -1,15 +1,15 @@
 from django.db import models
-
+from users.models import User
 
 class PomodoroSettings(models.Model):
-    username = models.CharField(max_length=100, unique=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     work_minutes = models.PositiveIntegerField(default=25)
     short_break_minutes = models.PositiveIntegerField(default=5)
     long_break_minutes = models.PositiveIntegerField(default=15)
-    sessions_before_long_break = models.PositiveIntegerField(default=4)
+    sessions_before_long_break = models.PositiveIntegerField(default=3)
 
     def __str__(self):
-        return f"{self.username}'s Pomodoro settings"
+        return f"{self.user}'s Pomodoro settings"
 
 
 class PomodoroSession(models.Model):
@@ -19,7 +19,7 @@ class PomodoroSession(models.Model):
         ("long_break", "Long break"),
     ]
 
-    username = models.CharField(max_length=100)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     session_type = models.CharField(max_length=20, choices=SESSION_TYPES, default="work")
     duration_minutes = models.PositiveIntegerField()
     task_label = models.CharField(max_length=200, blank=True)
@@ -29,4 +29,4 @@ class PomodoroSession(models.Model):
         ordering = ["-completed_at"]
 
     def __str__(self):
-        return f"{self.username} - {self.get_session_type_display()} ({self.duration_minutes}m)"
+        return f"{self.user} - {self.get_session_type_display()} ({self.duration_minutes}m)"

@@ -47,7 +47,7 @@
         </div>
     </a>
 
-        <a class="individual-feature" href="{% url 'timer:timer' %}">
+    <a class="individual-feature" href="{% url 'timer:timer' %}">
         <div>
             <i class="fa-solid fa-hourglass-half" id= "icon"></i>
             <h3 class = "feature-name">Pomodoro Timer</h3>
@@ -154,7 +154,7 @@
             <div class="stat-card-top">
                 <i class="fa-solid fa-list-check stat-icon"></i>
                 <span class="stat-change {% if tasks_change >= 0 %}positive{% else %}negative{% endif %}">
-                    {% if tasks_change >= 0 %}+{% endif %}{{ tasks_change }}%
+                    {% if tasks_change >= 0 %}+ {% endif %}{{ tasks_change }}%
                 </span>
             </div>
             <h3 class="stat-number">{{ tasks_this_week }}</h3>
@@ -166,7 +166,7 @@
             <div class="stat-card-top">
                 <i class="fa-solid fa-book stat-icon"></i>
                 <span class="stat-change {% if notes_change >= 0 %}positive{% else %}negative{% endif %}">
-                    {% if notes_change >= 0 %}+{% endif %}{{ notes_change }}%
+                    {% if notes_change >= 0 %}+ {% endif %}{{ notes_change }}%
                 </span>
             </div>
             <h3 class="stat-number">{{ notes_this_week }}</h3>
@@ -196,7 +196,7 @@
             <div class="stat-card-top">
                 <i class="fa-solid fa-mug-hot stat-icon"></i>
                 <span class="stat-change {% if pomodoro_change >= 0 %}positive{% else %}negative{% endif %}">
-                    {% if pomodoro_change >= 0 %}+{% endif %}{{ pomodoro_change }}%
+                    {% if pomodoro_change >= 0 %}+ {% endif %}{{ pomodoro_change }}%
                 </span>
             </div>
             <h3 class="stat-number">{{ pomodoro_sessions_this_week }}</h3>
