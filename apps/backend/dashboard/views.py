@@ -7,7 +7,7 @@ import json
 
 from todo.models import Todo
 from notes.models import Note
-from calendar_app.models import CalendarEvent  # ⚠️ adjust to your actual app path
+from calendar_app.models import CalendarEvent 
 from dashboard.models import Goal
 from timer.models import PomodoroSession
 
