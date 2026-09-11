@@ -12,6 +12,7 @@
 {% endblock%}
 
 {% block content %}
+{{ chart_data|json_script:"chart-data" }}
 <!-- Initial title and subtitle -->
 <h1 class = "title">Welcome back, {{ request.session.username }}</h1> 
 
@@ -46,14 +47,14 @@
         </div>
     </a>
 
-    <div class="individual-feature coming-soon">
+        <a class="individual-feature" href="{% url 'timer:timer' %}">
         <div>
-            <span class="coming-soon-badge">Coming soon</span>
             <i class="fa-solid fa-hourglass-half" id= "icon"></i>
             <h3 class = "feature-name">Pomodoro Timer</h3>
             <p class = "feature-summary">Stay focused with timed work sessions</p>
         </div>
-    </div>
+    </a>
+
 </div>
 
 <!-- TASK REMINDER SECTION -->
@@ -125,14 +126,13 @@
             </div>
         </div>
 
-        <div class="progress-card coming-soon-card">
-            <span class="coming-soon-badge progress-coming-soon-badge">Coming soon</span>
-            <div class="progress-ring" style="background: conic-gradient(rgba(255,255,255,0.15) 0% 0%, rgba(255,255,255,0.08) 0% 100%);">
-                <div class="progress-ring-inner"><i class="fa-solid fa-mug-hot"></i></div>
+                <div class="progress-card">
+            <div class="progress-ring" style="background: conic-gradient(rgb(190, 140, 230) 0% {{ pomodoro_progress_pct }}%, rgba(255,255,255,0.08) {{ pomodoro_progress_pct }}% 100%);">
+                <div class="progress-ring-inner">{{ pomodoro_progress_pct }}%</div>
             </div>
             <p class="progress-label">Pomodoro</p>
             <div class="progress-tooltip">
-                Tracking starts once the Pomodoro timer launches. Set your monthly session target now:
+                {{ pomodoro_sessions_this_month }} of {{ pomodoro_goal }} focus sessions this month
                 <form method="POST" class="goal-edit-form">
                     {% csrf_token %}
                     <input type="number" name="pomodoro_goal" min="1" value="{{ pomodoro_goal }}" class="goal-edit-input">
@@ -192,6 +192,18 @@
             <p class="stat-sublabel">{{ total_tasks }} tasks total</p>
         </div>
 
+                <div class="stat-card">
+            <div class="stat-card-top">
+                <i class="fa-solid fa-mug-hot stat-icon"></i>
+                <span class="stat-change {% if pomodoro_change >= 0 %}positive{% else %}negative{% endif %}">
+                    {% if pomodoro_change >= 0 %}+{% endif %}{{ pomodoro_change }}%
+                </span>
+            </div>
+            <h3 class="stat-number">{{ pomodoro_sessions_this_week }}</h3>
+            <p class="stat-label">Focus sessions this week</p>
+            <p class="stat-sublabel">{{ focus_minutes_this_week }} min focused · {{ pomodoro_sessions_last_week }} sessions last week</p>
+        </div>
+
     </div>
 
     <!-- YEAR CHART -->
@@ -203,6 +215,7 @@
                 <button type="button" class="chart-toggle" data-view="tasks">Tasks</button>
                 <button type="button" class="chart-toggle" data-view="notes">Notes</button>
                 <button type="button" class="chart-toggle" data-view="events">Events</button>
+                <button type="button" class="chart-toggle" data-view="pomodoro">Pomodoro</button>
             </div>
         </div>
         <canvas id="yearChart" height="90"></canvas>
@@ -227,7 +240,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 // Initialize the year chart
 
-const chartData = JSON.parse('{{ chart_data|escapejs }}');
+const chartData = JSON.parse(document.getElementById('chart-data').textContent);
 Chart.defaults.color = 'rgba(248, 251, 250, 0.7)';
 Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.08)';
 
@@ -237,6 +250,7 @@ const datasetsAll = [
     { label: 'Tasks completed', data: chartData.tasks, borderColor: 'rgb(120, 170, 240)', backgroundColor: 'rgba(120, 170, 240, 0.15)', tension: 0.3, fill: true },
     { label: 'Notes created', data: chartData.notes, borderColor: 'rgb(240, 180, 110)', backgroundColor: 'rgba(240, 180, 110, 0.15)', tension: 0.3, fill: true },
     { label: 'Events', data: chartData.events, borderColor: 'rgb(130, 210, 160)', backgroundColor: 'rgba(130, 210, 160, 0.15)', tension: 0.3, fill: true },
+    { label: 'Pomodoro sessions', data: chartData.pomodoro, borderColor: 'rgb(190, 140, 230)', backgroundColor: 'rgba(190, 140, 230, 0.15)', tension: 0.3, fill: true },
 ];
 
 const yearChart = new Chart(ctx, {
@@ -254,6 +268,7 @@ const singleDatasetMap = {
     tasks: [datasetsAll[0]],
     notes: [datasetsAll[1]],
     events: [datasetsAll[2]],
+    pomodoro: [datasetsAll[3]],
 };
 
 document.querySelectorAll('.chart-toggle').forEach(btn => {

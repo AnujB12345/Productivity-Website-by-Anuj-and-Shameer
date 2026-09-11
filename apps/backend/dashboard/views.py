@@ -1,15 +1,16 @@
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.db.models.functions import TruncMonth
 import json
 
 from todo.models import Todo
 from notes.models import Note
-from users.models import User
-from calendar_app.models import CalendarEvent  # ⚠️ adjust to your actual app path
+from calendar_app.models import CalendarEvent 
 from dashboard.models import Goal
+from timer.models import PomodoroSession
+from users.models import User
 
 import requests
 from django.http import JsonResponse
@@ -57,6 +58,14 @@ def dashboard(request):
         user=current_user, created_at__gte=week_1_start, created_at__lt=week_0_start
     ).count()
 
+    # Only "work" sessions count as focus sessions — short/long breaks don't.
+    pomodoro_sessions_this_week = PomodoroSession.objects.filter(
+        user=current_user, session_type="work", completed_at__gte=week_0_start
+    ).count()
+    pomodoro_sessions_last_week = PomodoroSession.objects.filter(
+        user=current_user, session_type="work", completed_at__gte=week_1_start, completed_at__lt=week_0_start
+    ).count()
+
     # --- Percentage change calculations ---
     def pct_change(current, previous):
         if previous == 0:
@@ -66,6 +75,7 @@ def dashboard(request):
     # --- Percentage changes stored ---
     tasks_change = pct_change(tasks_this_week, tasks_last_week)
     notes_change = pct_change(notes_this_week, notes_last_week)
+    pomodoro_change = pct_change(pomodoro_sessions_this_week, pomodoro_sessions_last_week)
 
     # --- Calendar: done in last 30 days / upcoming in next 30 days ---
     month_ago = today - timedelta(days=30)
@@ -83,6 +93,10 @@ def dashboard(request):
     total_completed_tasks = Todo.objects.filter(user=current_user, checked=True).count()
     completion_rate = round((total_completed_tasks / total_tasks) * 100) if total_tasks else 0
     total_notes = Note.objects.filter(user=current_user).count()
+
+    focus_minutes_this_week = PomodoroSession.objects.filter(
+        user=current_user, session_type="work", completed_at__gte=week_0_start
+    ).aggregate(total=Sum("duration_minutes"))["total"] or 0
 
     # --- Task reminder widget: top 3 highest-priority incomplete tasks ---
     incomplete_tasks = Todo.objects.filter(user=current_user, checked=False)
@@ -109,10 +123,15 @@ def dashboard(request):
     ).count()
     events_progress_pct = round((events_this_month_done / events_this_month_total) * 100) if events_this_month_total else 0
 
+    pomodoro_sessions_this_month = PomodoroSession.objects.filter(
+        user=current_user, session_type="work", completed_at__gte=month_start
+    ).count()
+    pomodoro_progress_pct = min(round((pomodoro_sessions_this_month / goal_obj.pomodoro_goal) * 100), 100) if goal_obj.pomodoro_goal else 0
+
     # --- Year-so-far chart: monthly totals ---
     year = today.year
 
-    # --- Helper function to get monthly counts for tasks, notes, and events for the year for the chart ---
+    # --- Helper function to get monthly counts for tasks, notes, events and pomodoro sessions for the year for the chart ---
     def monthly_counts(queryset, date_field):
         counts = {m: 0 for m in range(1, 13)}
         annotated = (
@@ -125,12 +144,15 @@ def dashboard(request):
             counts[row["month"].month] = row["total"]
         return [counts[m] for m in range(1, 13)]
 
-    # --- Prepare chart data for tasks, notes, and events ---
+    # --- Prepare chart data for tasks, notes, events and pomodoro sessions ---
     chart_data = {
         "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
         "tasks": monthly_counts(Todo.objects.filter(user=current_user, checked=True), "completed_at"),
         "notes": monthly_counts(Note.objects.filter(user=current_user), "created_at"),
         "events": monthly_counts(CalendarEvent.objects.filter(user=current_user), "date"),
+        "pomodoro": monthly_counts(
+            PomodoroSession.objects.filter(user=current_user, session_type="work"), "completed_at"
+        ),
     }
 
     # --- Render the dashboard template with all the calculated stats and data ---
@@ -146,7 +168,12 @@ def dashboard(request):
         "total_tasks": total_tasks,
         "completion_rate": completion_rate,
         "total_notes": total_notes,
-        "chart_data": json.dumps(chart_data),
+        "chart_data": chart_data,
+
+        "pomodoro_sessions_this_week": pomodoro_sessions_this_week,
+        "pomodoro_sessions_last_week": pomodoro_sessions_last_week,
+        "pomodoro_change": pomodoro_change,
+        "focus_minutes_this_week": focus_minutes_this_week,
 
         "tasks_remaining": tasks_remaining,
         "top_tasks": top_tasks,
@@ -156,7 +183,9 @@ def dashboard(request):
         "notes_progress_pct": notes_progress_pct,
         "notes_created_this_month": notes_created_this_month,
         "notes_goal": goal_obj.notes_goal,
-        "pomodoro_goal": goal_obj.pomodoro_goal,   # add this line
+        "pomodoro_goal": goal_obj.pomodoro_goal,
+        "pomodoro_progress_pct": pomodoro_progress_pct,
+        "pomodoro_sessions_this_month": pomodoro_sessions_this_month,
         "events_progress_pct": events_progress_pct,
         "events_this_month_done": events_this_month_done,
         "events_this_month_total": events_this_month_total,
