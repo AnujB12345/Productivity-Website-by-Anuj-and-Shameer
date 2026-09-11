@@ -16,7 +16,6 @@
 <!-- Initial title and subtitle -->
 <h1 class = "title">Welcome back, {{ request.session.username }}</h1> 
 
-<!-- <h2 class = "subheading">Your calendar, to-do list and revision notes, all in one place</h2> -->
 <div id = "quote">
   <h2 class="subheading" id = "quote-text"></h2>
 </div>
@@ -50,7 +49,7 @@
 
         <a class="individual-feature" href="{% url 'timer:timer' %}">
         <div>
-            <i class="fa-solid fa-mug-hot" id= "icon"></i>
+            <i class="fa-solid fa-hourglass-half" id= "icon"></i>
             <h3 class = "feature-name">Pomodoro Timer</h3>
             <p class = "feature-summary">Stay focused with timed work sessions</p>
         </div>
@@ -233,7 +232,7 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch("/dashboard/api/quote/")
         .then((response) => response.json())
         .then((data) => {
-            document.getElementById("quote-text").textContent = data.quote + " - " + data.author;
+            document.getElementById("quote-text").textContent = "'"+ data.quote + "'" + " - " + data.author;
         })
         .catch((error) => {
             console.error("Failed to fetch quote:", error);

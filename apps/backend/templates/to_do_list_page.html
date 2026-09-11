@@ -13,7 +13,7 @@
 
 <h2 class="title">Your to-do List</h2>
 
-<span class="completed-tasks-check">{{ task_count }} tasks, {{ checked_count }} completed</span>
+<span class="completed-tasks-check">{% if task_count == 1 %}{{ task_count }} task {% else %} {{ task_count }} tasks {% endif %}, {{ checked_count }} completed</span>
 
 <!-- ADD TASK -->
 <form method="POST">
@@ -84,12 +84,12 @@
                         class="priority-select priority-{{ todo.priority }}"
                         onchange="this.form.submit()"
                     >
-                        <option value="1" {% if todo.priority == 1 %}selected{% endif %}>Low</option>
-                        <option value="2" {% if todo.priority == 2 %}selected{% endif %}>Medium</option>
-                        <option value="3" {% if todo.priority == 3 %}selected{% endif %}>High</option>
+                        <option value="Low" {% if todo.priority == "Low" %}selected{% endif %}>Low</option>
+                        <option value="Medium" {% if todo.priority == "Medium" %}selected{% endif %}>Medium</option>
+                        <option value="High" {% if todo.priority == "High" %}selected{% endif %}>High</option>
                     </select>
 
-                    <input type="hidden" name="change_priority" value="1">
+                    <input type="hidden" name="change_priority" value="Low">
                 </form>
 
                 <!-- EDIT -->

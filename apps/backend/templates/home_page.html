@@ -11,11 +11,12 @@
 {% endblock%}
 
 {% block content %}
-<h1 class = "title">Welcome to the Productivity App</h1>
+<h1 class = "title">Welcome to Taskira</h1>
 
-<h2 class = "subheading">Your calendar, to-do list and revision notes, all in one place</h2>
+<h2 class = "subheading">Every productivity tool you need, all in one place</h2>
 
-<div class = "grid-container">
+<!-- 2x2 FEATURE GRID -->
+<div class="feature-grid-2x2">
 
     <a class="individual-feature" href="{% url 'todo:todo_list' %}">
         <div>
@@ -40,6 +41,15 @@
             <p class = "feature-summary">Plan out your day, hour by hour</p> 
         </div>
     </a>
+
+    <div class="individual-feature coming-soon">
+        <div>
+            <span class="coming-soon-badge">Coming soon</span>
+            <i class="fa-solid fa-hourglass-half" id= "icon"></i>
+            <h3 class = "feature-name">Pomodoro Timer</h3>
+            <p class = "feature-summary">Stay focused with timed work sessions</p>
+        </div>
+    </div>
 </div>
 
 

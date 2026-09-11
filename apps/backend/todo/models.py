@@ -1,16 +1,16 @@
 from django.db import models
+from users.models import User
 
 class Todo(models.Model):
     PRIORITY_CHOICES = [
-        (1, "Low"),
-        (2, "Medium"),
-        (3, "High"),
+        ("Low", "Low"),
+        ("Medium", "Medium"),
+        ("High", "High"),
     ]
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    username = models.CharField(max_length=100)
-    checkbox = models.BooleanField(default=False)
-    priority = models.IntegerField(choices=PRIORITY_CHOICES, default=2)
+    checked = models.BooleanField(default=False)
+    priority = models.CharField(choices=PRIORITY_CHOICES, default="Medium")
     created_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
 

@@ -8,12 +8,6 @@ body {
 }
 /*Default colour for all of the website pages (WILL CHANGE IN THE FUTURE)*/
 
-/*
-.main-container {
-    margin: 0;
-    padding: 0;
-} */
-
 .navbar {
   margin: 0;
   padding: 0;
@@ -25,7 +19,7 @@ body {
 
 .navbar-name {
   font-weight: bold;
-  font-size: 30px;
+  font-size: 40px;
   font-family:
     "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
     Arial, sans-serif;
@@ -63,6 +57,7 @@ body {
 
 .nav-link:hover {
   text-decoration: underline;
+  color: rgba(192, 191, 179, 0.8);
 }
 
 .homepage-register-button {
