@@ -46,10 +46,7 @@
           <li>
             <a class="nav-link" href="{% url 'calendar:calendar' %}" >Calendar</a>
           </li>
-          <li>
-            <a class="nav-link" href="{% url 'dashboard:dashboard' %}" >Pomodoro Timer</a>
-          </li>
-          <li><a class="nav-link" href="{% url 'timer:timer' %}">Timer</a></li>
+          <li><a class="nav-link" href="{% url 'timer:timer' %}">Pomodoro Timer</a></li>
         </ul>
       </div>
       <!--Account button-->
@@ -57,14 +54,20 @@
         <button class="account-button" id="account-button">
           <i class="fa-regular fa-circle-user"></i>
         </button>
-                <div class="account-sidebar" id="account-sidebar">
-          <a class="sidebar-link" href="{% url 'dashboard:dashboard' %}"
-            >Settings</a
-          >
-          <a class="sidebar-link" href="{% url 'notifications:settings_page' %}"
-            >Notifications</a
-          >
-          <a class="sidebar-link" href="{% url 'users:logout' %}">Logout</a>
+        <div class="account-sidebar" id="account-sidebar">
+          <a class="sidebar-link" href="{% url 'dashboard:dashboard' %}">
+            <i class="fa-solid fa-moon sidebar-icon"></i>
+            Light/ Dark </a>
+          <a class="sidebar-link" href="{% url 'dashboard:dashboard' %}">
+            <i class="fa-solid fa-gear sidebar-icon"></i>   
+            Settings         
+          </a>
+          <a class="sidebar-link" href="{% url 'notifications:settings_page' %}">
+            <i class="fa-solid fa-bell sidebar-icon"></i>
+            Notifications</a>
+          <a class="sidebar-link" href="{% url 'users:logout' %}" id="logout-button">
+            <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon" ></i>
+            Logout</a>
         </div>
       </div>
 

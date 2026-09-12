@@ -1,8 +1,5 @@
 body {
   background-color: rgb(26, 26, 26);
-  padding-bottom: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
   display: flex;
   flex-direction: column;
 }
@@ -15,6 +12,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: rgb(36, 35, 35);
+  border-bottom: 1px solid  rgb(48, 46, 46);
+
 }
 
 .navbar-name {
@@ -118,22 +118,21 @@ body {
 .account-buttons {
   display: flex;
   align-content: right;
-  margin: 10px;
   padding: 5px;
 }
 
 .account-button-container {
   position: relative;
   display: flex;
-  align-items: center;
-  margin: 10px;
+  justify-content: end;
+  align-items: right;
+  padding-right: 25px;
 }
 
 .account-button {
   background: none;
   border: none;
   cursor: pointer;
-  padding: 5px;
   color: white;
   font-size: 28px;
   display: flex;
@@ -142,6 +141,7 @@ body {
   transition: color 0.3s ease;
   outline: none;
   box-shadow: none;
+  padding: 5px;
 }
 
 .account-button:focus {
@@ -157,13 +157,13 @@ body {
   display: none;
   position: absolute;
   top: 100%;
-  right: 0;
+  right: 45%;
   background-color: rgba(44, 45, 42);
   border-radius: 8px;
-  padding: 8px 0;
   min-width: 160px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
   z-index: 1000;
+  padding:8px;
 }
 
 .account-sidebar.sidebar-open {
@@ -171,19 +171,29 @@ body {
 }
 
 .sidebar-link {
-  display: block;
+  display: flex;
+  align-items: center;
   color: white;
   text-decoration: none;
-  padding: 10px 20px;
+  padding: 10px ;
   font-size: 18px;
   font-family:
     "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
     Arial, sans-serif;
   transition: background-color 0.3s ease;
+  border-radius: 5px;
 }
 
 .sidebar-link:hover {
   background-color: rgb(52, 53, 51);
   text-decoration: none;
   color: white;
+}
+
+.sidebar-icon {
+  padding-right: 5px;
+}
+
+#logout-button {
+  color:  rgb(181, 59, 59);
 }

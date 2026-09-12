@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 
-from .models import PushSubscription, NotificationSettings
+from notifications.models import PushSubscription, NotificationSettings
+from users.models import User
 
 
 @require_POST
@@ -17,6 +18,8 @@ def save_subscription(request):
     except json.JSONDecodeError:
         return JsonResponse({"status": "error"}, status=400)
 
+    current_user = User.objects.get(username=request.session["username"])
+
     endpoint = data.get("endpoint")
     keys = data.get("keys", {})
     p256dh = keys.get("p256dh")
@@ -27,9 +30,9 @@ def save_subscription(request):
 
     PushSubscription.objects.update_or_create(
         endpoint=endpoint,
-        defaults={"username": username, "p256dh": p256dh, "auth": auth},
+        defaults={"user": current_user, "p256dh": p256dh, "auth": auth},
     )
-    NotificationSettings.objects.get_or_create(username=username)
+    NotificationSettings.objects.get_or_create(user=current_user)
 
     return JsonResponse({"status": "ok"})
 
@@ -39,7 +42,8 @@ def notification_settings_page(request):
     if not username:
         return redirect("users:login")
 
-    settings_obj, _ = NotificationSettings.objects.get_or_create(username=username)
+    current_user = User.objects.get(username=request.session["username"])
+    settings_obj, _ = NotificationSettings.objects.get_or_create(user=current_user)
 
     if request.method == "POST":
         frequency = request.POST.get("frequency_hours")
@@ -51,7 +55,9 @@ def notification_settings_page(request):
         settings_obj.notify_upcoming_events = "notify_upcoming_events" in request.POST
         settings_obj.notify_revision_reminder = "notify_revision_reminder" in request.POST
         settings_obj.save()
-        return redirect("notifications:settings_page")
+        # return redirect("notifications:settings_page")
+        return redirect("dashboard:dashboard")
+
 
     return render(request, "notification_settings_page.html", {
         "notification_settings": settings_obj,
