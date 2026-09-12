@@ -384,9 +384,9 @@ form {
 }
 
 /* Priority select coloring by Low/Medium/High */
-.priority-select.priority-1 { color: rgb(130, 210, 160); }
-.priority-select.priority-2 { color: rgb(240, 180, 110); }
-.priority-select.priority-3 { color: rgb(230, 120, 115); }
+.priority-select.priority-Low { color: rgb(130, 210, 160); }
+.priority-select.priority-Medium { color: rgb(240, 180, 110); }
+.priority-select.priority-High { color: rgb(230, 120, 115); }
 
 /* Completed tasks — custom dropdown, visually distinct from priority select */
 .completed-dropdown {
@@ -486,9 +486,9 @@ form {
     border-radius: 20px;
 }
 
-.priority-pill-1 { color: rgb(130, 210, 160); background-color: rgba(130, 210, 160, 0.12); }
-.priority-pill-2 { color: rgb(240, 180, 110); background-color: rgba(240, 180, 110, 0.12); }
-.priority-pill-3 { color: rgb(230, 120, 115); background-color: rgba(230, 120, 115, 0.12); }
+.priority-pill-Low { color: rgb(130, 210, 160); background-color: rgba(130, 210, 160, 0.12); }
+.priority-pill-Medium { color: rgb(240, 180, 110); background-color: rgba(240, 180, 110, 0.12); }
+.priority-pill-High { color: rgb(230, 120, 115); background-color: rgba(230, 120, 115, 0.12); }
 
 .completed-delete-btn {
     background: none;
