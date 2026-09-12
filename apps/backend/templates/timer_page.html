@@ -1,7 +1,7 @@
 {% extends "base_page.html" %} {% block title %} Pomodoro Timer {% endblock %}
 {% load static %}
 
-{% block body_class %}pomodoro timer{% endblock %}
+{% block body_class %}timer{% endblock %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'timer_page.css' %}">
 <script src="https://kit.fontawesome.com/dce4d5d2ec.js" crossorigin="anonymous"></script>
@@ -9,38 +9,52 @@
 
 {% block content %}
 {{ settings_dict|json_script:"pomodoro-settings" }}
+
 <div class="timer-page-container">
 
 <h2 class="title">Pomodoro Timer</h2>
 <span class="subtitle">Stay focused with timed work sessions</span>
 
-{{ settings_json|json_script:"pomodoro-settings" }}
-
 <div class="timer-layout">
 
-    <!-- TIMER CARD -->
+    <!-- MAIN TIMER -->
     <div class="timer-card">
+
+        <input type="text" id="task-label-input" class="task-label-input" placeholder="What are you focusing on?">
+
         <div class="session-type-label" id="session-type-label">Focus session</div>
 
         <div class="timer-ring-container">
-            <div class="timer-ring" id="timer-ring">
-                <div class="timer-ring-inner">
-                    <span class="timer-display" id="timer-display">25:00</span>
-                    <span class="timer-cycle-count" id="timer-cycle-count">Session 1 of {{ settings.sessions_before_long_break }}</span>
-                </div>
+            <svg class="timer-ring-svg" id="timer-ring-svg" viewBox="0 0 300 300">
+                <circle
+                    id="progress-arc"
+                    cx="150" cy="150" r="130"
+                    fill="none"
+                    stroke="rgb(120, 170, 240)"
+                    stroke-width="0"
+                    stroke-linecap="round"
+                    transform="rotate(-90 150 150)"
+                />
+                <g id="ticks-group"></g>
+            </svg>
+            <div class="timer-ring-inner">
+                <span class="timer-display" id="timer-display">25:00</span>
+                <span class="timer-cycle-count" id="timer-cycle-count">Session 1 of {{ settings.sessions_before_long_break }}</span>
             </div>
         </div>
 
-        <input type="text" id="task-label-input" class="task-label-input" placeholder="What are you focusing on? (optional)">
-
         <div class="timer-controls">
-            <button type="button" id="reset-btn" class="timer-btn timer-btn-secondary" title="Reset">
+            <button type="button" id="reset-btn" class="timer-icon-btn" title="Reset">
                 <i class="fa-solid fa-rotate-left"></i>
             </button>
-            <button type="button" id="start-pause-btn" class="timer-btn timer-btn-primary" title="Start/Pause">
-                <i class="fa-solid fa-play" id="start-pause-icon"></i>
+
+            <button type="button" id="start-pause-btn" class="timer-pill-btn">
+                <i class="fa-solid fa-play" id="icon-play"></i>
+                <i class="fa-solid fa-pause" id="icon-pause"></i>
+                <span id="start-pause-label">Start</span>
             </button>
-            <button type="button" id="skip-btn" class="timer-btn timer-btn-secondary" title="Skip">
+
+            <button type="button" id="skip-btn" class="timer-icon-btn" title="Skip">
                 <i class="fa-solid fa-forward"></i>
             </button>
         </div>
@@ -53,12 +67,32 @@
             <h3 class="side-panel-title">Today</h3>
             <div class="timer-stat-row">
                 <span class="timer-stat-number">{{ sessions_today }}</span>
-                <span class="timer-stat-label">focus sessions completed</span>
+                <span class="timer-stat-label">focus sessions</span>
             </div>
             <div class="timer-stat-row">
                 <span class="timer-stat-number">{{ focus_minutes_today }}</span>
                 <span class="timer-stat-label">minutes focused</span>
             </div>
+        </div>
+
+        <div class="recent-sessions-card">
+            <h3 class="side-panel-title">Recent sessions</h3>
+
+            {% if recent_sessions %}
+            <div class="recent-sessions-list">
+                {% for session in recent_sessions %}
+                <div class="recent-session-row">
+                    <span class="session-type-dot session-type-{{ session.session_type }}"></span>
+                    <div class="recent-session-info">
+                        <span class="recent-session-text">{% if session.task_label %}{{ session.task_label }}{% else %}{{ session.get_session_type_display }}{% endif %}</span>
+                        <span class="recent-session-meta">{{ session.duration_minutes }} min · {{ session.completed_at|date:"H:i" }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="no-sessions">No sessions logged yet.</p>
+            {% endif %}
         </div>
 
         <details class="settings-dropdown">
@@ -89,26 +123,6 @@
 
 </div>
 
-<!-- RECENT SESSIONS -->
-<div class="recent-sessions-section">
-    <h3 class="side-panel-title">Recent sessions</h3>
-
-    {% if recent_sessions %}
-    <div class="recent-sessions-list">
-        {% for session in recent_sessions %}
-        <div class="recent-session-row">
-            <span class="session-type-pill session-type-{{ session.session_type }}">{{ session.get_session_type_display }}</span>
-            <span class="recent-session-text">{% if session.task_label %}{{ session.task_label }}{% else %}—{% endif %}</span>
-            <span class="recent-session-duration">{{ session.duration_minutes }} min</span>
-            <span class="recent-session-time">{{ session.completed_at|date:"M d, H:i" }}</span>
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <p class="no-sessions">No sessions logged yet — start your first one above!</p>
-    {% endif %}
-</div>
-
 </div>
 
 {% endblock %}
@@ -125,15 +139,74 @@ let timerInterval = null;
 let completedWorkSessions = 0;
 
 const display = document.getElementById('timer-display');
-const ring = document.getElementById('timer-ring');
 const sessionLabel = document.getElementById('session-type-label');
 const cycleCount = document.getElementById('timer-cycle-count');
 const startPauseBtn = document.getElementById('start-pause-btn');
-const startPauseIcon = document.getElementById('start-pause-icon');
+const startPauseLabel = document.getElementById('start-pause-label');
 const taskInput = document.getElementById('task-label-input');
 
 const MODE_LABELS = { work: 'Focus session', short_break: 'Short break', long_break: 'Long break' };
 const MODE_COLORS = { work: 'rgb(120, 170, 240)', short_break: 'rgb(130, 210, 160)', long_break: 'rgb(240, 180, 110)' };
+
+const progressArc = document.getElementById('progress-arc');
+const ARC_RADIUS = 130;
+const ARC_CIRCUMFERENCE = 2 * Math.PI * ARC_RADIUS;
+
+progressArc.style.strokeDasharray = `${ARC_CIRCUMFERENCE}`;
+progressArc.style.strokeDashoffset = `${ARC_CIRCUMFERENCE}`;
+
+const TICK_COUNT = 60;
+const svgNS = 'http://www.w3.org/2000/svg';
+const ticksGroup = document.getElementById('ticks-group');
+const ticks = [];
+
+function buildTicks() {
+    ticksGroup.innerHTML = '';   // only clears the ticks group now — the circle lives outside it, untouched
+    ticks.length = 0;
+
+    const center = 150;
+    const outerRadius = 145;
+    const tickLength = 16;
+
+    for (let i = 0; i < TICK_COUNT; i++) {
+        const angle = (i / TICK_COUNT) * 2 * Math.PI - Math.PI / 2;
+        const x1 = center + (outerRadius - tickLength) * Math.cos(angle);
+        const y1 = center + (outerRadius - tickLength) * Math.sin(angle);
+        const x2 = center + outerRadius * Math.cos(angle);
+        const y2 = center + outerRadius * Math.sin(angle);
+
+        const line = document.createElementNS(svgNS, 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('stroke-width', 4);
+        line.setAttribute('stroke-linecap', 'round');
+        line.setAttribute('stroke', 'rgba(255,255,255,0.15)');
+
+        ticksGroup.appendChild(line);
+        ticks.push(line);
+    }
+}
+
+function updateTicksAndArc(elapsedPct) {
+    const activeColor = MODE_COLORS[mode];
+    const litCount = Math.round((elapsedPct / 100) * TICK_COUNT);
+
+    ticks.forEach((tick, i) => {
+        if (i < litCount) {
+            tick.setAttribute('stroke', activeColor);
+        } else if (i === litCount) {
+            tick.setAttribute('stroke', 'rgb(250, 180, 70)');
+        } else {
+            tick.setAttribute('stroke', 'rgba(255,255,255,0.15)');
+        }
+    });
+
+    const offset = ARC_CIRCUMFERENCE * (1 - elapsedPct / 100);
+    progressArc.style.strokeDashoffset = offset;
+    progressArc.setAttribute('stroke', activeColor);
+}
 
 function durationForMode(m) {
     if (m === 'work') return settings.work_minutes * 60;
@@ -147,7 +220,7 @@ function updateDisplay() {
     display.textContent = `${minutes}:${seconds}`;
 
     const elapsedPct = totalSeconds === 0 ? 0 : ((totalSeconds - secondsLeft) / totalSeconds) * 100;
-    ring.style.background = `conic-gradient(${MODE_COLORS[mode]} ${elapsedPct}%, rgba(255,255,255,0.08) ${elapsedPct}% 100%)`;
+    updateTicksAndArc(elapsedPct);
 
     sessionLabel.textContent = MODE_LABELS[mode];
     cycleCount.textContent = mode === 'work'
@@ -169,15 +242,15 @@ function tick() {
 function startTimer() {
     if (isRunning) return;
     isRunning = true;
-    startPauseIcon.classList.remove('fa-play');
-    startPauseIcon.classList.add('fa-pause');
+    startPauseLabel.textContent = 'Pause';
+    startPauseBtn.classList.add('is-running');
     timerInterval = setInterval(tick, 1000);
 }
 
 function pauseTimer() {
     isRunning = false;
-    startPauseIcon.classList.remove('fa-pause');
-    startPauseIcon.classList.add('fa-play');
+    startPauseLabel.textContent = 'Start';
+    startPauseBtn.classList.remove('is-running');
     clearInterval(timerInterval);
 }
 
@@ -279,6 +352,7 @@ startPauseBtn.addEventListener('click', () => isRunning ? pauseTimer() : startTi
 document.getElementById('reset-btn').addEventListener('click', resetTimer);
 document.getElementById('skip-btn').addEventListener('click', skipSession);
 
+buildTicks();
 updateDisplay();
 </script>
 {% endblock %}

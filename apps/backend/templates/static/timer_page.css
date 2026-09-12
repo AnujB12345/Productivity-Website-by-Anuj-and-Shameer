@@ -8,7 +8,7 @@
 }
 
 .timer-page-container {
-    max-width: 900px;
+    max-width: 1000px;
     margin: 0 auto;
     padding-left: 50px;
     padding-right: 50px;
@@ -30,75 +30,125 @@
 }
 
 .subtitle {
-  display: block;
-  text-align: center;
-  font-family: sans-serif;
-  font-weight: bold;
-  font-size: 20px;
-  color: grey;
-  margin-bottom: 20px;
+    display: block;
+    text-align: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    color: rgba(192, 191, 179, 0.6);
+    margin-bottom: 30px;
 }
 
 .timer-layout {
     display: grid;
-    grid-template-columns: 1.3fr 1fr;
+    grid-template-columns: 1.7fr 1fr;
     gap: 20px;
     align-items: start;
 }
 
-@media (max-width: 750px) {
+@media (max-width: 800px) {
     .timer-layout { grid-template-columns: 1fr; }
 }
 
-/* TIMER CARD */
+/* MAIN TIMER CARD — larger, everything centered, matching the reference's focal point */
 .timer-card {
     background-color: var(--b-color);
-    border-radius: 16px;
-    padding: 32px;
+    border-radius: 20px;
+    padding: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 520px;
+    justify-content: center;
 }
+
+.task-label-input {
+    width: 100%;
+    max-width: 320px;
+    background-color: rgba(255,255,255,0.06);
+    border: 1px solid var(--d-color);
+    border-radius: 30px;
+    color: white;
+    padding: 10px 20px;
+    font-size: 14px;
+    text-align: center;
+    outline: none;
+    margin-bottom: 26px;
+}
+
+.task-label-input::placeholder { color: rgba(192, 191, 179, 0.5); }
+.task-label-input:focus { border-color: rgb(120, 170, 240); }
 
 .session-type-label {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
-    color: rgba(248, 251, 250, 0.8);
+    color: rgba(248, 251, 250, 0.6);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
+    letter-spacing: 1.5px;
+    margin-bottom: 24px;
 }
 
-.timer-ring-container { margin-bottom: 24px; }
+.timer-ring-container { margin-bottom: 36px; }
 
-.timer-ring {
-    width: 240px;
-    height: 240px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: conic-gradient(rgb(120, 170, 240) 0%, rgba(255,255,255,0.08) 0% 100%);
-    transition: background 0.3s linear;
+.timer-ring-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin-bottom: 36px;
+}
+
+.timer-ring-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.timer-tick {
+    transition: stroke 0.4s ease, opacity 0.4s ease;
 }
 
 .timer-ring-inner {
-    width: 200px;
-    height: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 230px;
+    height: 230px;
     border-radius: 50%;
     background-color: var(--b-color);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
 }
 
 .timer-display {
-    font-family: 'SquadaOne', sans-serif;
-    font-size: 52px;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-weight: 200;
+    font-size: 64px;
+    letter-spacing: 2px;
     color: white;
+    font-variant-numeric: tabular-nums;
+}
+#progress-arc {
+    opacity: 0.35;
+    filter: blur(3px);
+    transition: stroke 0.4s ease;
+}
+
+#icon-pause {
+    display: none;
+}
+
+.timer-pill-btn.is-running #icon-play {
+    display: none;
+}
+
+.timer-pill-btn.is-running #icon-pause {
+    display: inline-block;
 }
 
 .timer-cycle-count {
@@ -107,31 +157,21 @@
     color: rgba(192, 191, 179, 0.6);
 }
 
-.task-label-input {
-    width: 100%;
-    max-width: 320px;
-    background-color: rgba(255,255,255,0.05);
-    border: 1px solid var(--d-color);
-    border-radius: 30px;
-    color: white;
-    padding: 10px 18px;
-    font-size: 14px;
-    text-align: center;
-    outline: none;
-    margin-bottom: 24px;
-}
-
-.task-label-input::placeholder { color: rgba(192, 191, 179, 0.5); }
-.task-label-input:focus { border-color: rgb(120, 170, 240); }
-
+/* CONTROLS — big pill Start/Pause flanked by small icon-only buttons, mirroring the reference's single prominent Pause button */
 .timer-controls {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 18px;
 }
 
-.timer-btn {
+.timer-icon-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
     border: none;
+    background-color: rgba(255,255,255,0.06);
+    color: rgba(248, 251, 250, 0.8);
+    font-size: 16px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -139,48 +179,53 @@
     transition: background-color 0.25s ease, transform 0.15s ease;
 }
 
-.timer-btn:active { transform: scale(0.94); }
+.timer-icon-btn:hover { background-color: rgba(255,255,255,0.12); }
+.timer-icon-btn:active { transform: scale(0.94); }
 
-.timer-btn-secondary {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background-color: rgba(255,255,255,0.06);
-    color: rgba(248, 251, 250, 0.8);
-    font-size: 16px;
-}
-
-.timer-btn-secondary:hover { background-color: rgba(255,255,255,0.12); }
-
-.timer-btn-primary {
-    width: 68px;
-    height: 68px;
-    border-radius: 50%;
+.timer-pill-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
     background-color: rgba(78, 121, 206);
     color: white;
-    font-size: 22px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 14px 36px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.15s ease;
 }
 
-.timer-btn-primary:hover { background-color: rgb(35, 82, 175); }
+.timer-pill-btn:hover { background-color: rgb(35, 82, 175); }
+.timer-pill-btn:active { transform: scale(0.97); }
 
+.timer-pill-btn.is-running {
+    background-color: rgba(120, 120, 118, 0.9);
+}
+
+.timer-pill-btn.is-running:hover {
+    background-color: rgb(95, 95, 93);
+}
 /* SIDE PANEL */
 .timer-side-panel {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
-
 .side-panel-title {
-    font-family: 'SquadaOne', sans-serif;
-    font-size: 20px;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    font-size: 16px;
     color: white;
     margin: 0 0 14px 0;
 }
 
-.timer-stats-card {
+.timer-stats-card, .recent-sessions-card {
     background-color: var(--b-color);
     border-radius: 16px;
-    padding: 22px;
+    padding: 20px;
 }
 
 .timer-stat-row {
@@ -191,32 +236,93 @@
 }
 
 .timer-stat-number {
-    font-family: 'SquadaOne', sans-serif;
-    font-size: 30px;
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 24px;
     color: rgb(120, 170, 240);
 }
 
 .timer-stat-label {
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
+    font-size: 13px;
     color: rgba(192, 191, 179, 0.7);
+}
+
+/* RECENT SESSIONS — now a compact scrollable list in the sidebar, mirroring the reference's "Today" task list */
+.recent-sessions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 280px;
+    overflow-y: auto;
+}
+
+.recent-session-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 8px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.recent-session-row:hover { background-color: rgba(255,255,255,0.04); }
+
+.session-type-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.session-type-work { background-color: rgb(120, 170, 240); }
+.session-type-short_break { background-color: rgb(130, 210, 160); }
+.session-type-long_break { background-color: rgb(240, 180, 110); }
+
+.recent-session-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.recent-session-text {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: rgba(248, 251, 250, 0.85);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recent-session-meta {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    color: rgba(192, 191, 179, 0.5);
+}
+
+.no-sessions {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: rgba(192, 191, 179, 0.5);
+    text-align: center;
+    padding: 10px 0;
 }
 
 /* SETTINGS DROPDOWN */
 .settings-dropdown {
     background-color: var(--b-color);
     border-radius: 16px;
-    padding: 4px 22px;
+    padding: 4px 20px;
 }
 
 .settings-summary {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 0;
+    padding: 16px 0;
     cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: bold;
     color: rgba(248, 251, 250, 0.9);
     list-style: none;
@@ -227,7 +333,7 @@
 
 .settings-arrow {
     color: rgba(248, 251, 250, 0.5);
-    font-size: 13px;
+    font-size: 12px;
     transition: transform 0.25s ease;
 }
 
@@ -237,7 +343,7 @@
     display: flex;
     flex-direction: column;
     gap: 14px;
-    padding-bottom: 22px;
+    padding-bottom: 20px;
 }
 
 .settings-label {
@@ -273,69 +379,3 @@
 }
 
 .settings-save-btn:hover { background-color: rgb(35, 82, 175); }
-
-/* RECENT SESSIONS */
-.recent-sessions-section {
-    margin-top: 30px;
-    margin-bottom: 60px;
-}
-
-.recent-sessions-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.recent-session-row {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background-color: var(--b-color);
-    border-radius: 10px;
-    padding: 12px 18px;
-}
-
-.session-type-pill {
-    font-size: 11px;
-    font-weight: bold;
-    padding: 3px 10px;
-    border-radius: 20px;
-    flex-shrink: 0;
-    width: 80px;
-    text-align: center;
-}
-
-.session-type-work { color: rgb(120, 170, 240); background-color: rgba(120, 170, 240, 0.12); }
-.session-type-short_break { color: rgb(130, 210, 160); background-color: rgba(130, 210, 160, 0.12); }
-.session-type-long_break { color: rgb(240, 180, 110); background-color: rgba(240, 180, 110, 0.12); }
-
-.recent-session-text {
-    flex: 1;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 14px;
-    color: rgba(248, 251, 250, 0.85);
-    overflow-wrap: anywhere;
-}
-
-.recent-session-duration {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    color: rgba(192, 191, 179, 0.6);
-    flex-shrink: 0;
-}
-
-.recent-session-time {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    color: rgba(192, 191, 179, 0.5);
-    flex-shrink: 0;
-    width: 110px;
-    text-align: right;
-}
-
-.no-sessions {
-    text-align: center;
-    font-family: Arial, Helvetica, sans-serif;
-    color: rgba(192, 191, 179, 0.6);
-    padding: 20px 0;
-}
