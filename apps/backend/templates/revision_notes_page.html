@@ -13,17 +13,15 @@
 
     <span class="subtitle">{% if note_count == 1 %}{{ note_count }} note {% else %} {{ note_count }} notes {% endif %}</span>
 
-    
     <!-- ADD TASK -->
     <form method="POST">
         {% csrf_token %}
         <div class="input-group">
-            <input class="note-input" type="text" name="title" placeholder="Add your new note title" required>
-            <textarea class="note-description-input" type="text" name="description" placeholder="Add your new note description"></textarea>
-            
+            <input class="note-input" type="text" name="title" placeholder="Add your new note title" required maxlength="200">
+            <textarea class="note-description-input" type="text" name="description" placeholder="Add your new note description" maxlength = "5000"></textarea>
 
             <div class="bottom-row">
-                <input class="note-subject-input" id="note-subject-input" type="text" name="subject" placeholder="Add your new note subject" list="all-subjects"></input>
+                <input class="note-subject-input" id="note-subject-input" type="text" name="subject" placeholder="Add your new note subject" list="all-subjects" maxlength="100"></input>
 
                 <datalist id="all-subjects">
                     {% for subject in subjects %}

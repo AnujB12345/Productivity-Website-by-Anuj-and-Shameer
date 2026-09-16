@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=SquadaOne&display=swap');
+
+:root {
+  --card-bg: rgba(44, 45, 42);
+  --card-bg-light: rgba(48, 49, 46);
+  --text-primary: rgba(248, 251, 250);
+  --text-secondary: rgba(192, 191, 179, 0.6);
+  --accent-blue: rgb(120, 170, 240);
+  --accent-blue-hover: rgb(35, 82, 175);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --danger-color: rgb(220, 100, 100);
+}
+
+.settings-page-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+
+@media (max-width: 700px) {
+  .settings-page-container {
+    padding: 30px 20px;
+  }
+}
+
+.title {
+  font-family: 'SquadaOne', sans-serif;
+  font-weight: bold;
+  font-size: 40px;
+  color: var(--text-primary);
+  padding-bottom: 5px;
+  text-align: center;
+}
+
+.subtitle {
+  display: block;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 30px;
+}
+
+.settings-card {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.settings-card.danger-zone {
+  border: 1px solid var(--danger-color);
+}
+
+.settings-section-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-primary);
+  margin: 0 0 18px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.setting-row:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+.setting-value {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.setting-link {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.setting-link:hover {
+  color: var(--accent-blue-hover);
+}
+
+.delete-account-heading {
+  color: var(--danger-color);
+  font-size: 18px;
+}
+.delete-account-info {
+  color: rgba(192, 191, 179, 0.85);
+}
+
+.delete-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  outline: 1px solid red;
+  padding: 15px;
+}
+
+.delete-button {
+  border-radius: 8px;
+  padding-block: 6px;
+  padding-inline: 10px;
+  background-color: rgb(232, 172, 172);
+  justify-content: center;
+  outline: 1px solid red;
+  color: red;
+}
+
+.danger-link:hover {
+  text-decoration: none;
+}
+.delete-button:hover {
+  background-color: rgb(207, 139, 139);
+  transition: background-color 0.3s ease;
+}
+
+/* Toggle Switch */
+.toggle-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(117, 117, 117);
+  border-radius: 24px;
+  transition: 0.3s;
+}
+
+.toggle-slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--accent-blue);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+}
+
+.theme-toggle-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-label {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+
+
+/* Styling for notifications */
+.notifications-card {
+    background-color: var(--b-color);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.notif-permission-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.notif-permission-text {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgba(248, 251, 250, 0.8);
+    margin: 0;
+    max-width: 420px;
+}
+
+.notif-enable-btn {
+    background-color: rgba(78, 121, 206);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+}
+
+.notif-enable-btn:hover {
+    background-color: rgb(35, 82, 175);
+}
+
+.notif-settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.notif-settings-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgba(248, 251, 250, 0.9);
+    font-weight: bold;
+}
+
+.notif-frequency-select {
+    background-color: rgba(255,255,255,0.05);
+    /* border: 1px solid rgba(117, 117, 117); */
+    border-radius: 20px;
+    color: rgba(188, 187, 174);
+    /* padding: 6px 14px; */
+    padding-block: 6px;
+    padding-left: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+}
+
+.notif-checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.notif-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    color: rgba(192, 191, 179, 0.85);
+    cursor: pointer;
+}
+
+.notif-checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: rgb(120, 170, 240);
+    cursor: pointer;
+}
+
+.notif-save-btn {
+    align-self: flex-start;
+    background-color: rgba(120, 170, 240, 0.15);
+    color: rgb(150, 180, 240);
+    border: none;
+    border-radius: 30px;
+    padding: 8px 20px;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.notif-save-btn:hover {
+    background-color: rgba(120, 170, 240, 0.3);
+}

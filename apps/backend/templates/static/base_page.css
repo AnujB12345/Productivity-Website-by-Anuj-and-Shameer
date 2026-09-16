@@ -3,7 +3,12 @@ body {
   display: flex;
   flex-direction: column;
 }
-/*Default colour for all of the website pages (WILL CHANGE IN THE FUTURE)*/
+/*Default colour for all of the website pages*/
+
+body.light-mode {
+  background-color: rgb(241, 235, 235);
+
+}
 
 .navbar {
   margin: 0;
@@ -160,7 +165,7 @@ body {
   right: 45%;
   background-color: rgba(44, 45, 42);
   border-radius: 8px;
-  min-width: 160px;
+  width: 250px;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
   z-index: 1000;
   padding:8px;
@@ -170,8 +175,12 @@ body {
   display: block;
 }
 
+.together {
+  justify-content: flex-start ;
+}
 .sidebar-link {
   display: flex;
+  justify-content:space-between ;
   align-items: center;
   color: white;
   text-decoration: none;
