@@ -3,12 +3,11 @@
     font-weight: bold;
     font-size: 40px;
     color: white;
-    text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
     padding-top: 40px;
     padding-bottom: 5px;
     text-align: center;
 }
-/*Styling for the title 'Welcome to the productivity app*/
+/*Styling for the title 'Welcome to Taskira*/
 
 .subheading {
     font-weight: bold;
