@@ -379,3 +379,20 @@
 }
 
 .settings-save-btn:hover { background-color: rgb(35, 82, 175); }
+
+.save-icon-btn {
+    color: rgb(240, 180, 110);
+}
+
+.save-icon-btn:hover:not(:disabled) {
+    background-color: rgba(240, 180, 110, 0.15);
+}
+
+.timer-icon-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.timer-icon-btn:disabled:hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}

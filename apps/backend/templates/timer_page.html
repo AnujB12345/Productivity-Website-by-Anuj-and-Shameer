@@ -54,6 +54,10 @@
                 <span id="start-pause-label">Start</span>
             </button>
 
+            <button type="button" id="save-btn" class="timer-icon-btn save-icon-btn" title="Save & stop this session" disabled>
+                <i class="fa-solid fa-stop"></i>
+            </button>
+
             <button type="button" id="skip-btn" class="timer-icon-btn" title="Skip">
                 <i class="fa-solid fa-forward"></i>
             </button>
@@ -228,6 +232,8 @@ function updateDisplay() {
         : 'Take a breather';
 
     document.title = isRunning ? `${minutes}:${seconds} · ${MODE_LABELS[mode]}` : 'Pomodoro Timer';
+
+    saveBtn.disabled = secondsLeft === totalSeconds;
 }
 
 function tick() {
@@ -289,6 +295,24 @@ function handleSessionComplete() {
 function skipSession() {
     pauseTimer();
     advanceCycle();
+}
+const saveBtn = document.getElementById('save-btn');
+
+function saveAndStop() {
+    const elapsedSeconds = totalSeconds - secondsLeft;
+    if (elapsedSeconds < 1) return; // nothing to save yet
+
+    pauseTimer();
+
+    // Log whatever time actually passed, minimum 1 minute so it's not discarded as 0.
+    const elapsedMinutes = Math.max(1, Math.round(elapsedSeconds / 60));
+    logSession(mode, elapsedMinutes);
+
+    // Don't advance the cycle — this session wasn't completed, just saved.
+    // Reset the clock back to the full length of the current mode.
+    secondsLeft = durationForMode(mode);
+    totalSeconds = secondsLeft;
+    updateDisplay();
 }
 
 function getCookie(name) {
@@ -352,6 +376,7 @@ startPauseBtn.addEventListener('click', () => isRunning ? pauseTimer() : startTi
 document.getElementById('reset-btn').addEventListener('click', resetTimer);
 document.getElementById('skip-btn').addEventListener('click', skipSession);
 
+saveBtn.addEventListener('click', saveAndStop);
 buildTicks();
 updateDisplay();
 </script>
