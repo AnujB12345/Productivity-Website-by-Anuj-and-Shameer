@@ -15,6 +15,7 @@ from users.models import User
 import requests
 from django.http import JsonResponse
 from django.core.cache import cache
+from notifications.models import NotificationSettings
 def dashboard(request):
 
     if not request.session.get("username"):
@@ -211,3 +212,45 @@ def quote(request):
     cache.set("daily_quote", quote_data, 86400)
 
     return JsonResponse(quote_data)
+
+
+def settings_page(request):
+    if not request.session.get("username"):
+        return redirect("users:login")
+
+    current_user = User.objects.get(username=request.session["username"])
+
+    settings_obj, _ = NotificationSettings.objects.get_or_create(
+        user=current_user
+    )
+
+    if request.method == "POST":
+
+        frequency = request.POST.get("frequency_hours")
+
+        valid_frequencies = dict(NotificationSettings.FREQUENCY_CHOICES)
+
+        if frequency and frequency.isdigit() and int(frequency) in valid_frequencies:
+            settings_obj.frequency_hours = int(frequency)
+
+        settings_obj.notify_priority_tasks = (
+            "notify_priority_tasks" in request.POST
+        )
+
+        settings_obj.notify_upcoming_events = (
+            "notify_upcoming_events" in request.POST
+        )
+
+        settings_obj.notify_revision_reminder = (
+            "notify_revision_reminder" in request.POST
+        )
+
+        settings_obj.save()
+
+        return redirect("dashboard:settings")
+
+    return render(request, "settings_page.html", {
+        "username": current_user.username,
+        "email": current_user.email,
+        "notification_settings": settings_obj,
+    })

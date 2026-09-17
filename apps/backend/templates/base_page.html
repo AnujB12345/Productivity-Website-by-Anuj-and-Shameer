@@ -55,19 +55,34 @@
           <i class="fa-regular fa-circle-user"></i>
         </button>
         <div class="account-sidebar" id="account-sidebar">
-          <a class="sidebar-link" href="{% url 'dashboard:dashboard' %}">
-            <i class="fa-solid fa-moon sidebar-icon"></i>
-            Light/ Dark </a>
-          <a class="sidebar-link" href="{% url 'dashboard:dashboard' %}">
-            <i class="fa-solid fa-gear sidebar-icon"></i>   
-            Settings         
+        <div class="sidebar-link">
+            <div class="together">
+                <i class="fa-solid fa-moon sidebar-icon"></i>
+                Light Mode
+            </div>
+
+            <input type="checkbox" id="theme-toggle">
+        </div>
+          <a class="sidebar-link" href="{% url 'dashboard:settings' %}">
+            <div class="together">
+              <i class="fa-solid fa-gear sidebar-icon"></i>   
+              Settings
+            </div>
+            <i class="fa-solid fa-angle-right"></i>         
           </a>
-          <a class="sidebar-link" href="{% url 'notifications:settings_page' %}">
-            <i class="fa-solid fa-bell sidebar-icon"></i>
-            Notifications</a>
+          <a class="sidebar-link" href="{% url 'dashboard:settings' %}">
+            <div class="together">
+              <i class="fa-solid fa-bell sidebar-icon"></i>
+              Notifications
+            </div>
+            <i class="fa-solid fa-angle-right"></i>
+          </a>
           <a class="sidebar-link" href="{% url 'users:logout' %}" id="logout-button">
-            <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon" ></i>
-            Logout</a>
+            <div class="together">
+              <i class="fa-solid fa-arrow-right-from-bracket sidebar-icon" ></i>
+              Logout
+            </div>
+          </a>
         </div>
       </div>
 
@@ -97,6 +112,30 @@
       document.addEventListener("DOMContentLoaded", function () {
         const accountButton = document.getElementById("account-button");
         const accountSidebar = document.getElementById("account-sidebar");
+        const themeToggle = document.getElementById("theme-toggle");
+
+        if (themeToggle) {
+          //Gets the value of the theme from localStorage
+          const savedTheme = localStorage.getItem("theme");
+
+          //Adds the light-mode CSS property if the saved theme is light
+          if (savedTheme === "light") {
+            document.body.classList.add("light-mode");
+            themeToggle.checked = true;
+          }
+
+          themeToggle.addEventListener("change", function () {
+            if (themeToggle.checked) {
+              document.body.classList.add("light-mode");
+              localStorage.setItem("theme", "light");
+            }
+            else {
+              document.body.classList.remove("light-mode");
+              localStorage.removeItem("theme");             
+            }
+          });
+        }
+
 
         accountButton.addEventListener("click", function (e) {
           e.stopPropagation();
@@ -113,6 +152,8 @@
           }
         });
       });
+
+
     </script>
 
     {% block scripts %}

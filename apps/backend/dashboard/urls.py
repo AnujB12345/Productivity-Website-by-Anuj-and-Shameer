@@ -7,5 +7,6 @@ app_name = "dashboard"
 
 urlpatterns = [
     path("", views.dashboard, name="dashboard"),
+    path("settings/", views.settings_page, name="settings"),
     path("api/quote/", views.quote, name="quote"),
 ]
