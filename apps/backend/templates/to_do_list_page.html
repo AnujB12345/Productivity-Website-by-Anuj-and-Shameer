@@ -10,6 +10,10 @@
 
 {% block content %}
 
+<!-- Everything below is wrapped in .todo-page-container so it never
+     touches the edges of the viewport — this wrapper was defined in the
+     CSS but unused before, which is why content ran edge-to-edge. -->
+<div class="todo-page-container">
 
 <h2 class="title">Your to-do List</h2>
 
@@ -27,48 +31,53 @@
 </form>
 
 <!-- ACTIVE TASKS -->
-{% for todo in active_todos %}
-
+{% if active_todos %}
 <div class="tasks-container">
-
     <div class="todo-container">
+
+    {% for todo in active_todos %}
         <!-- TASK LIST -->
         <div class="task">
 
             <div class="task-right-side">
 
-                <form method="POST" style="margin: 0;">
-                    {% csrf_token %}
-                    <input type="hidden" name="task_id" value="{{ todo.id }}">
-                    <input type="hidden" name="check_task" value="off">
-                    <input class="checkbox" type="checkbox" name="check_task" value="on"
-                        onchange="this.form.submit()"
-                        {% if todo.checkbox %} checked {% endif %}>
-                </form>
+    <form method="POST" style="margin: 0;">
+        {% csrf_token %}
+        <input type="hidden" name="task_id" value="{{ todo.id }}">
+        <input type="hidden" name="check_task" value="off">
+        <input class="checkbox" type="checkbox" name="check_task" value="on"
+            onchange="this.form.submit()"
+            {% if todo.checkbox %} checked {% endif %}>
+    </form>
 
-                <!-- NORMAL TEXT -->
-                <span id="text-{{ todo.id }}" class="task-text {% if todo.checkbox %}done{% endif %}">
-                    {{ todo.title }}
-                </span>
+    <!-- NORMAL TEXT -->
+    <span id="text-{{ todo.id }}" class="task-text {% if todo.checkbox %}done{% endif %}">
+        {{ todo.title }}
+    </span>
 
-            </div>
+    <!-- EDIT MODE (now a sibling of the checkbox/text, not the whole .task) -->
+    <form method="POST"
+        id="edit-{{ todo.id }}"
+        class="edit-form"
+        style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="task_id" value="{{ todo.id }}">
+        <input type="text" name="new_title" value="{{ todo.title }}" class="edit-input" required>
+        <button type="submit" name="edit_task" class="btn save-btn" title="Save">
+            <span class="btn-text">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M5 12.5L10 17L19 8" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
+                </svg>
+            </span>
+        </button>
+        <button type="button" class="btn cancel-btn" title="Cancel" onclick="cancelEdit({{ todo.id }})">
+            <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M6 6L18 18M6 18L18 6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </button>
+    </form>
 
-            <!-- EDIT MODE -->
-            <form method="POST"
-                id="edit-{{ todo.id }}"
-                class="edit-form"
-                style="display:none;">
-                {% csrf_token %}
-                <input type="hidden" name="task_id" value="{{ todo.id }}">
-                <input type="text" name="new_title" value="{{ todo.title }}" class="edit-input" required>
-                <button type="submit" name="edit_task" class="btn save-btn">
-                    <span class="btn-text">
-                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                            <path d="M5 12.5L10 17L19 8" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="square" stroke-linejoin="miter"/>
-                        </svg>
-                    </span>
-                </button>
-            </form>
+</div>
 
             <!-- BUTTONS -->
             <div class="btn-group">
@@ -114,13 +123,17 @@
             </div>
 
         </div>
+    {% endfor %}
 
     </div>
 </div>
+{% endif %}
 
-{% empty %}
-    <h3 class="no-tasks">No tasks yet</h3>
-{% endfor %}
+{% if checked_count == task_count and task_count != 0 %}
+    <h3 class="no-tasks"><i class="fa-solid fa-circle-check no-tasks-icon"></i> Well done! All tasks completed.</h3>
+{% elif not active_todos and not done_todos %}
+    <h3 class="no-tasks">No tasks yet. Add a new task above.</h3>
+{% endif %}
 
 <!-- COMPLETED TASKS — dropdown -->
 {% if done_todos %}
@@ -179,11 +192,19 @@
     {% endif %}
 </div>
 
+</div><!-- /.todo-page-container -->
 
 <script>
 function enableEdit(id) {
     document.getElementById("text-" + id).style.display = "none";
     document.getElementById("edit-" + id).style.display = "flex";
+    document.getElementById("btn-group-" + id).style.display = "none";
+}
+
+function cancelEdit(id) {
+    document.getElementById("text-" + id).style.display = "block";
+    document.getElementById("edit-" + id).style.display = "none";
+    document.getElementById("btn-group-" + id).style.display = "flex";
 }
 
 function toggleCompleted() {

@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
+from django.db.models import Case, When, Value, IntegerField
 from .models import Todo
 from users.models import User
 
@@ -10,7 +11,15 @@ def todo_list(request):
         return redirect("users:login")
 
     current_user = User.objects.get(username=request.session["username"])
-    todos = Todo.objects.filter(user=current_user).order_by('checked', '-priority')
+
+    #Used to rank the priority of the tasks for ordering
+    priority_rank = Case(
+        When(priority='High', then=Value(0)),
+        When(priority='Medium', then=Value(1)),
+        When(priority='Low', then=Value(2)),
+        output_field=IntegerField(),
+    )
+    todos = Todo.objects.filter(user=current_user).order_by('checked', priority_rank)
 
     if request.method == "POST":
 

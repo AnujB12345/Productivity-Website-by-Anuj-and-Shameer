@@ -41,24 +41,30 @@ def notes(request):
         if "edit_note" in request.POST:
             note_id = request.POST.get("note_id")
             new_title = request.POST.get("new_title")
-            new_description = request.POST.get("new_description")
-            new_subject = request.POST.get("new_subject")
+            new_description = request.POST.get("new_description") or ""
+            new_subject = request.POST.get("new_subject") or ""
             new_subject_colour = request.POST.get("new_subject_colour")
-            note = get_object_or_404(Note, id=note_id, user = current_user)
-            #Modifies the values of the existing note
-            note.title = new_title
+
+            note = get_object_or_404(Note, id=note_id, user=current_user)
+
+            old_subject = note.subject  # capture before overwriting
+
+            note.title = new_title or note.title
             note.description = new_description
             note.subject = new_subject
             note.subject_colour = new_subject_colour or note.subject_colour
-            for n0te in notes:
-                if n0te.subject == new_subject and n0te.id != note_id:
-                    n0te.subject_colour = new_subject_colour or note.subject_colour
-                    n0te.save()
-            if new_description is None:
-                note.description = ""
-            if not new_title:
-                new_title = note.title
             note.save()
+
+            # Keep every other note that shared the old subject name in sync: same
+            # rename, same colour - so it still reads as one subject group.
+            if old_subject:
+                Note.objects.filter(
+                    user=current_user, subject=old_subject
+                ).exclude(id=note.id).update(
+                    subject=new_subject,
+                    subject_colour=note.subject_colour,
+                )
+
             return redirect("notes:notes")
 
         #Handles deletion of notes
