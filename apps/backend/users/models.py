@@ -4,6 +4,10 @@ class User(models.Model):
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)  # hashed, not plaintext
+    firstName = models.CharField(max_length=100, default="Anonymous")
+    lastName = models.CharField(max_length=100, default="Anonymous")
+    preferredName = models.CharField(max_length=100, default= None, blank=True, null=True)
+
 
     def __str__(self):
         return self.username

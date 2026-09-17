@@ -24,33 +24,86 @@
       <span class="setting-value">{{ username }}</span>
     </div>
 
+  <div class="setting-row">
+    <span class="setting-label">First Name</span>
+
+      <!-- display mode -->
+      <div id="text-first_name" class="setting-value-display">
+        <span class="setting-value">{{ first_name }}</span>
+        <button type="button" class="btn-edit" onclick="enableEdit('first_name')" aria-label="Edit first name">
+          <i class="fa-regular fa-pen-to-square" id="edit-icon"></i>
+        </button>
+      </div>
+
+      <!-- edit mode -->
+      <form method="POST" id="edit-first_name" class="setting-value-edit" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="edit_field" value="first_name">
+        <input type="text" name="field_value" class="edit-field-input" id="input-first_name" value="{{ first_name }}" maxlength="150">
+        <button type="submit" class="btn save-button" aria-label="Save">
+          <i class="fa-solid fa-check"></i>
+        </button>
+        <button type="button" class="btn cancel-button" onclick="cancelEdit('first_name')" aria-label="Cancel">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </form>
+  </div>
+
+  <div class="setting-row">
+    <span class="setting-label">Last Name</span>
+
+      <!-- display mode -->
+      <div id="text-last_name" class="setting-value-display">
+        <span class="setting-value">{{ last_name }}</span>
+        <button type="button" class="btn-edit" onclick="enableEdit('last_name')" aria-label="Edit last name">
+          <i class="fa-regular fa-pen-to-square" id="edit-icon"></i>
+        </button>
+      </div>
+
+      <!-- edit mode -->
+      <form method="POST" id="edit-last_name" class="setting-value-edit" style="display:none;">
+        {% csrf_token %}
+        <input type="hidden" name="edit_field" value="last_name">
+        <input type="text" name="field_value" class="edit-field-input" id="input-last_name" value="{{ last_name }}" maxlength="150">
+        <button type="submit" class="btn save-button" aria-label="Save">
+          <i class="fa-solid fa-check"></i>
+        </button>
+        <button type="button" class="btn cancel-button" onclick="cancelEdit('last_name')" aria-label="Cancel">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </form>
+  </div>
+
+  <div class="setting-row">
+      <span class="setting-label">Preferred Name</span>
+
+        <!-- display mode -->
+        <div id="text-preferred_name" class="setting-value-display">
+          <span class="setting-value">{{ preferred_name }}</span>
+          <button type="button" class="btn-edit" onclick="enableEdit('preferred_name')" aria-label="Edit preferred name">
+            <i class="fa-regular fa-pen-to-square" id="edit-icon"></i>
+          </button>
+        </div>
+
+        <!-- edit mode -->
+        <form method="POST" id="edit-preferred_name" class="setting-value-edit" style="display:none;">
+          {% csrf_token %}
+          <input type="hidden" name="edit_field" value="preferred_name">
+          <input type="text" name="field_value" class="edit-field-input" id="input-preferred_name" value="{{ preferred_name }}" maxlength="150">
+          <button type="submit" class="btn save-button" aria-label="Save">
+            <i class="fa-solid fa-check"></i>
+          </button>
+          <button type="button" class="btn cancel-button" onclick="cancelEdit('preferred_name')" aria-label="Cancel">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </form>
+    </div>
+
     <div class="setting-row">
       <span class="setting-label">Email</span>
       <span class="setting-value">{{ email }}</span>
     </div>
 
-    <div class="setting-row">
-      <span class="setting-label">Change password</span>
-      <a href="#" class="setting-link">Update &rarr;</a>
-    </div>
-  </div>
-
-  <!-- Preferences Section -->
-  <div class="settings-card">
-    <h2 class="settings-section-title">
-      <i class="fa-solid fa-paint-brush"></i> Preferences
-    </h2>
-
-    <div class="setting-row">
-      <span class="setting-label">Theme</span>
-      <div class="theme-toggle-wrapper">
-        <span class="theme-label">Light mode</span>
-        <label class="toggle-switch">
-          <input type="checkbox" id="theme-toggle-settings">
-          <span class="toggle-slider"></span>
-        </label>
-      </div>
-    </div>
   </div>
 
   <!-- Notifications Section -->
@@ -115,9 +168,12 @@
     </div>
     <div>
       <a href="#" class="danger-link">
-        <div class="delete-button">
-        Delete account
-        </div>
+        <form method="POST" onsubmit="return confirm('Are you sure you want to delete your account?')">
+          {% csrf_token %}
+          <button type="submit" class="delete-button" name="delete_account">
+          Delete account
+          </button>
+        </form>
       </a>    
     </div>
   </div>
@@ -127,27 +183,18 @@
 
 {% block scripts %}
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    var savedTheme = localStorage.getItem("theme");
-    var themeToggle = document.getElementById("theme-toggle-settings");
+  function enableEdit(id) {
+      document.getElementById("text-" + id).style.display = "none";
+      document.getElementById("edit-" + id).style.display = "flex";
+      const input = document.getElementById("input-" + id);
+      input.focus();
+      input.select();
+  }
 
-    if (themeToggle) {
-      if (savedTheme === "light") {
-        document.body.classList.add("light-mode");
-        themeToggle.checked = true;
-      }
-
-      themeToggle.addEventListener("change", function () {
-        if (themeToggle.checked) {
-          document.body.classList.add("light-mode");
-          localStorage.setItem("theme", "light");
-        } else {
-          document.body.classList.remove("light-mode");
-          localStorage.removeItem("theme");
-        }
-      });
-    }
-  });
+  function cancelEdit(id) {
+      document.getElementById("text-" + id).style.display = "flex";
+      document.getElementById("edit-" + id).style.display = "none";
+  }
 
   const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
 
