@@ -38,34 +38,56 @@ def notes(request):
             return redirect("notes:notes")
 
         #Handles editing the notes
-        if "edit_note" in request.POST:
-            note_id = request.POST.get("note_id")
-            new_title = request.POST.get("new_title")
-            new_description = request.POST.get("new_description") or ""
-            new_subject = request.POST.get("new_subject") or ""
-            new_subject_colour = request.POST.get("new_subject_colour")
+        #Handles editing the notes
+    if "edit_note" in request.POST:
+        note_id = request.POST.get("note_id")
+        new_title = request.POST.get("new_title")
+        new_description = request.POST.get("new_description") or ""
+        new_subject = request.POST.get("new_subject") or ""
+        new_subject_colour = request.POST.get("new_subject_colour")
 
-            note = get_object_or_404(Note, id=note_id, user=current_user)
+        note = get_object_or_404(Note, id=note_id, user=current_user)
 
-            old_subject = note.subject  # capture before overwriting
+        old_subject = note.subject
+        subject_changed = new_subject != old_subject
 
-            note.title = new_title or note.title
-            note.description = new_description
+        note.title = new_title or note.title
+        note.description = new_description
+
+        if subject_changed:
             note.subject = new_subject
+
+            if new_subject:
+                existing_note = Note.objects.filter(
+                    user=current_user, subject=new_subject
+                ).exclude(id=note.id).first()
+
+                if existing_note:
+                    note.subject_colour = existing_note.subject_colour
+                else:
+                    # Starting a brand new subject group - use whatever colour
+                    # was submitted (or fall back to current colour/black).
+                    note.subject_colour = new_subject_colour or note.subject_colour
+            else:
+                # Cleared the subject entirely - just keep/accept the submitted colour.
+                note.subject_colour = new_subject_colour or note.subject_colour
+
+            note.save()
+
+        else:
+            # Subject unchanged - a colour change here means "recolour this
+            # whole subject group", so apply it to every note sharing this subject.
             note.subject_colour = new_subject_colour or note.subject_colour
             note.save()
 
-            # Keep every other note that shared the old subject name in sync: same
-            # rename, same colour - so it still reads as one subject group.
             if old_subject:
                 Note.objects.filter(
                     user=current_user, subject=old_subject
                 ).exclude(id=note.id).update(
-                    subject=new_subject,
                     subject_colour=note.subject_colour,
                 )
 
-            return redirect("notes:notes")
+        return redirect("notes:notes")
 
         #Handles deletion of notes
         if "delete_note" in request.POST:

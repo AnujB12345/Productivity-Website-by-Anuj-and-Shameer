@@ -109,6 +109,8 @@ body {
   width: 100%;
 }
 
+
+
 .note-input::placeholder,
 .note-description-input::placeholder,
 .note-subject-input::placeholder {
@@ -206,7 +208,11 @@ body {
 }
 
 .filter-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-.filter-item .fname { flex: 1; }
+.filter-item .fname { flex: 1; min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 .filter-item .fcount { font-size: 12px; color: var(--d-color); }
 
 /* ---------- Notes grid: fixed-size cards ---------- */
