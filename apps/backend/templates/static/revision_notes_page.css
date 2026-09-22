@@ -26,10 +26,10 @@ body {
 
 /* ---------- Top bar ---------- */
 .topbar {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 14px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center; 
   padding-top: 40px;
   padding-bottom: 24px;
 }
@@ -380,10 +380,12 @@ body {
 
 .no-notes {
   text-align: center;
+  align-self: center;
   font-family: Arial;
+  margin-top: 60px;
   font-weight: bold;
-  font-size: 20px;
-  color: white;
+  font-size: 50px;
+  color: var(--d-color);
   padding-top: 20px;
   grid-column: 1 / -1;
 }

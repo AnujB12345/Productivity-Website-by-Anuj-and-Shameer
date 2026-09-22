@@ -13,11 +13,42 @@
   <h1 class="title">Settings</h1>
   <p class="subtitle">Manage your account, preferences, and notifications</p>
 
+  {% if messages %}
+    <div class="settings-messages">
+      {% for message in messages %}
+        <div class="settings-message settings-message-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
   <!-- Account Section -->
   <div class="settings-card">
     <h2 class="settings-section-title">
       <i class="fa-solid fa-user"></i> Account
     </h2>
+
+    <!-- Profile picture -->
+    <form method="POST" enctype="multipart/form-data" class="profile-picture-form">
+      {% csrf_token %}
+
+      <div class="avatar-preview-row">
+        {% if current_user.profile_picture %}
+          <img src="{{ current_user.profile_picture.url }}" class="avatar-preview" id="avatar-preview">
+        {% else %}
+          <div class="avatar-preview-placeholder" id="avatar-preview-placeholder">
+            <i class="fa-regular fa-circle-user"></i>
+          </div>
+        {% endif %}
+
+        <div class="avatar-upload-controls">
+          <label for="profile-picture-input" class="avatar-upload-label">Change photo</label>
+          <input type="file" id="profile-picture-input" name="profile_picture" accept="image/png, image/jpeg, image/webp" class="avatar-upload-input">
+          <span class="avatar-hint">JPG, PNG, or WEBP. Max 5MB.</span>
+        </div>
+      </div>
+
+      <button type="submit" name="update_profile_picture" class="settings-save-btn avatar-save-btn">Save photo</button>
+    </form>
 
     <div class="setting-row">
       <span class="setting-label">Username</span>
@@ -96,7 +127,7 @@
               </label>
           </div>
 
-          <button type="submit" class="notif-save-btn">Save preferences</button>
+          <button type="submit" name="update_notifications" class="notif-save-btn">Save preferences</button>
       </form>
 
     </div>
@@ -148,6 +179,37 @@
       });
     }
   });
+
+  // --- Profile picture: client-side size check + instant preview ---
+  const profilePictureInput = document.getElementById("profile-picture-input");
+
+  if (profilePictureInput) {
+    profilePictureInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) return;
+
+      const maxBytes = 5 * 1024 * 1024;
+      if (file.size > maxBytes) {
+        alert("That image is too large. Please choose one under 5MB.");
+        this.value = "";
+        return;
+      }
+
+      const previewUrl = URL.createObjectURL(file);
+      let img = document.getElementById("avatar-preview");
+
+      if (!img) {
+        // No picture set yet — swap the placeholder icon out for an <img>.
+        const placeholder = document.getElementById("avatar-preview-placeholder");
+        img = document.createElement("img");
+        img.id = "avatar-preview";
+        img.className = "avatar-preview";
+        placeholder.replaceWith(img);
+      }
+
+      img.src = previewUrl;
+    });
+  }
 
   const VAPID_PUBLIC_KEY = "{{ vapid_public_key }}";
 

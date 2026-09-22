@@ -39,55 +39,55 @@ def notes(request):
 
         #Handles editing the notes
         #Handles editing the notes
-    if "edit_note" in request.POST:
-        note_id = request.POST.get("note_id")
-        new_title = request.POST.get("new_title")
-        new_description = request.POST.get("new_description") or ""
-        new_subject = request.POST.get("new_subject") or ""
-        new_subject_colour = request.POST.get("new_subject_colour")
+        if "edit_note" in request.POST:
+            note_id = request.POST.get("note_id")
+            new_title = request.POST.get("new_title")
+            new_description = request.POST.get("new_description") or ""
+            new_subject = request.POST.get("new_subject") or ""
+            new_subject_colour = request.POST.get("new_subject_colour")
 
-        note = get_object_or_404(Note, id=note_id, user=current_user)
+            note = get_object_or_404(Note, id=note_id, user=current_user)
 
-        old_subject = note.subject
-        subject_changed = new_subject != old_subject
+            old_subject = note.subject
+            subject_changed = new_subject != old_subject
 
-        note.title = new_title or note.title
-        note.description = new_description
+            note.title = new_title or note.title
+            note.description = new_description
 
-        if subject_changed:
-            note.subject = new_subject
+            if subject_changed:
+                note.subject = new_subject
 
-            if new_subject:
-                existing_note = Note.objects.filter(
-                    user=current_user, subject=new_subject
-                ).exclude(id=note.id).first()
+                if new_subject:
+                    existing_note = Note.objects.filter(
+                        user=current_user, subject=new_subject
+                    ).exclude(id=note.id).first()
 
-                if existing_note:
-                    note.subject_colour = existing_note.subject_colour
+                    if existing_note:
+                        note.subject_colour = existing_note.subject_colour
+                    else:
+                        # Starting a brand new subject group - use whatever colour
+                        # was submitted (or fall back to current colour/black).
+                        note.subject_colour = new_subject_colour or note.subject_colour
                 else:
-                    # Starting a brand new subject group - use whatever colour
-                    # was submitted (or fall back to current colour/black).
+                    # Cleared the subject entirely - just keep/accept the submitted colour.
                     note.subject_colour = new_subject_colour or note.subject_colour
+
+                note.save()
+
             else:
-                # Cleared the subject entirely - just keep/accept the submitted colour.
+                # Subject unchanged - a colour change here means "recolour this
+                # whole subject group", so apply it to every note sharing this subject.
                 note.subject_colour = new_subject_colour or note.subject_colour
+                note.save()
 
-            note.save()
+                if old_subject:
+                    Note.objects.filter(
+                        user=current_user, subject=old_subject
+                    ).exclude(id=note.id).update(
+                        subject_colour=note.subject_colour,
+                    )
 
-        else:
-            # Subject unchanged - a colour change here means "recolour this
-            # whole subject group", so apply it to every note sharing this subject.
-            note.subject_colour = new_subject_colour or note.subject_colour
-            note.save()
-
-            if old_subject:
-                Note.objects.filter(
-                    user=current_user, subject=old_subject
-                ).exclude(id=note.id).update(
-                    subject_colour=note.subject_colour,
-                )
-
-        return redirect("notes:notes")
+            return redirect("notes:notes")
 
         #Handles deletion of notes
         if "delete_note" in request.POST:

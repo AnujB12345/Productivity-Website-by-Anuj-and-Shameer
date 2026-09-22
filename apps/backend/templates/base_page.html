@@ -52,7 +52,11 @@
       <!--Account button-->
       <div class="account-button-container">
         <button class="account-button" id="account-button">
-          <i class="fa-regular fa-circle-user"></i>
+          {% if current_user.profile_picture %}
+            <img src="{{ current_user.profile_picture.url }}" alt="{{ current_user.username }}" class="account-avatar">
+          {% else %}
+            <i class="fa-regular fa-circle-user"></i>
+          {% endif %}
         </button>
         <div class="account-sidebar" id="account-sidebar">
         <div class="sidebar-link">
