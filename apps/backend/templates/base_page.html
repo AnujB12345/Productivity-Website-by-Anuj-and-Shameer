@@ -55,14 +55,6 @@
           <i class="fa-regular fa-circle-user"></i>
         </button>
         <div class="account-sidebar" id="account-sidebar">
-        <div class="sidebar-link">
-            <div class="together">
-                <i class="fa-solid fa-moon sidebar-icon"></i>
-                Light Mode
-            </div>
-
-            <input type="checkbox" id="theme-toggle">
-        </div>
           <a class="sidebar-link" href="{% url 'dashboard:settings' %}">
             <div class="together">
               <i class="fa-solid fa-gear sidebar-icon"></i>   
@@ -112,30 +104,6 @@
       document.addEventListener("DOMContentLoaded", function () {
         const accountButton = document.getElementById("account-button");
         const accountSidebar = document.getElementById("account-sidebar");
-        const themeToggle = document.getElementById("theme-toggle");
-
-        if (themeToggle) {
-          //Gets the value of the theme from localStorage
-          const savedTheme = localStorage.getItem("theme");
-
-          //Adds the light-mode CSS property if the saved theme is light
-          if (savedTheme === "light") {
-            document.body.classList.add("light-mode");
-            themeToggle.checked = true;
-          }
-
-          themeToggle.addEventListener("change", function () {
-            if (themeToggle.checked) {
-              document.body.classList.add("light-mode");
-              localStorage.setItem("theme", "light");
-            }
-            else {
-              document.body.classList.remove("light-mode");
-              localStorage.removeItem("theme");             
-            }
-          });
-        }
-
 
         accountButton.addEventListener("click", function (e) {
           e.stopPropagation();
