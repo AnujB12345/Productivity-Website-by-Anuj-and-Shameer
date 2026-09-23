@@ -126,6 +126,7 @@
   background-color: rgb(232, 172, 172);
   justify-content: center;
   outline: 1px solid red;
+  border: none;
   color: red;
 }
 
@@ -417,4 +418,63 @@
 .settings-message-error {
   background-color: rgba(230, 120, 115, 0.12);
   color: rgb(230, 120, 115);
+.btn-edit {
+    color: var(--d-color);
+    background-color: transparent;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-edit:hover {
+    color: var(--c-color);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-edit,
+.btn-edit:focus,
+.btn-edit:focus-visible,
+.btn-edit:active {
+    outline: none;
+    box-shadow: none;
+}
+
+#edit-icon {
+    width: 16px;
+    height: 16px;
+    display: block;
+    color: white;
+}
+
+.save-button, .cancel-button {
+    background-color: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+    outline: none;
+    cursor: pointer;
+}
+
+.edit-field-input {
+  background-color: none;
+  color: none;
+}
+
+.setting-value-display {
+  display: flex;
+  align-content: center;
+  align-items: center;
 }

@@ -22,11 +22,11 @@
         <form method="POST" class="compose">
             {% csrf_token %}
             <p class="compose-label">New note</p>
-            <input class="note-input" type="text" name="title" placeholder="Add your new note title" required>
-            <textarea class="note-description-input" name="description" placeholder="Add your new note description"></textarea>
+            <input class="note-input" type="text" name="title" placeholder="Add your new note title" required maxlength="200">
+            <textarea class="note-description-input" name="description" placeholder="Add your new note description" maxlength="5000"></textarea>
 
             <div class="bottom-row">
-                <input class="note-subject-input" id="note-subject-input" type="text" name="subject" placeholder="Add your new note subject" list="all-subjects">
+                <input class="note-subject-input" id="note-subject-input" type="text" name="subject" placeholder="Add your new note subject" list="all-subjects" maxlength="100">
                 <datalist id="all-subjects">
                     {% for subject in subjects %}
                         {% if subject %}

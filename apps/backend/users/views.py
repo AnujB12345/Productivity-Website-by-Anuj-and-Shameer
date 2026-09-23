@@ -3,7 +3,7 @@ import time
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
-from .forms import LoginForm, RegisterForm
+from .forms import LoginForm, RegisterForm, SetupAccountForm
 from users.models import User
 
 def register(request):
@@ -32,7 +32,8 @@ def register(request):
             )
 
             request.session["username"] = username #Logs the newly registered user in
-            return redirect("dashboard:dashboard") #redirects to the dashboard after account is successfully created
+            # return redirect("dashboard:dashboard") #redirects to the dashboard after account is successfully created
+            return redirect("users:set_up") #redirects to the dashboard after account is successfully created
         
         else:
             return render(request, 'register_page.html', {'form': form})
@@ -71,3 +72,37 @@ def sign_in(request):
 def sign_out(request):
     request.session.flush()
     return redirect("/") #redirects to the homepage after you sign out
+
+def set_up(request):
+    username = request.session.get("username")
+    if request.method == 'GET': #If the user is asking to visit the page
+        form = SetupAccountForm() #Creates an empty form
+        return render(request, 'account_setup.html', {'form': form})    
+   
+    elif request.method == 'POST':
+        form = SetupAccountForm(request.POST) 
+        if form.is_valid():
+            firstName = form.cleaned_data['firstName']
+            lastName = form.cleaned_data['lastName']
+            preferredName = form.cleaned_data['preferredName']
+
+            user = User.objects.get(username = username)
+            user.firstName = firstName
+            user.lastName = lastName
+            user.preferredName = preferredName
+            user.save()
+            return redirect("dashboard:dashboard") #redirects to the dashboard after account is successfully created 
+
+
+        else:
+            return render(request, 'account_setup.html', {'form': form})
+
+    return render(request, "dashboard_page.html", {
+        "first_name": firstName,
+        "last_name": lastName,
+        "preferred_name": preferredName,
+        })
+        
+
+
+

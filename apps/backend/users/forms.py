@@ -22,3 +22,7 @@ class RegisterForm(UserCreationForm):
             'email': forms.EmailInput(attrs={'placeholder': 'Enter your email'}),
         }
    
+class SetupAccountForm(forms.Form):
+    firstName = forms.CharField(label = "First Name", required = True, max_length=65, widget=forms.TextInput(attrs={'placeholder': 'Enter your first name'}))
+    lastName = forms.CharField(label = "Last Name", required = True, max_length=65, widget=forms.TextInput(attrs={'placeholder': 'Enter your last name'}))
+    preferredName = forms.CharField(label = "Preferred Name (Optional)", required = False, max_length=65, widget=forms.TextInput(attrs={'placeholder': 'What should we call you?'}))

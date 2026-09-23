@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Count, Sum
@@ -164,6 +165,9 @@ def dashboard(request):
 
     # --- Render the dashboard template with all the calculated stats and data ---
     return render(request, "dashboard_page.html", {
+        "first_name": current_user.firstName,
+        "last_name": current_user.lastName,
+        "preferred_name": current_user.preferredName,
         "tasks_this_week": tasks_this_week,
         "tasks_last_week": tasks_last_week,
         "tasks_change": tasks_change,
@@ -235,6 +239,34 @@ def settings_page(request):
         # --- Profile picture upload ---
         if "update_profile_picture" in request.POST:
             picture = request.FILES.get("profile_picture")
+        # --- Inline profile field edit (First / Last / Preferred name) ---
+        edit_field = request.POST.get("edit_field")
+
+        if edit_field:
+            editable_fields = {
+                "first_name": "firstName",
+                "last_name": "lastName",
+                "preferred_name": "preferredName",
+            }
+
+            if edit_field in editable_fields:
+                new_value = request.POST.get("field_value", "").strip()
+
+                if new_value and len(new_value) <= 150:
+                    setattr(current_user, editable_fields[edit_field], new_value)
+                    current_user.save(update_fields=[editable_fields[edit_field]])
+
+            return redirect("dashboard:settings")
+
+        if "delete_account" in request.POST:
+            username = request.session.get("username")
+            user = get_object_or_404(User, username=username)
+            user.delete()
+            request.session.flush()
+            return redirect("/") 
+            
+
+        frequency = request.POST.get("frequency_hours")
 
             if picture:
                 if picture.size > MAX_PROFILE_PICTURE_SIZE:
@@ -277,6 +309,9 @@ def settings_page(request):
             return redirect("dashboard:settings")
 
     return render(request, "settings_page.html", {
+        "first_name": current_user.firstName,
+        "last_name": current_user.lastName,
+        "preferred_name": current_user.preferredName,
         "username": current_user.username,
         "email": current_user.email,
         "current_user": current_user,

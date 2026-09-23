@@ -1,9 +1,12 @@
 {% extends "base_page.html" %} {% block title %} Home Page {% endblock %}
 <!-- This page extends base_page.html-->
 
-{% load static %} {% block body_class %}calendar{% endblock %} {% block extra_css %}
-<link rel="stylesheet" href="{% static 'calendar_page.css' %}" />
+{% load static %} {% block body_class %}calendar{% endblock %} 
 
+<link rel="stylesheet" href="{% static 'base_page.css' %}" />
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'calendar_page.css' %}" />
 {% endblock %} 
 
 {% block content %}
