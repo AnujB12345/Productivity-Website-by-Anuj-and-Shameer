@@ -206,3 +206,9 @@ body.light-mode {
 #logout-button {
   color:  rgb(181, 59, 59);
 }
+.account-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}

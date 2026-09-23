@@ -103,6 +103,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 "notifications.context_processors.vapid_public_key",
+                "users.context_processors.current_user",
             ],
         },
     },
@@ -185,3 +186,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 VAPID_PRIVATE_KEY = str(BASE_DIR / "private_key.pem")
 VAPID_PUBLIC_KEY = "BOs7hsqfkha1GOgFtTfyNrpdGvTRfsKa3In7ZElvzGUqrQgZ6QhIMiWd1U10q8k630qzjJsxEBQXirFVj5seGwo"
 VAPID_ADMIN_EMAIL = "you@example.com"                       # any contact email, required by the push spec
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

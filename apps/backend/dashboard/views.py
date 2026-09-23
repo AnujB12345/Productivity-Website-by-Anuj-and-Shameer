@@ -1,3 +1,5 @@
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from datetime import timedelta
@@ -16,6 +18,11 @@ import requests
 from django.http import JsonResponse
 from django.core.cache import cache
 from notifications.models import NotificationSettings
+
+MAX_PROFILE_PICTURE_SIZE = 5 * 1024 * 1024  # 5MB
+ALLOWED_PROFILE_PICTURE_TYPES = ["image/jpeg", "image/png", "image/webp"]
+
+
 def dashboard(request):
 
     if not request.session.get("username"):
@@ -229,6 +236,9 @@ def settings_page(request):
 
     if request.method == "POST":
 
+        # --- Profile picture upload ---
+        if "update_profile_picture" in request.POST:
+            picture = request.FILES.get("profile_picture")
         # --- Inline profile field edit (First / Last / Preferred name) ---
         edit_field = request.POST.get("edit_field")
 
@@ -258,26 +268,45 @@ def settings_page(request):
 
         frequency = request.POST.get("frequency_hours")
 
-        valid_frequencies = dict(NotificationSettings.FREQUENCY_CHOICES)
+            if picture:
+                if picture.size > MAX_PROFILE_PICTURE_SIZE:
+                    messages.error(request, "Image must be under 5MB.")
+                    return redirect("dashboard:settings")
 
-        if frequency and frequency.isdigit() and int(frequency) in valid_frequencies:
-            settings_obj.frequency_hours = int(frequency)
+                if picture.content_type not in ALLOWED_PROFILE_PICTURE_TYPES:
+                    messages.error(request, "Only JPG, PNG, or WEBP images are allowed.")
+                    return redirect("dashboard:settings")
 
-        settings_obj.notify_priority_tasks = (
-            "notify_priority_tasks" in request.POST
-        )
+                current_user.profile_picture = picture
+                current_user.save()
+                messages.success(request, "Profile picture updated.")
 
-        settings_obj.notify_upcoming_events = (
-            "notify_upcoming_events" in request.POST
-        )
+            return redirect("dashboard:settings")
 
-        settings_obj.notify_revision_reminder = (
-            "notify_revision_reminder" in request.POST
-        )
+        # --- Notification preferences ---
+        if "update_notifications" in request.POST:
+            frequency = request.POST.get("frequency_hours")
 
-        settings_obj.save()
+            valid_frequencies = dict(NotificationSettings.FREQUENCY_CHOICES)
 
-        return redirect("dashboard:settings")
+            if frequency and frequency.isdigit() and int(frequency) in valid_frequencies:
+                settings_obj.frequency_hours = int(frequency)
+
+            settings_obj.notify_priority_tasks = (
+                "notify_priority_tasks" in request.POST
+            )
+
+            settings_obj.notify_upcoming_events = (
+                "notify_upcoming_events" in request.POST
+            )
+
+            settings_obj.notify_revision_reminder = (
+                "notify_revision_reminder" in request.POST
+            )
+
+            settings_obj.save()
+
+            return redirect("dashboard:settings")
 
     return render(request, "settings_page.html", {
         "first_name": current_user.firstName,
@@ -285,5 +314,6 @@ def settings_page(request):
         "preferred_name": current_user.preferredName,
         "username": current_user.username,
         "email": current_user.email,
+        "current_user": current_user,
         "notification_settings": settings_obj,
     })

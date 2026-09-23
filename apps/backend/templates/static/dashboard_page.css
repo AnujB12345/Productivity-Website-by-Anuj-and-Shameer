@@ -362,9 +362,9 @@
     flex-shrink: 0;
 }
 
-.priority-dot-1 { background-color: rgb(130, 210, 160); }
-.priority-dot-2 { background-color: rgb(240, 180, 110); }
-.priority-dot-3 { background-color: rgb(230, 120, 115); }
+.priority-dot-Low { background-color: rgb(130, 210, 160); }
+.priority-dot-Medium { background-color: rgb(240, 180, 110); }
+.priority-dot-High { background-color: rgb(230, 120, 115); }
 
 /* Progress tracker */
 .progress-tracker-section {
