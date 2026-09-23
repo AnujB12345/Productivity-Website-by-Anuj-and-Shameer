@@ -97,11 +97,7 @@ def set_up(request):
         else:
             return render(request, 'account_setup.html', {'form': form})
 
-    return render(request, "dashboard_page.html", {
-        "first_name": firstName,
-        "last_name": lastName,
-        "preferred_name": preferredName,
-        })
+
         
 
 
