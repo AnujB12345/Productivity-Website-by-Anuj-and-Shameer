@@ -1,7 +1,8 @@
 import pytest
 import datetime
 from django.urls import reverse
-from calendar_app.models import CalendarEvent  # Adjust import to match your app name (e.g., calendar_app or calendar)
+from users.models import User
+from calendar_app.models import CalendarEvent  # Adjust import if app name differs
 
 
 # ============================================================================
@@ -10,9 +11,10 @@ from calendar_app.models import CalendarEvent  # Adjust import to match your app
 
 @pytest.mark.django_db
 def test_calendar_event_str():
+    alice = User.objects.create(username="alice", email="alice@test.com")
     event = CalendarEvent.objects.create(
         title="Team Sync",
-        username="alice",
+        user=alice,
         date="2026-09-10",
         time="10:00:00"
     )
@@ -35,6 +37,8 @@ def test_calendar_unauthenticated_redirect(client):
 @pytest.mark.django_db
 def test_calendar_get_authenticated(client):
     """Authenticated users can access the calendar and view calculated dates."""
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
@@ -53,15 +57,17 @@ def test_calendar_get_authenticated(client):
 @pytest.mark.django_db
 def test_calendar_filter_by_selected_date(client):
     """Passing a date query string filters events specifically for that day."""
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
 
     event1 = CalendarEvent.objects.create(
-        title="Event 1", username="alice", date="2026-09-10", time="09:00:00"
+        title="Event 1", user=alice, date="2026-09-10", time="09:00:00"
     )
     CalendarEvent.objects.create(
-        title="Event 2", username="alice", date="2026-09-11", time="10:00:00"
+        title="Event 2", user=alice, date="2026-09-11", time="10:00:00"
     )
 
     url = reverse("calendar:calendar")
@@ -74,6 +80,8 @@ def test_calendar_filter_by_selected_date(client):
 
 @pytest.mark.django_db
 def test_add_event(client):
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
@@ -88,13 +96,15 @@ def test_add_event(client):
     })
 
     assert response.status_code == 302
-    event = CalendarEvent.objects.get(username="alice", title="Doctor Appointment")
+    event = CalendarEvent.objects.get(user=alice, title="Doctor Appointment")
     assert str(event.date) == "2026-09-15"
     assert str(event.time) == "14:30:00"
 
 
 @pytest.mark.django_db
 def test_edit_event(client):
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
@@ -102,7 +112,7 @@ def test_edit_event(client):
     event = CalendarEvent.objects.create(
         title="Initial Title",
         description="Initial Desc",
-        username="alice",
+        user=alice,
         date="2026-09-15",
         time="10:00:00"
     )
@@ -126,13 +136,15 @@ def test_edit_event(client):
 
 @pytest.mark.django_db
 def test_delete_event(client):
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
 
     event = CalendarEvent.objects.create(
         title="Delete Me",
-        username="alice",
+        user=alice,
         date="2026-09-20",
         time="12:00:00"
     )

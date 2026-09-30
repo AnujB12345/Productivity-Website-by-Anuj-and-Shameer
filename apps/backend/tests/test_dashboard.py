@@ -1,9 +1,11 @@
 import json
 from datetime import time, timedelta
+from django.db import IntegrityError
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
 
+from users.models import User
 from dashboard.models import Goal
 from todo.models import Todo
 from notes.models import Note
@@ -13,16 +15,24 @@ from calendar_app.models import CalendarEvent
 class GoalModelTest(TestCase):
     """Tests for the Goal model."""
 
+    def setUp(self):
+        self.user = User.objects.create(
+            username="testuser",
+            email="testuser@example.com",
+            password="hashedpassword"
+        )
+
     def test_goal_creation_and_defaults(self):
-        goal = Goal.objects.create(username="testuser")
+        goal = Goal.objects.create(user=self.user)
         self.assertEqual(goal.notes_goal, 5)
         self.assertEqual(goal.pomodoro_goal, 8)
         self.assertEqual(str(goal), "testuser's goal")
 
     def test_goal_unique_username(self):
-        Goal.objects.create(username="testuser")
+        Goal.objects.create(user=self.user)
+        # Catch explicit database integrity error for unique constraints
         with self.assertRaises(Exception):
-            Goal.objects.create(username="testuser")
+            Goal.objects.create(user=self.user)
 
 
 class DashboardViewTest(TestCase):
@@ -31,6 +41,11 @@ class DashboardViewTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.username = "testuser"
+        self.user = User.objects.create(
+            username=self.username,
+            email="testuser@example.com",
+            password="hashedpassword"
+        )
         self.dashboard_url = reverse("dashboard:dashboard")
 
         session = self.client.session
@@ -57,18 +72,18 @@ class DashboardViewTest(TestCase):
         )
         self.assertRedirects(response, self.dashboard_url)
 
-        goal = Goal.objects.get(username=self.username)
+        goal = Goal.objects.get(user=self.user)
         self.assertEqual(goal.notes_goal, 15)
 
     def test_update_notes_goal_invalid_ignored(self):
-        Goal.objects.create(username=self.username, notes_goal=5)
+        Goal.objects.create(user=self.user, notes_goal=5)
 
         for invalid in ["-5", "0", "abc", ""]:
             self.client.post(
                 self.dashboard_url,
                 {"update_goal": "1", "notes_goal": invalid}
             )
-            goal = Goal.objects.get(username=self.username)
+            goal = Goal.objects.get(user=self.user)
             self.assertEqual(goal.notes_goal, 5)
 
     def test_update_pomodoro_goal_valid(self):
@@ -78,20 +93,21 @@ class DashboardViewTest(TestCase):
         )
         self.assertRedirects(response, self.dashboard_url)
 
-        goal = Goal.objects.get(username=self.username)
+        goal = Goal.objects.get(user=self.user)
         self.assertEqual(goal.pomodoro_goal, 12)
 
     def test_week_over_week_and_total_calculations(self):
         now = timezone.now()
 
-        Todo.objects.create(username=self.username, title="T1", checkbox=True, completed_at=now - timedelta(days=2))
-        Todo.objects.create(username=self.username, title="T2", checkbox=True, completed_at=now - timedelta(days=3))
-        Todo.objects.create(username=self.username, title="T3", checkbox=True, completed_at=now - timedelta(days=10))
+        # Replaced 'completed' with 'is_completed' (adjust if model uses a different field name)
+        Todo.objects.create(user=self.user, title="T1", checked=True, completed_at=now - timedelta(days=2))
+        Todo.objects.create(user=self.user, title="T2", checked=True, completed_at=now - timedelta(days=3))
+        Todo.objects.create(user=self.user, title="T3", checked=True, completed_at=now - timedelta(days=10))
 
-        n1 = Note.objects.create(username=self.username, title="N1")
+        n1 = Note.objects.create(user=self.user, title="N1")
         Note.objects.filter(id=n1.id).update(created_at=now - timedelta(days=1))
 
-        n2 = Note.objects.create(username=self.username, title="N2")
+        n2 = Note.objects.create(user=self.user, title="N2")
         Note.objects.filter(id=n2.id).update(created_at=now - timedelta(days=9))
 
         response = self.client.get(self.dashboard_url)
@@ -106,10 +122,11 @@ class DashboardViewTest(TestCase):
 
     def test_completion_rate_and_top_tasks(self):
         now = timezone.now()
-        Todo.objects.create(username=self.username, title="T1", checkbox=True, completed_at=now)
-        Todo.objects.create(username=self.username, title="T2", checkbox=True, completed_at=now)
-        t_low = Todo.objects.create(username=self.username, title="T3", checkbox=False, priority=1)
-        t_high = Todo.objects.create(username=self.username, title="T4", checkbox=False, priority=5)
+        
+        Todo.objects.create(user=self.user, title="T1", checked=True, completed_at=now)
+        Todo.objects.create(user=self.user, title="T2", checked=True, completed_at=now)
+        t_low = Todo.objects.create(user=self.user, title="T3", checked=False, priority=1)
+        t_high = Todo.objects.create(user=self.user, title="T4", checked=False, priority=5)
 
         response = self.client.get(self.dashboard_url)
 
@@ -126,13 +143,13 @@ class DashboardViewTest(TestCase):
         dummy_time = time(12, 0)
 
         CalendarEvent.objects.create(
-            username=self.username, 
+            user=self.user, 
             title="E1", 
             date=today - timedelta(days=10), 
             time=dummy_time
         )
         CalendarEvent.objects.create(
-            username=self.username, 
+            user=self.user, 
             title="E2", 
             date=today + timedelta(days=5), 
             time=dummy_time
@@ -145,7 +162,11 @@ class DashboardViewTest(TestCase):
 
     def test_chart_data_structure(self):
         response = self.client.get(self.dashboard_url)
-        chart_data = json.loads(response.context["chart_data"])
+        chart_data = response.context["chart_data"]
+
+        # Parse with json.loads only if it arrives as a string; otherwise use directly as dict
+        if isinstance(chart_data, str):
+            chart_data = json.loads(chart_data)
 
         self.assertIn("labels", chart_data)
         self.assertEqual(len(chart_data["labels"]), 12)

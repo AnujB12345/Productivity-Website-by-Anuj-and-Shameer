@@ -268,18 +268,18 @@ def settings_page(request):
 
         frequency = request.POST.get("frequency_hours")
 
-            if picture:
-                if picture.size > MAX_PROFILE_PICTURE_SIZE:
-                    messages.error(request, "Image must be under 5MB.")
-                    return redirect("dashboard:settings")
+        if picture:
+            if picture.size > MAX_PROFILE_PICTURE_SIZE:
+                messages.error(request, "Image must be under 5MB.")
+                return redirect("dashboard:settings")
 
-                if picture.content_type not in ALLOWED_PROFILE_PICTURE_TYPES:
-                    messages.error(request, "Only JPG, PNG, or WEBP images are allowed.")
-                    return redirect("dashboard:settings")
+            if picture.content_type not in ALLOWED_PROFILE_PICTURE_TYPES:
+                messages.error(request, "Only JPG, PNG, or WEBP images are allowed.")
+                return redirect("dashboard:settings")
 
-                current_user.profile_picture = picture
-                current_user.save()
-                messages.success(request, "Profile picture updated.")
+            current_user.profile_picture = picture
+            current_user.save()
+            messages.success(request, "Profile picture updated.")
 
             return redirect("dashboard:settings")
 
