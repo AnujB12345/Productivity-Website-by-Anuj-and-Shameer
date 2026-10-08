@@ -1,7 +1,6 @@
 import pytest
-import sqlite3
 from django.urls import reverse, NoReverseMatch
-from django.contrib.auth.hashers import make_password
+from users.models import User
 from users.forms import LoginForm, RegisterForm
 
 
@@ -57,29 +56,6 @@ def test_register_form_password_mismatch():
 # VIEW TESTS
 # ============================================================================
 
-@pytest.fixture(autouse=True)
-def setup_sqlite_db(tmp_path, monkeypatch):
-    """
-    Fixture that redirects raw sqlite3 connections to a temporary test database.
-    """
-    db_file = str(tmp_path / "test_users.db")
-    orig_connect = sqlite3.connect
-    monkeypatch.setattr(sqlite3, 'connect', lambda database, *args, **kwargs: orig_connect(db_file, *args, **kwargs))
-
-    conn = sqlite3.connect(db_file)
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL UNIQUE,
-            password_hash TEXT NOT NULL,
-            email TEXT NOT NULL UNIQUE
-        )
-    """)
-    conn.commit()
-    conn.close()
-
-
 @pytest.mark.django_db
 def test_register_get_unauthenticated(client):
     url = get_url('register', '/users/register/')
@@ -105,13 +81,11 @@ def test_register_post_success(client):
 
 @pytest.mark.django_db
 def test_sign_in_post_success(client):
-    conn = sqlite3.connect("users.db")
-    cursor = conn.cursor()
-    hashed_pwd = make_password("correctpassword")
-    cursor.execute("INSERT INTO users (username, password_hash, email) VALUES (?, ?, ?)", 
-                   ("loginuser", hashed_pwd, "login@example.com"))
-    conn.commit()
-    conn.close()
+    User.objects.create(
+        username="loginuser",
+        email="login@example.com",
+        password="correctpassword"
+    )
 
     url = get_url('sign_in', '/user/login/')
     response = client.post(url, {'username': 'loginuser', 'password': 'correctpassword'})
@@ -120,13 +94,11 @@ def test_sign_in_post_success(client):
 
 @pytest.mark.django_db
 def test_sign_in_post_invalid_password(client):
-    conn = sqlite3.connect("users.db")
-    cursor = conn.cursor()
-    hashed_pwd = make_password("correctpassword")
-    cursor.execute("INSERT INTO users (username, password_hash, email) VALUES (?, ?, ?)", 
-                   ("loginuser2", hashed_pwd, "login2@example.com"))
-    conn.commit()
-    conn.close()
+    User.objects.create(
+        username="loginuser2",
+        email="login2@example.com",
+        password="correctpassword"
+    )
 
     url = get_url('sign_in', '/user/login/')
     response = client.post(url, {'username': 'loginuser2', 'password': 'wrongpassword'})
@@ -135,8 +107,14 @@ def test_sign_in_post_invalid_password(client):
 
 @pytest.mark.django_db
 def test_sign_out(client):
+    alice = User.objects.create(
+        username="activeuser",
+        email="activeuser@example.com",
+        password="Password123!"
+    )
+
     session = client.session
-    session["username"] = "activeuser"
+    session["username"] = alice.username
     session.save()
 
     url = get_url('sign_out', '/user/logout/')

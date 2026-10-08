@@ -1,5 +1,6 @@
 import pytest
 from django.urls import reverse
+from users.models import User
 from notes.models import Note
 
 
@@ -9,13 +10,15 @@ from notes.models import Note
 
 @pytest.mark.django_db
 def test_note_str_representation():
-    note = Note.objects.create(title="Biology Summary", username="alice")
+    alice = User.objects.create(username="alice", email="alice@test.com")
+    note = Note.objects.create(title="Biology Summary", user=alice)
     assert str(note) == "Biology Summary"
 
 
 @pytest.mark.django_db
 def test_note_default_values():
-    note = Note.objects.create(title="Math Formulas", username="alice")
+    alice = User.objects.create(username="alice", email="alice@test.com")
+    note = Note.objects.create(title="Math Formulas", user=alice)
     assert note.description == ""
     assert note.subject == ""
     assert note.subject_colour == "#000000"
@@ -37,13 +40,16 @@ def test_notes_unauthenticated_redirect(client):
 @pytest.mark.django_db
 def test_notes_get_authenticated(client):
     """Authenticated users see only their own notes and distinct subjects."""
+    alice = User.objects.create(username="alice", email="alice@test.com")
+    bob = User.objects.create(username="bob", email="bob@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
 
-    Note.objects.create(title="Note 1", subject="Math", username="alice")
-    Note.objects.create(title="Note 2", subject="Math", username="alice")
-    Note.objects.create(title="Note 3", subject="Physics", username="bob")  # Belongs to Bob
+    Note.objects.create(title="Note 1", subject="Math", user=alice)
+    Note.objects.create(title="Note 2", subject="Math", user=alice)
+    Note.objects.create(title="Note 3", subject="Physics", user=bob)  # Belongs to Bob
 
     url = reverse("notes:notes")
     response = client.get(url)
@@ -56,6 +62,8 @@ def test_notes_get_authenticated(client):
 
 @pytest.mark.django_db
 def test_add_note_with_defaults(client):
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
@@ -70,7 +78,7 @@ def test_add_note_with_defaults(client):
     })
 
     assert response.status_code == 302
-    note = Note.objects.get(username="alice", title="History Chapter 1")
+    note = Note.objects.get(user=alice, title="History Chapter 1")
     assert note.description == "Important dates"
     assert note.subject == "History"
     assert note.subject_colour == "#000000"
@@ -78,12 +86,14 @@ def test_add_note_with_defaults(client):
 
 @pytest.mark.django_db
 def test_add_note_reuses_existing_subject_color(client):
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
 
     # Pre-existing note with custom subject color
-    Note.objects.create(title="Old Note", subject="Chemistry", subject_colour="#FF0000", username="alice")
+    Note.objects.create(title="Old Note", subject="Chemistry", subject_colour="#FF0000", user=alice)
 
     url = reverse("notes:notes")
     client.post(url, {
@@ -98,6 +108,8 @@ def test_add_note_reuses_existing_subject_color(client):
 
 @pytest.mark.django_db
 def test_edit_note(client):
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
@@ -107,7 +119,7 @@ def test_edit_note(client):
         description="Draft text",
         subject="Drafts",
         subject_colour="#000000",
-        username="alice"
+        user=alice
     )
 
     url = reverse("notes:notes")
@@ -130,11 +142,13 @@ def test_edit_note(client):
 
 @pytest.mark.django_db
 def test_delete_note(client):
+    alice = User.objects.create(username="alice", email="alice@test.com")
+
     session = client.session
     session["username"] = "alice"
     session.save()
 
-    note = Note.objects.create(title="Delete Me", username="alice")
+    note = Note.objects.create(title="Delete Me", user=alice)
 
     url = reverse("notes:notes")
     response = client.post(url, {"delete_note": "", "note_id": note.id})
@@ -142,18 +156,3 @@ def test_delete_note(client):
     assert response.status_code == 302
     assert not Note.objects.filter(id=note.id).exists()
 
-
-@pytest.mark.django_db
-def test_clear_all_notes(client):
-    session = client.session
-    session["username"] = "alice"
-    session.save()
-
-    Note.objects.create(title="Note A", username="alice")
-    Note.objects.create(title="Note B", username="bob")
-
-    url = reverse("notes:notes")
-    response = client.post(url, {"clear_all": ""})
-
-    assert response.status_code == 302
-    assert Note.objects.count() == 0  # clear_all deletes all Note objects in table

@@ -2,7 +2,7 @@ from django.db import models
 from users.models import User
 
 class PomodoroSettings(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     work_minutes = models.PositiveIntegerField(default=25)
     short_break_minutes = models.PositiveIntegerField(default=5)
     long_break_minutes = models.PositiveIntegerField(default=15)
